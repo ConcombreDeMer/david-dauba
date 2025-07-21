@@ -1,85 +1,119 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <!-- <RouterLink to="/">Home</RouterLink>
+  <RouterLink to="/about">About</RouterLink> -->
 
   <RouterView />
+  <div class="admin">
+    <AdminButton v-if="!isAdmin" />
+    <button v-if="isAdmin" @click="logout" class="logout-btn"><img class="logout-icon" src="/logout.png"
+        alt=""></button>
+    <button v-if="isAdmin" @click="goToAdmin" class="admin-btn"><img class="admin-icon" src="/admin.png"
+        alt=""></button>
+  </div>
+
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script setup lang="ts">
+
+import { RouterView } from 'vue-router'
+import AdminButton from './components/AdminButton.vue'
+import { isAdmin, logoutAdmin } from './stores/admin'
+
+function logout() {
+  logoutAdmin()
+  window.location.reload()
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+import { useRouter } from 'vue-router'
+const router = useRouter()
+function goToAdmin() {
+  router.push('/admin')
+}
+</script>
+
+
+<style>
+.logout-btn {
+  margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  background: #c00;
+  color: #fff;
+  cursor: pointer;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.logout-btn:hover {
+  background: #f00;
+  transition: all 0.3s ease;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.admin-btn {
+  margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  background: #5D5D5D;
+  color: #fff;
+  cursor: pointer;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.admin-btn:hover {
+  background: #7D7D7D;
+  transition: all 0.3s ease;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.logout-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
 }
 
-nav a:first-of-type {
-  border: 0;
+.admin-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.admin {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  gap : 10px;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+@font-face {
+  font-family: 'Clash Display';
+  src: url('./assets/fonts/ClashDisplay-Variable.ttf') format('woff2');
+  font-weight: lighter 200, Light 300, Regular 400, Medium 500, Semibold 600, Bold 700, Extrabold 800, Black 900;
+  font-style: normal;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Clash Display';
+  background-color: #262626;
+  color: #f0f0f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 8rem;
+  font-weight: normal;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: none;
 }
 </style>
