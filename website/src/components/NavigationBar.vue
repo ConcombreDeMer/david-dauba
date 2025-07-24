@@ -19,8 +19,12 @@
 
 .header{
     position : fixed;
+    top: 0;
+    left: auto;
     width: 100%;
-    z-index: 1000;
+    z-index: 1000;  
+    padding: 0;
+    margin-top: 40px;
 }
 
 .navbar {
@@ -31,7 +35,6 @@
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 40px;
     background: transparent;
     backdrop-filter: blur(10px);
     border-radius: 10px;

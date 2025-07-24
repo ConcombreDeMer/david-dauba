@@ -1,5 +1,4 @@
 <template>
-  <NavigationBar />
   <div class="home">
 
     <a class="insta-link" href="https://www.instagram.com/david_dauba_noface/"><img src="/instagram.png" alt=""></a>
@@ -46,7 +45,6 @@ import { supabase } from '../../supabase'
 import type { Chapter } from '../type'
 import { isAdmin } from '../stores/admin'
 import IconClose from '@/components/icons/IconClose.vue'
-import NavigationBar from '@/components/NavigationBar.vue'
 import GoToButton from '@/components/GoToButton.vue'
 const chapters = ref<Chapter[]>([])
 

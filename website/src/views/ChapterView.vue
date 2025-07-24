@@ -1,5 +1,4 @@
 <template>
-      <NavigationBar />
 
     <div class="chapter-header">
         <h1 class="chapter-title">{{ chapter.title }}</h1>
@@ -63,7 +62,6 @@ const closePhotoModal = () => {
   selectedPhoto.value = null
   document.body.style.overflow = ''
 }
-import NavigationBar from '@/components/NavigationBar.vue'
 import type { Chapter } from '../type'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'

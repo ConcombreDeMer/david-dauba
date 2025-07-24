@@ -167,6 +167,10 @@ defineExpose({ triggerUpload })
   background-color: #3a3a3a;
   border-radius: 8px;
   margin-top: 10px;
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
 }
 .upload-label {
   display: flex;
@@ -181,6 +185,7 @@ defineExpose({ triggerUpload })
 .upload-label:hover {
   border-color: #007bff;
 }
+
 .upload-plus {
   font-size: 5rem;
   color: #888;

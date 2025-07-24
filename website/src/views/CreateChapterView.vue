@@ -1,7 +1,5 @@
 <template>
 
-    <NavigationBar />
-
     <h1 class="create-chapter-title">Créer un chapitre</h1>
 
     <form @submit.prevent="createChapter">
@@ -40,8 +38,6 @@
 </template>
 
 <script setup lang="ts">
-
-import NavigationBar from '@/components/NavigationBar.vue';
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
 import UploadPhotos from '@/components/UploadPhotos.vue';

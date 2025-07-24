@@ -3,6 +3,8 @@
   <!-- <RouterLink to="/">Home</RouterLink>
   <RouterLink to="/about">About</RouterLink> -->
 
+  <NavigationBar />
+
   <RouterView />
   <div class="admin">
     <AdminButton v-if="!isAdmin" />
@@ -21,6 +23,7 @@
 import { RouterView } from 'vue-router'
 import AdminButton from './components/AdminButton.vue'
 import { isAdmin, logoutAdmin } from './stores/admin'
+import NavigationBar from './components/NavigationBar.vue'
 
 function logout() {
   logoutAdmin()
