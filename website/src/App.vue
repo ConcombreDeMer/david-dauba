@@ -12,6 +12,8 @@
         alt=""></button>
   </div>
 
+  <DynamicFooter />
+
 </template>
 
 <script setup lang="ts">
@@ -22,10 +24,11 @@ import { isAdmin, logoutAdmin } from './stores/admin'
 
 function logout() {
   logoutAdmin()
-  window.location.reload()
+  router.push('/')
 }
 
 import { useRouter } from 'vue-router'
+import DynamicFooter from './components/DynamicFooter.vue'
 const router = useRouter()
 function goToAdmin() {
   router.push('/admin')
@@ -103,6 +106,16 @@ body {
   color: #f0f0f0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: 'Clash Display';
+  font-weight: Medium;
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 h1 {

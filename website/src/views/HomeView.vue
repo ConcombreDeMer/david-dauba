@@ -2,6 +2,8 @@
   <NavigationBar />
   <div class="home">
 
+    <a class="insta-link" href="https://www.instagram.com/david_dauba_noface/"><img src="/instagram.png" alt=""></a>
+
     <div class="home-container">
       <h1 class="title">David Dauba</h1>
       <img class="home1" src="/home1.png" alt="">
@@ -10,6 +12,7 @@
     <GoToButton class="discover-btn" targetSection="chapters">
       <p>Découvrir</p>
     </GoToButton>
+
   </div>
 
   <div class="chapters" id="chapters">
@@ -33,7 +36,6 @@
     <div class="chapters-right">
       <img class="home2" src="/home2.png" alt="">
     </div>
-
   </div>
 
 </template>
@@ -74,6 +76,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.insta-link {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.insta-link img {
+  width: 40px;
+  height: 40px;
+  opacity: 0.7;
+  transition: all 0.3s ease-in-out;
+}
+
+.insta-link:hover img {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.footer {
+  position: relative;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+}
+
 .home {
   height: 100vh;
   position: relative;
@@ -119,7 +147,8 @@ onMounted(() => {
   width: 300px;
   border-radius: 5px;
   margin-left: auto;
-  margin-right: auto;;
+  margin-right: auto;
+  ;
   padding: 12px;
 }
 

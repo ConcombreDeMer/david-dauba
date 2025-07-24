@@ -10,7 +10,7 @@
         <button @click="removePhoto(idx)" class="remove-photo-btn" title="Supprimer" type="button">×</button>
       </div>
     </div>
-    <button v-if="selectedFiles.length && isValidationVisible" @click="uploadFiles">Valider</button>
+    <button class="upload-btn" v-if="selectedFiles.length && isValidationVisible" @click="uploadFiles">Valider</button>
   </div>
 </template>
 
@@ -116,6 +116,25 @@ defineExpose({ triggerUpload })
 </script>
 
 <style scoped>
+
+.upload-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.upload-btn:hover {
+  background-color: #45a049;
+}
+
+
 /* ...existing code... */
 .remove-photo-btn {
   position: absolute;
@@ -145,6 +164,9 @@ defineExpose({ triggerUpload })
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  background-color: #3a3a3a;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 .upload-label {
   display: flex;
@@ -152,11 +174,9 @@ defineExpose({ triggerUpload })
   align-items: center;
   width: 100%;
   height: 70px;
-  border-radius: 4px;
+  border-radius: 8px;
   background: #4E4E4E;
   cursor: pointer;
-  margin-bottom: 20px;
-  transition: border-color 0.2s;
 }
 .upload-label:hover {
   border-color: #007bff;

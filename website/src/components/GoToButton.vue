@@ -49,7 +49,7 @@ function scrollToFormations() {
 .next {
   transition: all 0.3s ease;
   text-align: center;
-  z-index: 99999;
+  z-index: 3000;
   margin: 0;
   padding: 0;
 }

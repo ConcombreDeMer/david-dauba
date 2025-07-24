@@ -1,7 +1,7 @@
 <template>
       <NavigationBar />
 
-    <div>
+    <div class="chapter-header">
         <h1 class="chapter-title">{{ chapter.title }}</h1>
         <p class="chapter-date">{{ chapter.date }}</p>
 
@@ -11,11 +11,11 @@
       </div>
 
 
-        <p>{{ chapter.description }}</p>
+        <p class="chapter-description">{{ chapter.description }}</p>
         <UploadPhotos 
         v-if="isAdmin"
         :chapterId="chapter.id"
-        :isValidationVisible="false"
+        :isValidationVisible="true"
         />
     </div>
 
@@ -168,6 +168,20 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.chapter-description{
+  text-align: center;
+  width: 50vw;
+  margin: 0 auto;
+  font-size: 1.6rem;
+  font-weight: light;
+  padding: 20px;
+}
+
+.chapter-header {
+  text-align: center;
+  width: 80vw;
+  margin: 0 auto;
+}
 
 .modal-overlay {
   position: fixed;
