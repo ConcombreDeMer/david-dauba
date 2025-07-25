@@ -1,23 +1,45 @@
 <template>
+  <a class="insta-link" href="https://www.instagram.com/david_dauba_noface/"><img src="/instagram.png" alt=""></a>
   <div class="home">
-
-    <a class="insta-link" href="https://www.instagram.com/david_dauba_noface/"><img src="/instagram.png" alt=""></a>
-
     <div class="home-container">
       <h1 class="title">David Dauba</h1>
       <img class="home1" src="/home1.png" alt="">
     </div>
 
-    <GoToButton class="discover-btn" targetSection="chapters">
-      <p>Découvrir</p>
+    <GoToButton class="discover-presentation" targetSection="presentation">
+      Découvrir
     </GoToButton>
 
   </div>
 
+
+  <div class="presentation" id="presentation">
+    <h1 class="presentation-title">Qui suis-je ?</h1>
+    <p class="presentation-text">
+      Depuis de nombreuses années, je concentre l'essentiel de mon travail sur les 
+      <span class="bold">"portraits sans visage"</span>. 
+      Ce parti pris remet en question notre perception traditionnelle de l'identité dans un monde submergé de selfies.
+      <br><br>
+      Les photos, colorées, parfois drôles, souvent poétiques, témoignent de la vie d'un homme 
+      <span class="bold">dont le visage n'apparaît jamais</span>. 
+      Caché, effacé, camouflé, il disparaît pour laisser place à l'absence.
+      <br><br>
+      Cette approche vise à provoquer une résonance émotionnelle chez le spectateur, l'incitant à
+      <span class="bold">une véritable introspection</span>.
+      En transcendant la représentation classique du portrait, mon objectif est d'éveiller
+      <span class="bold">l'imagination des spectateurs </span>, 
+      afin de leur permettre de mieux comprendre le message caché derrière ces clichés.
+      <br><br>
+      David
+    </p>
+    <GoToButton class="discover-chapter" targetSection="chapters">
+      Découvrir mes chapitres
+    </GoToButton>
+  </div>
+
+
   <div class="chapters" id="chapters">
-
     <div class="chapters-left">
-
       <div class="chapters-left-container">
         <h1 class="chapters-title">Mes chapitres</h1>
         <div class="chapters-list" v-for="(chapter, idx) in chapters" :key="chapter.id">
@@ -29,13 +51,14 @@
         </div>
         <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
       </div>
-
     </div>
-
     <div class="chapters-right">
       <img class="home2" src="/home2.png" alt="">
     </div>
   </div>
+
+
+
 
 </template>
 
@@ -74,6 +97,26 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.presentation {
+  height: 100vh;
+  width: 61vw;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.discover-chapter {
+  background-color: #5D5D5D;
+  border-radius: 5px;
+  padding: 12px;
+}
+
+
 .insta-link {
   position: fixed;
   top: 20px;
@@ -130,33 +173,30 @@ onMounted(() => {
 .title {
   text-align: center;
   color: #f0f0f0;
+  font-size: 10rem;
 }
 
-.discover-btn {
+.discover-presentation {
   position: absolute;
   display: block;
-  font-weight: lighter;
-  font-size: 1.5rem;
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   background-color: #5D5D5D;
-  width: 300px;
   border-radius: 5px;
   margin-left: auto;
   margin-right: auto;
-  ;
   padding: 12px;
 }
 
-.discover-btn:hover {
+.discover-presentation:hover, .discover-chapter:hover {
   background-color: #7D7D7D;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.discover-btn p {
+.discover-presentation p {
   margin: 0;
   padding: 0;
 }

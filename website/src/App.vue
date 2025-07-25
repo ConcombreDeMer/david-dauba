@@ -125,11 +125,22 @@ h1 {
   margin: 0;
   padding: 0;
   font-size: 8rem;
-  font-weight: normal;
+  font-weight: 500;
 }
 
 a {
   color: #ffffff;
   text-decoration: none;
+}
+
+p{
+  margin: 0;
+  padding: 0;
+  font-size: 2.5rem;
+  font-weight: lighter;
+}
+
+.bold {
+  font-weight: 500;
 }
 </style>

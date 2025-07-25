@@ -1,7 +1,9 @@
 <template>
 
     <div class="next" @click="scrollToFormations">
-        <slot class="texte">Suivant</slot>
+        <p class="texte">
+          <slot>Suivant</slot>
+        </p>
     </div>
 
 </template>
@@ -57,7 +59,9 @@ function scrollToFormations() {
 .texte{
   text-align: center;
   margin: 0;
-  padding: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 2rem;
 }
 
 

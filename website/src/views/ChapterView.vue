@@ -170,8 +170,6 @@ onMounted(async () => {
   text-align: center;
   width: 50vw;
   margin: 0 auto;
-  font-size: 1.6rem;
-  font-weight: light;
   padding: 20px;
 }
 
@@ -316,9 +314,8 @@ onMounted(async () => {
 
 .chapter-date{
   text-align: center;
-  font-weight: lighter;
   color: #bcbcbc;
-  font-size: 1.2rem;
+
 }
 
 

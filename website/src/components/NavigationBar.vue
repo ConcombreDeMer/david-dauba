@@ -3,7 +3,7 @@
     <div class="header">
         <div class="navbar">
             <RouterLink to="/" class="btn">Accueil</RouterLink>
-            <RouterLink to="/" class="btn">Chapitre</RouterLink>
+            <RouterLink to="/chapters" class="btn">Chapitre</RouterLink>
             <RouterLink to="/contact" class="btn">Contact</RouterLink>
         </div>
     </div>
