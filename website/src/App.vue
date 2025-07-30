@@ -124,7 +124,7 @@ button {
 h1 {
   margin: 0;
   padding: 0;
-  font-size: 8rem;
+  font-size: 8vh;
   font-weight: 500;
 }
 
@@ -136,7 +136,7 @@ a {
 p{
   margin: 0;
   padding: 0;
-  font-size: 2.5rem;
+  font-size: 2.5vh;
   font-weight: lighter;
 }
 
