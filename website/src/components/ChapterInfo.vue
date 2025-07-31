@@ -73,6 +73,8 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     z-index: 10;
     color: #b1b1b1;
     transition: all 0.3s ease-in-out;
+    /* rendre le texte non selectionnable */
+    user-select: none;
 
 }
 
@@ -175,6 +177,7 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
                 border: none;
                 padding: 10px 20px;
                 transition: all 0.3s ease-in-out;
+                font-size: 2.5vh;
             }
 
             .chapter-button:hover {
