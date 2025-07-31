@@ -123,6 +123,7 @@ onMounted(() => {
 .chapters-title {
     text-align: center;
     padding-top: 200px;
+    margin-bottom: 100px;
 }
 
 .chapters-list {
