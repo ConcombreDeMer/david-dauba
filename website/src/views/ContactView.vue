@@ -1,32 +1,25 @@
 <template>
 
-    <div class="contact-container">
-        <h1 class="contact-title">Contact</h1>
-        <form @submit.prevent="sendMessage">
-          <div>
-            <label for="name">Nom :</label>
-            <input id="name" v-model="name" required />
-          </div>
-          <div>
-            <label for="email">Email :</label>
-            <input id="email" v-model="email" type="email" required />
-          </div>
-          <div>
-            <label for="message">Message :</label>
-            <textarea
-              id="message"
-              v-model="message"
-              required
-              ref="messageTextarea"
-              @input="autoResize"
-              rows="1"
-              style="overflow:hidden;resize:none;"
-            ></textarea>
-          </div>
-          <button class="create-chapter-button" type="submit">Envoyer</button>
-          <div v-if="status">{{ status }}</div>
-        </form>
-    </div>
+  <div class="contact-container">
+    <h1 class="contact-title">Contact</h1>
+    <form @submit.prevent="sendMessage">
+      <div>
+        <label for="name">Nom :</label>
+        <input id="name" v-model="name" required />
+      </div>
+      <div>
+        <label for="email">Email :</label>
+        <input id="email" v-model="email" type="email" required />
+      </div>
+      <div>
+        <label for="message">Message :</label>
+        <textarea id="message" v-model="message" required ref="messageTextarea" @input="autoResize" rows="1"
+          style="overflow:hidden;resize:none;"></textarea>
+      </div>
+      <button class="create-chapter-button" type="submit">Envoyer</button>
+      <div v-if="status">{{ status }}</div>
+    </form>
+  </div>
 
 
 </template>
@@ -60,7 +53,7 @@ const sendMessage = async () => {
   }
 
   try {
-  const response = await fetch('http://localhost:3001/api/send-email', {
+    const response = await fetch('http://localhost:3001/api/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -89,11 +82,11 @@ const sendMessage = async () => {
 </script>
 
 <style scoped>
-
 .contact-title {
   text-align: center;
   padding-top: 200px;
 }
+
 form {
   display: flex;
   flex-direction: column;
@@ -102,12 +95,14 @@ form {
   margin-top: 50px;
   margin-bottom: 100px;
 }
+
 form div {
   width: 50vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
+
 input,
 textarea {
   width: 95%;
@@ -125,15 +120,18 @@ textarea {
   margin-top: 4px;
   transition: border-color 0.2s;
 }
+
 input:focus,
 textarea:focus {
   border-bottom: 1px solid #ffffff;
 }
+
 label {
   font-weight: normal;
   margin-bottom: 2px;
   font-size: 2rem;
 }
+
 button[type="submit"] {
   margin-top: 16px;
   padding: 10px 32px;
@@ -149,7 +147,44 @@ button[type="submit"] {
   width: 50vw;
   height: 70px;
 }
+
 button[type="submit"]:hover {
   background: #0056b3;
+}
+
+@media (max-width: 900px) {
+
+  .contact-title {
+    padding-top: 100px;
+    font-size: 6vh;
+  }
+
+  form {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+
+    div{
+      width: 100%;
+    }
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border-radius: 0px;
+  }
+
+  label {
+    font-size: 3vh;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    font-size: 3vh;
+  }
+
 }
 </style>

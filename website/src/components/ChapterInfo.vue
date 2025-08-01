@@ -144,13 +144,9 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
             flex-direction: column;
             align-items: start;
             justify-content: center;
+            height: 100%;
             gap: 50px;
             transition: all 0.3s ease-in-out;
-
-
-            .chapter-description {
-                height: 300px;
-            }
 
         }
 
@@ -163,7 +159,6 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
             justify-content: center;
             gap: 50px;
             transition: all 0.3s ease-in-out;
-
 
             img {
                 width: 300px;
@@ -187,4 +182,62 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     }
 
 }
+
+
+@media (max-width: 900px) {
+
+    .chapter-item {
+        width: 90vw;
+        margin-bottom: 40px;
+    }
+
+    .chapter-title {
+        font-size: 4vh;
+        top: -20px;
+    }
+
+    .chapter-info {
+        padding-top: 50px;
+        height: auto;
+
+        .arrow-down {
+            width: 50px;
+            height: 50px;
+        }
+
+        .dropdown {
+            flex-direction: column;
+            align-items: center;
+            height: 700px;
+
+            .left, .right {
+                width: 90%;
+                padding: 10px;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                margin: 0;
+                padding: 0;
+            }
+
+
+            .right {
+                font-size: 2vh;
+                height: fit-content;
+                padding: 20px;
+            }
+
+        }
+    }
+
+    .chapter-description {
+        font-size: 2vh;
+    }
+    
+    .chapter-date {
+        display: none;
+    }
+}
+
+
 </style>

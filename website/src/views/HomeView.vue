@@ -16,18 +16,18 @@
   <div class="presentation" id="presentation">
     <h1 class="presentation-title">Qui suis-je ?</h1>
     <p class="presentation-text">
-      Depuis de nombreuses années, je concentre l'essentiel de mon travail sur les 
-      <span class="bold">"portraits sans visage"</span>. 
+      Depuis de nombreuses années, je concentre l'essentiel de mon travail sur les
+      <span class="bold">"portraits sans visage"</span>.
       Ce parti pris remet en question notre perception traditionnelle de l'identité dans un monde submergé de selfies.
       <br><br>
-      Les photos, colorées, parfois drôles, souvent poétiques, témoignent de la vie d'un homme 
-      <span class="bold">dont le visage n'apparaît jamais</span>. 
+      Les photos, colorées, parfois drôles, souvent poétiques, témoignent de la vie d'un homme
+      <span class="bold">dont le visage n'apparaît jamais</span>.
       Caché, effacé, camouflé, il disparaît pour laisser place à l'absence.
       <br><br>
       Cette approche vise à provoquer une résonance émotionnelle chez le spectateur, l'incitant à
       <span class="bold">une véritable introspection</span>.
       En transcendant la représentation classique du portrait, mon objectif est d'éveiller
-      <span class="bold">l'imagination des spectateurs </span>, 
+      <span class="bold">l'imagination des spectateurs </span>,
       afin de leur permettre de mieux comprendre le message caché derrière ces clichés.
       <br><br>
       David
@@ -190,7 +190,8 @@ onMounted(() => {
   padding: 12px;
 }
 
-.discover-presentation:hover, .discover-chapter:hover {
+.discover-presentation:hover,
+.discover-chapter:hover {
   background-color: #7D7D7D;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -302,5 +303,108 @@ onMounted(() => {
 
 .delete-icon:hover {
   color: #ff4d4f;
+}
+
+
+@media (max-width: 900px) {
+
+  .title {
+    font-size: 10vh;
+    line-height: 0.8;
+    margin: 0;
+    padding: 0;
+  }
+
+  .home {
+    height: 90vh;
+  }
+
+  .home1 {
+    height: 40vh;
+  }
+
+  .discover-presentation {
+    bottom: 50px;
+    width: 80%;
+  }
+
+
+  .home-container {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+  }
+
+  .presentation {
+    width: 90vw;
+    height: 90vh;
+  }
+
+  .presentation-title {
+    font-size: 6vh;
+  }
+
+  .presentation-text {
+    font-size: 2vh;
+  }
+
+  .discover-chapter {
+    background-color: #5D5D5D;
+    border-radius: 5px;
+    padding: 12px;
+  }
+
+  .chapters {
+    position: relative;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    height: 90vh;
+  }
+
+  .chapters-title {
+    font-size: 6vh;
+    text-align: center;
+    padding-bottom: 100px;
+  }
+
+  .chapters-left {
+    width: 100%;
+    height: 100%;
+  }
+
+  .chapters-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .chapter-divider {
+    width: 70%;
+    margin-top: 3vh;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .chapters-right {
+    display: none;
+  }
+
+  .chapter {
+    font-size: 4vh;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  .insta-link{
+    display: none;
+  }
+
+
 }
 </style>

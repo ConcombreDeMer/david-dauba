@@ -11,31 +11,8 @@
                 <ul class="chapters-list">
                     <li v-for="chapter in chapters" :key="chapter.id">
 
-
                         <ChapterInfo :chapter="chapter" :is-deployed="true" />
 
-
-                        <!-- <div class="chapter-title">
-                            <router-link :to="`/chapter/${chapter.id}`" class="chapter-title-texte">
-                                {{ chapter.title }}
-                            </router-link>
-                            <div class="chapter-title-shadow"></div>
-                        </div>
-
-                        <div class="chapter-info">
-                            <img class="arrow-down" src="../../public/arrow-down.png" alt=""
-                                @click="deployChapter(chapter)">
-                            <div class="left">
-                                <p class="chapter-description">{{ chapter.description }}</p>
-                                <p class="chapter-date">{{ chapter.date }}</p>
-                            </div>
-                            <div class="right">
-                                <div v-if="chapter.firstPhotoUrl" class="chapter-photo-wrapper">
-                                    <img :src="chapter.firstPhotoUrl" alt="photo du chapitre" class="chapter-photo" />
-                                </div>
-                                <button class="chapter-button">Découvrir</button>
-                            </div>
-                        </div> -->
                         <button v-if="isAdmin" @click="deleteChapter(chapter.id)" class="delete-chapter-btn">
                             <IconClose />
                         </button>
@@ -143,4 +120,27 @@ onMounted(() => {
 .delete-chapter-btn:hover {
     color: #ff4d4f;
 }
+
+
+@media (max-width: 900px) {
+
+    .chapters-container {
+        width: 90vw;
+    }
+
+    .chapters-title {
+        padding-top: 100px;
+        margin-bottom: 50px;
+        font-size: 6vh;
+    }
+
+    .chapters-left {
+        width: 100%;
+        height: auto;
+    }
+
+
+}
+
+
 </style>
