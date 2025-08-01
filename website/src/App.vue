@@ -1,8 +1,5 @@
 <template>
 
-  <!-- <RouterLink to="/">Home</RouterLink>
-  <RouterLink to="/about">About</RouterLink> -->
-
   <NavigationBar />
 
   <RouterView />
@@ -40,8 +37,9 @@ function goToAdmin() {
 
 
 <style>
+
 .logout-btn {
-  margin-top: 20px;
+  margin-top: 50px;
   width: 50px;
   height: 50px;
   border-radius: 5px;
@@ -57,7 +55,7 @@ function goToAdmin() {
 }
 
 .admin-btn {
-  margin-top: 20px;
+  margin-top: 50px;
   width: 50px;
   height: 50px;
   border-radius: 5px;

@@ -61,7 +61,7 @@ function scrollToFormations() {
   margin: 0;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 2rem;
+  font-size: 3vh;
 }
 
 

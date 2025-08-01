@@ -173,7 +173,7 @@ onMounted(() => {
 .title {
   text-align: center;
   color: #f0f0f0;
-  font-size: 10rem;
+  font-size: 15vh;
 }
 
 .discover-presentation {
