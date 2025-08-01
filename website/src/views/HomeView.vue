@@ -316,7 +316,8 @@ onMounted(() => {
   }
 
   .home {
-    height: 90vh;
+    height: 85vh;
+    margin-bottom: 15vh;
   }
 
   .home1 {
