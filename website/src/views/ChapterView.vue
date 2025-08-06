@@ -351,9 +351,8 @@ onMounted(async () => {
   }
 
   .chapter-description {
-    width: 90vw;
+    width: 80vw;
     font-size: 2vh;
-    padding: 10px;
   }
 
   .random-landscape-photo {

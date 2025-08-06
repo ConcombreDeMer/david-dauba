@@ -213,8 +213,6 @@ a{
         align-items: flex-start;
         width: 100%;
         padding: 10px;
-        background: transparent;
-        backdrop-filter: blur(10px);
         border-radius: 10px;
         opacity: 0.9;
         position: fixed;
