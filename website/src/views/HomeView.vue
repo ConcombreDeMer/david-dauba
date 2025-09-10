@@ -3,13 +3,15 @@
   <div class="home">
     <div class="home-container">
       <h1 class="title">David Dauba</h1>
-      <img class="home1" src="/home1.png" alt="">
+      <img class="home1" src="/test/home1.png" alt="">
+      <img class="home3" src="/test/home3.png" alt="">
     </div>
 
     <GoToButton class="discover-presentation" targetSection="presentation">
       Découvrir
     </GoToButton>
 
+    
   </div>
 
 
@@ -63,12 +65,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '../type'
 import { isAdmin } from '../stores/admin'
 import IconClose from '@/components/icons/IconClose.vue'
 import GoToButton from '@/components/GoToButton.vue'
+
 const chapters = ref<Chapter[]>([])
 
 const fetchChapters = async () => {
@@ -90,13 +93,42 @@ const deleteChapter = async (id: number) => {
   }
 }
 
-
+// Mouvement home3 en fonction de la souris
 onMounted(() => {
   fetchChapters()
+
+  const home3 = document.querySelector<HTMLImageElement>('.home3')
+  const home1 = document.querySelector<HTMLImageElement>('.home1')
+  if (!home3 || !home1) return
+
+  const moveImage = (e: MouseEvent) => {
+    const x = e.clientX / window.innerWidth - 0.5 // -0.5 à 0.5
+    const y = e.clientY / window.innerHeight - 0.5
+    // home3 : Mouvement très léger (max 20px)
+    const maxMove3 = 20
+    const translateX3 = x * maxMove3 * 2
+    const translateY3 = y * maxMove3 * 2
+    home3.style.transform = `translate(-50%, -50%) translate(${translateX3}px, ${translateY3}px)`
+    // home1 : Mouvement encore plus subtil (max 10px)
+    const maxMove1 = 10
+    const translateX1 = x * maxMove1 * 2
+    const translateY1 = y * maxMove1 * 2
+    home1.style.transform = `translate(-50%, -50%) translate(${translateX1}px, ${translateY1}px)`
+  }
+  window.addEventListener('mousemove', moveImage)
+
+  // Nettoyage à la destruction du composant
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', moveImage)
+    // Remettre la position initiale
+    if (home3) home3.style.transform = 'translate(-50%, -50%)'
+    if (home1) home1.style.transform = 'translate(-50%, -50%)'
+  })
 })
 </script>
 
 <style scoped>
+
 .presentation {
   height: 100vh;
   width: 61vw;
@@ -166,14 +198,32 @@ onMounted(() => {
 
 .home1 {
   display: block;
-  position: relative;
+  position: absolute;
   height: 50vh;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.home3 {
+  display: block;
+  position: absolute;
+  height: 50vh;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .title {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
   text-align: center;
-  color: #f0f0f0;
+  color: #dcdcdc;
   font-size: 15vh;
+  z-index: 10;
 }
 
 .discover-presentation {
@@ -402,7 +452,7 @@ onMounted(() => {
 
   }
 
-  .insta-link{
+  .insta-link {
     display: none;
   }
 

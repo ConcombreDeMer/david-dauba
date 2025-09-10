@@ -26,7 +26,7 @@ const isHome = computed(() => route.path === '/');
 <style scoped>
 .footer {
     position: relative;
-    width: 100vw;
+    width: 100%;
     padding: 0;
     margin: 0;
     mix-blend-mode: lighten;
@@ -40,7 +40,7 @@ const isHome = computed(() => route.path === '/');
 
 .alternative-footer {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 150px;
     margin-top: 150px;
     color: #fff;
