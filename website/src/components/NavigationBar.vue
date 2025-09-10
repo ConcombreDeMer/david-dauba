@@ -5,6 +5,7 @@
             <RouterLink to="/" class="btn">Accueil</RouterLink>
             <RouterLink to="/chapters" class="btn">Chapitres</RouterLink>
             <RouterLink to="/contact" class="btn">Contact</RouterLink>
+            <RouterLink to="/about" class="btn">À propos</RouterLink>
         </div>
 
         <div class="mobile-navbar">
