@@ -11,8 +11,8 @@
         <div class="spacing">
         </div>
 
-        <div :class="['chapter-info', { deployed: isDeployed }]">
-            <img class="arrow-down" src="../../public/arrow-down.png" alt="" @click="deployChapter(chapter)">
+        <div :class="['chapter-info', { deployed: isDeployed }]" @click="deployChapter(chapter)">
+            <img class="arrow-down" src="../../public/arrow-down.png" alt="">
             <div class="dropdown">
                 <div class="left">
                     <p class="chapter-description">{{ chapter.description }}</p>
@@ -49,7 +49,7 @@ const props = defineProps<{
 const deployChapter = (chapter: ChapterWithPhoto) => {
     isDeployed.value = !isDeployed.value;
     if (isDeployed.value) {
-        chapter.firstPhotoUrl = chapter.firstPhotoUrl || '/default-chapter-photo.png'; // Default photo if none exists
+        chapter.firstPhotoUrl = chapter.firstPhotoUrl || '/default-chapter-photo.png';
         console.log('Déploiement du chapitre:', chapter.title);
     }
 };
@@ -62,6 +62,21 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     width: 70vw;
     position: relative;
     margin-bottom: 70px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.chapter-item:hover {
+    cursor: pointer;
+}
+
+.chapter-item:hover .chapter-info {
+    opacity: 1;
+}
+
+.chapter-item:hover .chapter-title{
+    color: #ffffff;
+    font-weight: 300;
 }
 
 .chapter-title {
@@ -73,7 +88,6 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     z-index: 10;
     color: #b1b1b1;
     transition: all 0.3s ease-in-out;
-    /* rendre le texte non selectionnable */
     user-select: none;
 
 }
@@ -107,7 +121,7 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     width: 95%;
     height: fit-content;
     overflow: hidden;
-    opacity: 1;
+    opacity: 0.8;
     transition: all 0.3s ease-in-out;
 
     .arrow-down {
@@ -210,7 +224,8 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
             align-items: center;
             height: 700px;
 
-            .left, .right {
+            .left,
+            .right {
                 width: 90%;
                 padding: 10px;
                 align-items: center;
@@ -233,11 +248,9 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     .chapter-description {
         font-size: 2vh;
     }
-    
+
     .chapter-date {
         display: none;
     }
 }
-
-
 </style>
