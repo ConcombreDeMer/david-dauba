@@ -75,4 +75,34 @@ img {
     justify-content: center;
     align-items: start;
 }
+
+@media (max-width: 900px) {
+
+    .presentation {
+        flex-direction: column-reverse;
+        margin-top: 100px;
+        gap: 50px;
+        width: 90%;
+    }
+
+    .left {
+        width: 400px;
+    }
+
+    .right {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .presentation-title {
+        font-size: 6vh;
+    }
+
+    .presentation-text {
+        font-size: 2.5vh;
+    }
+
+
+}
 </style>
