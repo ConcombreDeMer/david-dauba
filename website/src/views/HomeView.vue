@@ -9,8 +9,9 @@
     </div>
 
     <div class="home-buttons">
-      <a class="home-button" href="/about">Qui suis-je ?</a>
-      <a class="home-button" href="/chapters">Voir mes chapitres</a>
+      <RouterLink class="home-button" to="/about">Qui suis-je ?</RouterLink>
+      <RouterLink class="home-button" to="/chapters">Voir mes chapitres</RouterLink>
+
     </div>
   </div>
 
