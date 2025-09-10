@@ -4,8 +4,8 @@
         <div class="navbar">
             <RouterLink to="/" class="btn">Accueil</RouterLink>
             <RouterLink to="/chapters" class="btn">Chapitres</RouterLink>
-            <RouterLink to="/contact" class="btn">Contact</RouterLink>
             <RouterLink to="/about" class="btn">À propos</RouterLink>
+            <RouterLink to="/contact" class="btn">Contact</RouterLink>
         </div>
 
         <div class="mobile-navbar">
@@ -21,6 +21,7 @@
                     <div v-if="dropdownOpen" class="dropdown-menu">
                         <RouterLink to="/" class="btn" @click="closeDropdown">Accueil</RouterLink>
                         <RouterLink to="/chapters" class="btn" @click="closeDropdown">Chapitres</RouterLink>
+                        <RouterLink to="/about" class="btn" @click="closeDropdown">À propos</RouterLink>
                         <RouterLink to="/contact" class="btn" @click="closeDropdown">Contact</RouterLink>
                     </div>
                 </transition>
