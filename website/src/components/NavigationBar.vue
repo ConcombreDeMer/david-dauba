@@ -4,6 +4,7 @@
         <div class="navbar">
             <RouterLink to="/" class="btn">Accueil</RouterLink>
             <RouterLink to="/chapters" class="btn">Chapitres</RouterLink>
+            <RouterLink to="/news" class="btn">Actualités</RouterLink>
             <RouterLink to="/about" class="btn">À propos</RouterLink>
             <RouterLink to="/contact" class="btn">Contact</RouterLink>
         </div>
@@ -21,6 +22,7 @@
                     <div v-if="dropdownOpen" class="dropdown-menu">
                         <RouterLink to="/" class="btn" @click="closeDropdown">Accueil</RouterLink>
                         <RouterLink to="/chapters" class="btn" @click="closeDropdown">Chapitres</RouterLink>
+                        <RouterLink to="/news" class="btn" @click="closeDropdown">Actualités</RouterLink>
                         <RouterLink to="/about" class="btn" @click="closeDropdown">À propos</RouterLink>
                         <RouterLink to="/contact" class="btn" @click="closeDropdown">Contact</RouterLink>
                     </div>
@@ -48,13 +50,12 @@ function closeDropdown() {
 </script>
 
 <style scoped>
-
-.header{
-    position : fixed;
+.header {
+    position: fixed;
     top: 0;
     left: auto;
     width: 100%;
-    z-index: 9999;  
+    z-index: 9999;
     padding: 0;
     margin-top: 40px;
 }
@@ -77,6 +78,7 @@ function closeDropdown() {
     display: flex;
     justify-content: flex-end;
 }
+
 .dropdown-toggle {
     background: #222;
     border: none;
@@ -90,9 +92,11 @@ function closeDropdown() {
     height: 48px;
     transition: background 0.3s;
 }
+
 .dropdown-toggle:hover {
     background: #333;
 }
+
 .burger {
     display: inline-block;
     width: 28px;
@@ -100,6 +104,7 @@ function closeDropdown() {
     position: relative;
     transition: all 0.3s ease;
 }
+
 .burger span {
     display: block;
     position: absolute;
@@ -111,33 +116,40 @@ function closeDropdown() {
     left: 0;
     transition: all 0.3s ease;
 }
+
 .burger span:nth-child(1) {
     top: 0;
 }
+
 .burger span:nth-child(2) {
     top: 9px;
 }
+
 .burger span:nth-child(3) {
     top: 18px;
 }
+
 .burger.open span:nth-child(1) {
     top: 9px;
     transform: rotate(45deg);
 }
+
 .burger.open span:nth-child(2) {
     opacity: 0;
 }
+
 .burger.open span:nth-child(3) {
     top: 9px;
     transform: rotate(-45deg);
 }
+
 .dropdown-menu {
     position: absolute;
     top: 110%;
     right: 0;
     background: #222;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     min-width: 160px;
@@ -147,18 +159,25 @@ function closeDropdown() {
     transform: translateY(0);
     transition: opacity 0.3s, transform 0.3s;
 }
+
 /* Animation for dropdown */
-.dropdown-fade-enter-active, .dropdown-fade-leave-active {
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
     transition: opacity 0.3s, transform 0.3s;
 }
-.dropdown-fade-enter-from, .dropdown-fade-leave-to {
+
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
     opacity: 0;
     transform: translateY(-10px);
 }
-.dropdown-fade-enter-to, .dropdown-fade-leave-from {
+
+.dropdown-fade-enter-to,
+.dropdown-fade-leave-from {
     opacity: 1;
     transform: translateY(0);
 }
+
 .dropdown-menu .btn {
     padding: 10px 20px;
     text-align: left;
@@ -168,6 +187,7 @@ function closeDropdown() {
     font-size: 1.1rem;
     transition: color 0.2s;
 }
+
 .dropdown-menu .btn:hover {
     color: #fff;
     background: #333;
@@ -189,7 +209,7 @@ function closeDropdown() {
 }
 
 
-a{
+a {
     color: #d1d1d1;
     text-decoration: none;
     font-size: 1.2rem;
@@ -199,6 +219,7 @@ a{
 .btn {
     transition: all 0.3s ease-in-out;
 }
+
 .btn:hover {
     font-weight: 500;
     color: #ffffff;
@@ -209,6 +230,7 @@ a{
     .navbar {
         display: none;
     }
+
     .mobile-navbar {
         display: flex;
         justify-content: flex-end;
@@ -223,5 +245,4 @@ a{
         z-index: 10001;
     }
 }
-
 </style>
