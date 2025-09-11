@@ -2,8 +2,8 @@
 
     <div class="presentation" id="presentation">
 
-        <div class="left">
-            <img class="home2" src="/home2.png" alt=""></img>
+        <div class="left image-bg">
+            <img class="home2" src="/home2.png" alt="" />
         </div>
 
         <div class="right">
@@ -66,6 +66,11 @@ img {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.image-bg {
+    background: #262626;
+    box-sizing: border-box;
 }
 
 .right {

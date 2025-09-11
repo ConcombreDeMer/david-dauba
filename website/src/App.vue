@@ -2,7 +2,9 @@
 
   <NavigationBar />
 
-  <RouterView />
+  <Transition mode="out-in" name="fade">
+    <RouterView />
+  </Transition>
   <div class="admin">
     <AdminButton v-if="!isAdmin" />
     <button v-if="isAdmin" @click="logout" class="logout-btn"><img class="logout-icon" src="/logout.png"
@@ -37,6 +39,16 @@ function goToAdmin() {
 
 
 <style>
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}
 
 .logout-btn {
   margin-top: 50px;
