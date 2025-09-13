@@ -218,6 +218,7 @@ a {
 
 .btn {
     transition: all 0.3s ease-in-out;
+    font-weight: 300;
 }
 
 .btn:hover {

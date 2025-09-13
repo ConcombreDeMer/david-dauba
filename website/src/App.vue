@@ -41,7 +41,7 @@ function goToAdmin() {
 <style>
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
@@ -103,6 +103,13 @@ function goToAdmin() {
   gap : 10px;
 }
 
+@font-face {
+  font-family: 'Fairplay Display';
+  src: url('./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('woff2');
+  font-weight: lighter 200, Light 300, Regular 400, Medium 500, Semibold 600, Bold 700, Extrabold 800, Black 900;
+  font-style: normal;
+}
+
 
 @font-face {
   font-family: 'Clash Display';
@@ -114,15 +121,18 @@ function goToAdmin() {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Clash Display';
+  font-family: 'Roboto', sans-serif;
   background-color: #262626;
+  /* background-image: url('/mesh-gradient.svg');
+  background-size: cover;
+  background-attachment: fixed; */
   color: #f0f0f0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-  font-family: 'Clash Display';
+  font-family: 'Roboto', sans-serif;
   font-weight: Medium;
   font-size: 1.2rem;
   color: #f0f0f0;
@@ -136,6 +146,7 @@ h1 {
   padding: 0;
   font-size: 8vh;
   font-weight: 500;
+  font-family: 'Fairplay Display';
 }
 
 a {

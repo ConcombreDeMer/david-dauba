@@ -2,17 +2,17 @@
   <a class="insta-link" href="https://www.instagram.com/david_dauba_noface/"><img src="/instagram.png" alt=""></a>
   <div class="home">
     <div class="home-container">
-      <h1 class="title">David Dauba</h1>
+      <div class="titles">
+        <h1 class="title">David Dauba</h1>
+        <p class="sous-title">Photographie sans visage</p>
+        <div class="line"></div>
+        <RouterLink class="home-button" to="/about">Découvrir</RouterLink>
+      </div>
       <img class="home1" src="/test/home1.png" alt="">
       <img class="home3" src="/test/home3.png" alt="">
       <img class="home1-mobile" src="/home1.png" alt="">
     </div>
-
-    <div class="home-buttons">
-      <RouterLink class="home-button" to="/about">Qui suis-je ?</RouterLink>
-      <RouterLink class="home-button" to="/chapters">Voir mes chapitres</RouterLink>
-
-    </div>
+    <RouterLink class="home-button-mobile" to="/about">Découvrir</RouterLink>
   </div>
 
 
@@ -158,32 +158,31 @@ onMounted(() => {
   margin: 40px 0;
 }
 
-.home-buttons {
+
+
+.home-button, .home-button-mobile {
   position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+  bottom: -80px;
+  left: -20px;
+  background-color: #D9D9D9;
+  border-radius: 20px;
+  padding: 12px 40px;
+  color: #212121;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: lighter;
+}
 
-  .home-button {
-    background-color: #5D5D5D;
-    border-radius: 5px;
-    padding: 12px;
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-    width: 300px;
-    text-align: center;
-  }
+.home-button:hover, .home-button-mobile:hover {
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
 
-  .home-button:hover {
-    background-color: #7D7D7D;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
+.home-button-mobile {
+  display: none;
 }
 
 .insta-link {
@@ -229,9 +228,18 @@ onMounted(() => {
 .home1 {
   display: block;
   position: absolute;
-  height: 50vh;
+  height: 70vh;
   top: 60%;
-  left: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.home3 {
+  display: block;
+  position: absolute;
+  height: 70vh;
+  top: 60%;
+  left: 70%;
   transform: translate(-50%, -50%);
 }
 
@@ -244,31 +252,80 @@ onMounted(() => {
   transform: translate(-50%, -50%);
 }
 
-.home3 {
-  display: block;
+.titles {
   position: absolute;
-  height: 50vh;
-  top: 60%;
-  left: 50%;
+  top: 40%;
+  left: 32%;
   transform: translate(-50%, -50%);
+  z-index: 20;
+  width: fit-content;
 }
 
 .title {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  width: 80%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  position: relative;
   color: #dcdcdc;
-  font-size: 15vh;
   z-index: 10;
+  width: fit-content;
+  font-size: 16vh;
+}
+
+.sous-title {
+  color: #dcdcdc;
+  font-size: 3vh;
+  z-index: 10;
+  font-family: 'Fairplay Display', serif;
+  font-weight: 400;
+  margin-left: 2px;
+  padding: 0;
+  margin-top: -20px;
+}
+
+.line {
+  width: 2px;
+  height: 85%;
+  background-color: white;
+  position: absolute;
+  top: 18%;
+  left: -20px;
 }
 
 
 @media (max-width: 900px) {
 
+
+  .home-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+  }
+
+  .titles {
+    text-align: center;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    .sous-title {
+      margin-top: -10px;
+      opacity: 0.8;
+
+    }
+
+
+    .line {
+      display: none;
+    }
+  }
+
   .title {
+    position: relative;
     font-size: 10vh;
     line-height: 0.8;
     margin: 0;
@@ -276,8 +333,20 @@ onMounted(() => {
   }
 
   .home {
-    height: 85vh;
+    height: 90vh;
     margin-bottom: 15vh;
+  }
+
+  .home-button {
+    display: none;
+  }
+
+  .home-button-mobile {
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .home1 {
@@ -293,22 +362,10 @@ onMounted(() => {
     height: 40vh;
   }
 
-  .home-container {
-    position: relative;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-
-  }
-
   .insta-link {
     display: none;
   }
 
-  .home-buttons {
-    flex-direction: column;
-
-  }
 
 
 }

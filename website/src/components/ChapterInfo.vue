@@ -1,6 +1,6 @@
 <template>
 
-    <div :class="['chapter-item', { deployed: isDeployed }]">
+    <!-- <div :class="['chapter-item', { deployed: isDeployed }]">
         <div class="chapter-title">
             <div class="chapter-title-texte" @click="deployChapter(chapter)">
                 {{ chapter.title }}
@@ -28,6 +28,26 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+
+    <div :class="['item', { deployed: isDeployed }]">
+
+        <img :src="chapter.firstPhotoUrl" alt="photo du chapitre" class="photo" @click="deployChapter(chapter)" />
+
+        <div class="info">
+            <div class="texte">
+                <div class="title">
+                    {{ chapter.title }}
+                </div>
+                <p class="description">{{ chapter.description }}</p>
+            </div>
+            <div class="date">{{ chapter.date }}</div>
+            <router-link :to="`/chapter/${chapter.id}`" class="button">
+                Découvrir
+            </router-link>
+        </div>
+
     </div>
 
 
@@ -58,7 +78,210 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
 </script>
 
 <style scoped>
-.chapter-item {
+.item {
+    width: 85vw;
+    height: 30vh;
+    max-width: 1600px;
+    max-height: 800px;
+    background: #676767;
+    background: linear-gradient(90deg, #262626 0%, #262626 30%, #343434 100%);
+    border-radius: 20px;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    opacity: 0.8;
+
+    .photo {
+        position: absolute;
+        width: 40%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: all 0.3s ease-in-out;
+        z-index: 90;
+    }
+
+    .info {
+        position: relative;
+        left: 40%;
+        width: 60%;
+        height: 100%;
+        transition: all 0.3s ease-in-out;
+        z-index: 2;
+    }
+    
+    .texte {
+        position: relative;
+        top: 20px;
+        left: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 90%;
+    }
+    .title {
+        position: relative;
+        font-size: 4vh;
+        font-weight: bold;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .description {
+        position: relative;
+        width: 100%;
+        font-size: 1.5vh;
+        color: #c2c2c2;
+        font-weight: 100;
+    }
+
+    .button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #D9D9D9;
+        border-radius: 20px;
+        padding: 12px 40px;
+        color: #212121;
+        text-decoration: none;
+        font-size: 1.8vh;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-weight: lighter;
+    }
+
+    .button:hover {
+        background-color: #f8f8f8;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .date {
+        position: absolute;
+        bottom: 20px;
+        left: 40px;
+        color: #8a8a8a;
+        font-style: italic;
+        font-size: 2vh;
+        font-weight: 100;
+
+    }
+}
+
+.item:hover {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+/* .item:not(.deployed) {
+    width: 85vw;
+    height: 30vh;
+    max-width: 1200px;
+    max-height: 800px;
+    background: #676767;
+    background: linear-gradient(90deg, #262626 0%, #262626 30%, #343434 100%);
+    border-radius: 20px;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+
+    .photo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+        z-index: 90;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+        cursor: pointer;
+    }
+
+    .info {
+        position: relative;
+        left: 35%;
+        width: 65%;
+        height: 100%;
+        transition: all 0.3s ease-in-out;
+        z-index: 2;
+
+    }
+
+    .title {
+        position: relative;
+        top: 20px;
+        left: 20px;
+        font-size: 5vh;
+        font-weight: bold;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .title-undeployed {
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        transform: translate(0%, -50%);
+        width: 100%;
+        font-size: 5vh;
+        font-weight: bold;
+        color: #ffffff;
+        z-index: 100;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        user-select: none;
+        opacity: 1;
+    }
+
+    .description {
+        position: relative;
+        width: 90%;
+        top: 40px;
+        left: 20px;
+        margin-top: 20px;
+        font-size: 2vh;
+        color: #c2c2c2;
+        font-weight: 100;
+    }
+
+    .button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #D9D9D9;
+        border-radius: 20px;
+        padding: 12px 40px;
+        color: #212121;
+        text-decoration: none;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-weight: lighter;
+    }
+
+    .button:hover {
+        background-color: #f8f8f8;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .date {
+        position: absolute;
+        bottom: 20px;
+        left: 40px;
+        color: #ededed;
+        font-weight: 100;
+
+    }
+
+
+
+} */
+
+
+
+
+
+
+/* .chapter-item {
     width: 70vw;
     position: relative;
     margin-bottom: 70px;
@@ -74,7 +297,7 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     opacity: 1;
 }
 
-.chapter-item:hover .chapter-title{
+.chapter-item:hover .chapter-title {
     color: #ffffff;
     font-weight: 300;
 }
@@ -252,5 +475,5 @@ const deployChapter = (chapter: ChapterWithPhoto) => {
     .chapter-date {
         display: none;
     }
-}
+} */
 </style>

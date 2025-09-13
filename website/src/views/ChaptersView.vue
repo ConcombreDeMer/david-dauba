@@ -2,25 +2,26 @@
 
 
     <div class="chapters-container">
-        <div class="chapters-left">
-            <div class="presentation">
-                <h1 class="chapters-title">Mes chapitres</h1>
-                <div v-if="isAdmin" class="admin-actions">
-                    <GoToButton to="/create-chapter">Créer un chapitre</GoToButton>
-                </div>
-                <ul class="chapters-list">
-                    <li v-for="chapter in chapters" :key="chapter.id">
 
-                        <ChapterInfo :chapter="chapter" :is-deployed="true" />
-
-                        <button v-if="isAdmin" @click="deleteChapter(chapter.id)" class="delete-chapter-btn">
-                            <IconClose />
-                        </button>
-                    </li>
-                </ul>
-                <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
-            </div>
+        <div class="chapters-titles">
+            <h1 class="chapters-title">Mes chapitres</h1>
+            <p class="chapters-subtitle">Mes différents projets</p>
+            <div class="line"></div>
         </div>
+        <div v-if="isAdmin" class="admin-actions">
+            <GoToButton to="/create-chapter">Créer un chapitre</GoToButton>
+        </div>
+        <ul class="chapters-list">
+            <li v-for="chapter in chapters" :key="chapter.id">
+
+                <ChapterInfo :chapter="chapter" :is-deployed="true" />
+
+                <button v-if="isAdmin" @click="deleteChapter(chapter.id)" class="delete-chapter-btn">
+                    <IconClose />
+                </button>
+            </li>
+        </ul>
+        <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
     </div>
 
 
@@ -92,20 +93,60 @@ onMounted(() => {
 
 <style scoped>
 .chapters-container {
-    width: 70vw;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
+
+.chapters-titles {
+    position: absolute;
+    top: 40%;
+    left: 32%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    width: fit-content;
+}
+
+
 .chapters-title {
-    text-align: center;
-    padding-top: 200px;
-    margin-bottom: 100px;
+    position: relative;
+    color: #dcdcdc;
+    z-index: 10;
+    width: fit-content;
+    font-size: 12vh;
+}
+
+.chapters-subtitle {
+    color: #dcdcdc;
+    font-size: 2.5vh;
+    z-index: 10;
+    font-family: 'Fairplay Display', serif;
+    font-weight: 400;
+    margin-left: 2px;
+    padding: 0;
+    margin-top: -20px;
+}
+
+.line {
+    width: 2px;
+    height: 85%;
+    background-color: white;
+    position: absolute;
+    top: 18%;
+    left: -20px;
 }
 
 .chapters-list {
     list-style: none;
     padding: 0;
+    margin-top: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .delete-chapter-btn {
@@ -141,6 +182,4 @@ onMounted(() => {
 
 
 }
-
-
 </style>
