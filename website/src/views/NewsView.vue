@@ -2,38 +2,44 @@
 
     <div class="news">
 
-        <h1>Mes actualités</h1>
-        <RouterLink v-if="isAdmin" to="/create-news" class="create-news">
-            <p>Créer une actualité</p>
-            <p class="plus">+</p>
-        </RouterLink>
+        <PageTitles title="Actualités" subtitle="Tenez vous au courant de mes actus" />
 
 
-        <div class="news-list">
-            <template v-if="loading">
-                <p class="no-news">Chargement des actualités...</p>
-            </template>
-            <template v-else-if="news.length === 0">
-                <p class="no-news">Aucune actualité pour le moment.</p>
-            </template>
-            <div v-else>
-                <div v-for="item in news" :key="item.id" class="news-item">
-                    <button v-if="isAdmin" class="delete-news-btn" @click="deleteNews(item.id)" title="Supprimer">x</button>
-                    <h2>{{ item.name }}</h2>
-                    <p>{{ item.description }}</p>
-                    <div v-if="item.media_url" class="media-block">
-                        <img :src="item.media_url" alt="media" class="image-iframe" />
+        <div class="content">
+
+            <RouterLink v-if="isAdmin" to="/create-news" class="create-news">
+                <p>Créer une actualité</p>
+                <p class="plus">+</p>
+            </RouterLink>
+
+            <div class="news-list">
+                <template v-if="loading">
+                    <p class="no-news">Chargement des actualités...</p>
+                </template>
+                <template v-else-if="news.length === 0">
+                    <p class="no-news">Aucune actualité pour le moment.</p>
+                </template>
+                <div v-else>
+                    <div v-for="item in news" :key="item.id" class="news-item">
+                        <button v-if="isAdmin" class="delete-news-btn" @click="deleteNews(item.id)"
+                            title="Supprimer">x</button>
+                        <h2>{{ item.name }}</h2>
+                        <p>{{ item.description }}</p>
+                        <div v-if="item.media_url" class="media-block">
+                            <img :src="item.media_url" alt="media" class="image-iframe" />
+                        </div>
+                        <div v-if="item.media_link" class="media-block">
+                            <iframe v-if="isYoutube(item.media_link)" :src="youtubeEmbedUrl(item.media_link)"
+                                frameborder="0" class="youtube-iframe"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                            <iframe v-else :src="item.media_link" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="created-at">{{ formatRelativeDate(item.date) }}</div>
                     </div>
-                    <div v-if="item.media_link" class="media-block">
-                        <iframe v-if="isYoutube(item.media_link)" :src="youtubeEmbedUrl(item.media_link)"
-                            frameborder="0" class="youtube-iframe"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                        <iframe v-else :src="item.media_link" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="created-at">{{ formatRelativeDate(item.date) }}</div>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -44,6 +50,7 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
 import { isAdmin } from '@/stores/admin'
+import PageTitles from '@/components/PageTitles.vue'
 
 interface NewsItem {
     id: number
@@ -138,6 +145,15 @@ function formatRelativeDate(dateStr: string): string {
     }
 }
 
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70vh;
+}
+
 .create-news {
     background-color: #5D5D5D;
     border-radius: 5px;
@@ -151,7 +167,7 @@ function formatRelativeDate(dateStr: string): string {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 
 }
 
@@ -212,14 +228,14 @@ function formatRelativeDate(dateStr: string): string {
     color: #aaa;
     position: absolute;
     top: -30px;
-    left : 0px;
+    left: 0px;
 }
 
 .delete-news-btn {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: none;
     border-radius: 50%;
@@ -233,27 +249,33 @@ function formatRelativeDate(dateStr: string): string {
     z-index: 3;
     transition: background 0.2s;
 }
+
 .delete-news-btn:hover {
     background: #e74c3c;
 }
+
 @media (max-width: 900px) {
     .news {
         width: 98vw;
         margin-top: 100px;
     }
+
     .news h1 {
         font-size: 6vh;
         margin-bottom: 30px;
     }
+
     .create-news {
         width: 80vw;
         font-size: 1.1rem;
         margin-bottom: 50px;
         padding: 0 8px;
     }
+
     .plus {
         font-size: 2.2rem;
     }
+
     .news-item {
         max-width: 100vw;
         width: 90vw;
@@ -261,19 +283,23 @@ function formatRelativeDate(dateStr: string): string {
         margin-bottom: 40px;
         gap: 10px;
     }
+
     .news-item h2 {
         font-size: 2rem;
     }
+
     .youtube-iframe,
     .image-iframe {
         width: 100%;
         min-width: 0;
         aspect-ratio: 16 / 9;
     }
+
     .news-item .created-at {
         font-size: 0.9rem;
         top: -22px;
     }
+
     .delete-news-btn {
         width: 28px;
         height: 28px;

@@ -3,25 +3,24 @@
 
     <div class="chapters-container">
 
-        <div class="chapters-titles">
-            <h1 class="chapters-title">Mes chapitres</h1>
-            <p class="chapters-subtitle">Mes différents projets</p>
-            <div class="line"></div>
-        </div>
-        <div v-if="isAdmin" class="admin-actions">
-            <GoToButton to="/create-chapter">Créer un chapitre</GoToButton>
-        </div>
-        <ul class="chapters-list">
-            <li v-for="chapter in chapters" :key="chapter.id">
+        <PageTitles title="Mes chapitres" subtitle="Mes différents projets" />
 
-                <ChapterInfo :chapter="chapter" :is-deployed="true" />
+        <div class="content">
 
-                <button v-if="isAdmin" @click="deleteChapter(chapter.id)" class="delete-chapter-btn">
-                    <IconClose />
-                </button>
-            </li>
-        </ul>
-        <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
+            <RouterLink v-if="isAdmin" to="/create-chapter" class="create-chapters">
+                <p>Créer une chapitre</p>
+                <p class="plus">+</p>
+            </RouterLink>
+            <ul class="chapters-list">
+                <li v-for="chapter in chapters" :key="chapter.id">
+
+                    <ChapterInfo :chapter="chapter" :is-deployed="true" @delete-chapter="deleteChapter" />
+                </li>
+            </ul>
+            <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
+
+        </div>
+
     </div>
 
 
@@ -32,10 +31,10 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
 import { isAdmin } from '../stores/admin'
-import IconClose from '@/components/icons/IconClose.vue'
-import GoToButton from '@/components/GoToButton.vue'
 import type { Chapter } from '@/type'
 import ChapterInfo from '@/components/ChapterInfo.vue'
+
+import PageTitles from '@/components/PageTitles.vue'
 
 export type ChapterWithPhoto = {
     id: number
@@ -93,7 +92,12 @@ onMounted(() => {
 
 <style scoped>
 .chapters-container {
-    width: 100%;
+    width: 80%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-left: auto;
     margin-right: auto;
 }
@@ -137,10 +141,40 @@ onMounted(() => {
     left: -20px;
 }
 
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 85vh;
+
+}
+
+.create-chapters {
+    background-color: #5D5D5D;
+    border-radius: 5px;
+    padding: 0px 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    width: 350px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.plus {
+    font-size: 3rem;
+    font-weight: 500;
+}
+
 .chapters-list {
     list-style: none;
     padding: 0;
-    margin-top: 90vh;
     display: flex;
     flex-direction: column;
     gap: 60px;
@@ -150,7 +184,10 @@ onMounted(() => {
 }
 
 .delete-chapter-btn {
-    margin-left: 24px;
+    position: absolute;
+    right: 100px;
+    transform: translateY(-50%);
+
     background: none;
     border: none;
     cursor: pointer;
