@@ -16,7 +16,7 @@
             </router-link>
         </div>
 
-        <button  v-if="isAdmin" class="delete-chapter-btn" @click.stop="deleteChapter(chapter)">Supprimer</button>
+        <button v-if="isAdmin" class="delete-chapter-btn" @click.stop="deleteChapter(chapter)">Supprimer</button>
 
     </div>
 
@@ -144,9 +144,9 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
         color: #212121;
         text-decoration: none;
         font-size: 1.8vh;
+        font-weight: 300;
         transition: all 0.3s ease;
         text-align: center;
-        font-weight: lighter;
     }
 
     .button:hover {
@@ -171,5 +171,4 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     opacity: 1;
     transform: scale(1.02);
 }
-
 </style>
