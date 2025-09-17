@@ -22,9 +22,9 @@
                 <div v-else>
                     <div v-for="item in news" :key="item.id" class="news-item">
                         <button v-if="isAdmin" class="delete-news-btn" @click="deleteNews(item.id)"
-                            title="Supprimer">x</button>
-                        <h2>{{ item.name }}</h2>
-                        <p>{{ item.description }}</p>
+                            title="Supprimer">Supprimer</button>
+                        <h2 class="title">{{ item.name }}</h2>
+                        <p class="description">{{ item.description }}</p>
                         <div v-if="item.media_url" class="media-block">
                             <img :src="item.media_url" alt="media" class="image-iframe" />
                         </div>
@@ -36,6 +36,7 @@
                             <iframe v-else :src="item.media_link" frameborder="0" allowfullscreen></iframe>
                         </div>
                         <div class="created-at">{{ formatRelativeDate(item.date) }}</div>
+                        <div class="line"></div>
                     </div>
                 </div>
             </div>
@@ -129,6 +130,7 @@ function formatRelativeDate(dateStr: string): string {
 </script>
 
 <style scoped>
+
 .news {
     width: 80%;
     height: fit-content;
@@ -168,7 +170,6 @@ function formatRelativeDate(dateStr: string): string {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 50px;
-
 }
 
 .create-news:hover {
@@ -189,17 +190,25 @@ function formatRelativeDate(dateStr: string): string {
 
 .news-item {
     position: relative;
-    background: #464646;
+    background: #676767;
+    background: linear-gradient(90deg, #343434 0%, #262626 80%, #262626 100%);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     max-width: 1200px;
     width: 90vw;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: start;
     gap: 20px;
     padding: 20px;
-    margin-bottom: 80px;
+    margin-bottom: 100px;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.news-item:hover {
+    opacity: 1;
+    scale: 1.02;
 }
 
 .news-item h2 {
@@ -209,11 +218,19 @@ function formatRelativeDate(dateStr: string): string {
     font-weight: 500;
 }
 
+.description {
+    font-size: 2vh;
+    color: #ddd;
+    margin: 0;
+    padding: 0;
+    width: 80%;
+}
+
 .news-item .media-block {
-    width: 100%;
+    width: 80%;
     height: fit-content;
     display: flex;
-    justify-content: center;
+    justify-content: start;
 }
 
 .youtube-iframe,
@@ -221,6 +238,7 @@ function formatRelativeDate(dateStr: string): string {
     width: 90%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
+    border-radius: 20px;
 }
 
 .news-item .created-at {
@@ -231,28 +249,35 @@ function formatRelativeDate(dateStr: string): string {
     left: 0px;
 }
 
+.line {
+    width: 2px;
+    height: 50%;
+    background-color: #959595;
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .delete-news-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(0, 0, 0, 0.6);
+    top: 20px;
+    right: 20px;
+    background: #ff4d4f;
     color: #fff;
     border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 2rem;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1.2rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
+    z-index: 100;
     transition: background 0.2s;
 }
 
 .delete-news-btn:hover {
-    background: #e74c3c;
+    background: #d9363e;
 }
+
 
 @media (max-width: 900px) {
     .news {

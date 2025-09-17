@@ -1,7 +1,7 @@
 <template>
 
   <div class="contact-container">
-    <h1 class="contact-title">Contact</h1>
+    <PageTitles title="Me contacter" subtitle="Discutons ensemble" />
     <form @submit.prevent="sendMessage">
       <div>
         <label for="name">Nom :</label>
@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import PageTitles from '@/components/PageTitles.vue'
 
 const name = ref('')
 const email = ref('')
@@ -92,8 +93,14 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 50px;
-  margin-top: 50px;
+  margin-top: 75vh;
   margin-bottom: 100px;
+  background-color: rgb(43, 43, 43);
+  width: fit-content;
+  padding: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
 }
 
 form div {
@@ -129,7 +136,8 @@ textarea:focus {
 label {
   font-weight: normal;
   margin-bottom: 2px;
-  font-size: 2rem;
+  font-size: 2.5vh;
+  font-weight: lighter;
 }
 
 button[type="submit"] {
@@ -149,7 +157,8 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background: #0056b3;
+  background: rgb(101, 101, 101);
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 900px) {
@@ -164,7 +173,7 @@ button[type="submit"]:hover {
     margin-left: auto;
     margin-right: auto;
 
-    div{
+    div {
       width: 100%;
     }
   }

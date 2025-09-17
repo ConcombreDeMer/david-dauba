@@ -31,35 +31,35 @@
     </div>
   </div>
 
-  <!-- Modal photo -->
-  <transition name="modal-fade">
-    <div v-if="showPhotoModal" class="modal-overlay" @click.self="closePhotoModal">
-      <div class="modal-content">
-        <img :src="selectedPhoto?.url" :alt="selectedPhoto?.name || 'photo agrandie'" class="modal-photo"
-          @load="onModalImgLoad" />
-        <button class="modal-close" @click="closePhotoModal">✕</button>
-      </div>
-    </div>
-  </transition>
+  <PhotoModal
+    :show="showPhotoModal"
+    :photos="photos"
+    :selectedIndex="selectedPhotoIndex"
+    @close="closePhotoModal"
+    @update:selectedIndex="updatePhotoIndex"
+  />
 
 
 </template>
 
 <script setup lang="ts">
+import PhotoModal from '../components/PhotoModal.vue'
 const showPhotoModal = ref(false)
-const selectedPhoto = ref<any | null>(null)
-const onModalImgLoad = (e: Event) => {
-  // Optionnel : ajuster dynamiquement la taille si besoin
-}
+const selectedPhotoIndex = ref(0)
 const openPhotoModal = (photo: any) => {
-  selectedPhoto.value = photo
-  showPhotoModal.value = true
-  document.body.style.overflow = 'hidden' // Empêche le scroll en arrière-plan
+  const idx = photos.value.findIndex((p) => p.id === photo.id)
+  if (idx !== -1) {
+    selectedPhotoIndex.value = idx
+    showPhotoModal.value = true
+    document.body.style.overflow = 'hidden'
+  }
 }
 const closePhotoModal = () => {
   showPhotoModal.value = false
-  selectedPhoto.value = null
   document.body.style.overflow = ''
+}
+const updatePhotoIndex = (idx: number) => {
+  selectedPhotoIndex.value = idx
 }
 import type { Chapter } from '../type'
 import { ref, onMounted } from 'vue'

@@ -2,6 +2,9 @@
 
     <div class="presentation" id="presentation">
 
+        <PageTitles title="À propos" subtitle="Derrière l'objectif" />
+
+
         <div class="left image-bg">
             <img class="home2" src="/home2.png" alt="" />
         </div>
@@ -33,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import PageTitles from '@/components/PageTitles.vue'
 
 </script>
 
@@ -46,8 +50,10 @@
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 200px;
+    margin-top: 90vh;
     gap: 100px;
+    background-color: rgb(43, 43, 43);
+    border-radius: 10px;
 
     .presentation-title {
         margin-bottom: 50px;
@@ -69,7 +75,6 @@ img {
 }
 
 .image-bg {
-    background: #262626;
     box-sizing: border-box;
 }
 

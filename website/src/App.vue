@@ -104,6 +104,13 @@ function goToAdmin() {
 }
 
 @font-face {
+  font-family: 'Roboto';
+  src: url('./assets/fonts/Roboto-VariableFont_wdth,wght.ttf') format('woff2');
+  font-weight: lighter 200, Light 300, Regular 400, Medium 500, Semibold 600, Bold 700, Extrabold 800, Black 900;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Fairplay Display';
   src: url('./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('woff2');
   font-weight: lighter 200, Light 300, Regular 400, Medium 500, Semibold 600, Bold 700, Extrabold 800, Black 900;
@@ -121,7 +128,7 @@ function goToAdmin() {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto';
   background-color: #262626;
   /* background-image: url('/mesh-gradient.svg');
   background-size: cover;

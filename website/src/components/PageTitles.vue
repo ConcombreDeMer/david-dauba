@@ -40,7 +40,6 @@ defineProps<{
 		font-weight: 400;
 		margin-left: 2px;
 		padding: 0;
-		margin-top: -20px;
 }
 
 .line {

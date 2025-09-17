@@ -17,16 +17,38 @@
 
 
   <div class="recent-works">
-    <div v-if="recentImages.length" class="recent-works-grid">
-      <img v-for="img in recentImages" :key="img.id" :src="img.url" :alt="img.name || 'photo'"
-        class="recent-work-img" />
-    </div>
-    <div v-else class="recent-works-empty">Aucune image à afficher.</div>
+    <PhotoModal :show="showPhotoModal" :photos="recentImages" :selectedIndex="selectedPhotoIndex"
+      @close="closePhotoModal" @update:selectedIndex="updatePhotoIndex" />
+    <template v-if="recentImages.length">
+      <div class="recent-works-grid">
+        <img v-for="(img, i) in recentImages" :key="img.id" :src="img.url" :alt="img.name || 'photo'"
+          class="recent-work-img" @click="openPhotoModal(i)" style="cursor:pointer;" />
+      </div>
+    </template>
+    <template v-else>
+      <div class="recent-works-empty">Aucune image à afficher.</div>
+    </template>
   </div>
 
 </template>
 
 <script setup lang="ts">
+// ...existing code...
+import PhotoModal from '../components/PhotoModal.vue'
+const showPhotoModal = ref(false)
+const selectedPhotoIndex = ref(0)
+const openPhotoModal = (idx: number) => {
+  selectedPhotoIndex.value = idx
+  showPhotoModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+const closePhotoModal = () => {
+  showPhotoModal.value = false
+  document.body.style.overflow = ''
+}
+const updatePhotoIndex = (idx: number) => {
+  selectedPhotoIndex.value = idx
+}
 import { ref, onMounted, onUnmounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '../type'
@@ -120,6 +142,124 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background: rgba(30, 30, 30, 0.55);
+  backdrop-filter: blur(7px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.modal-content {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modal-pop 0.25s cubic-bezier(.4, 2, .6, 1) both;
+  gap: 16px;
+}
+
+.modal-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  font-size: 2.2rem;
+  color: #333;
+  cursor: pointer;
+  z-index: 1100;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  opacity: 0.5;
+}
+
+.modal-arrow.left {
+  left: 32px;
+}
+
+.modal-arrow.right {
+  right: 32px;
+}
+
+.modal-arrow:hover {
+  background: #eaeaea;
+}
+
+.modal-photo {
+  max-width: 80vw;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  object-fit: contain;
+  background: #fff;
+  display: block;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  color: #c00;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-close:hover {
+  background: #ffeaea;
+}
+
+@keyframes modal-pop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.25s;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
 .recent-works {
   margin: 60px auto 0 auto;
   width: 90vw;
@@ -147,7 +287,8 @@ onMounted(() => {
 }
 
 .recent-work-img:hover {
-  transform: scale(1.04);
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.03);
   cursor: pointer;
 }
 
@@ -158,9 +299,8 @@ onMounted(() => {
   margin: 40px 0;
 }
 
-
-
-.home-button, .home-button-mobile {
+.home-button,
+.home-button-mobile {
   position: absolute;
   bottom: -80px;
   left: -20px;
@@ -172,11 +312,12 @@ onMounted(() => {
   font-size: 1.5rem;
   transition: all 0.3s ease;
   text-align: center;
-  font-weight: lighter;
+  font-weight: 300;
 }
 
-.home-button:hover, .home-button-mobile:hover {
-  background-color: #f8f8f8;
+.home-button:hover,
+.home-button-mobile:hover {
+  background-color: #ffffff;
   transition: all 0.3s ease;
   cursor: pointer;
 }
