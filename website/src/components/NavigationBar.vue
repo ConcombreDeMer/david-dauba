@@ -40,6 +40,32 @@ import { ref } from 'vue';
 
 const dropdownOpen = ref(false);
 
+// Ferme le menu si on clique en dehors
+function handleClickOutside(event: MouseEvent) {
+    const dropdown = document.querySelector('.dropdown');
+    if (dropdownOpen.value && dropdown && !dropdown.contains(event.target as Node)) {
+        dropdownOpen.value = false;
+    }
+}
+
+// Ajoute/retire l'écouteur selon l'état du menu
+import { watch, onMounted, onBeforeUnmount } from 'vue';
+watch(dropdownOpen, (open) => {
+    if (open) {
+        document.addEventListener('mousedown', handleClickOutside);
+    } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+});
+onMounted(() => {
+    if (dropdownOpen.value) {
+        document.addEventListener('mousedown', handleClickOutside);
+    }
+});
+onBeforeUnmount(() => {
+    document.removeEventListener('mousedown', handleClickOutside);
+});
+
 function toggleDropdown() {
     dropdownOpen.value = !dropdownOpen.value;
 }
