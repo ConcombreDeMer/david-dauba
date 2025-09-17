@@ -16,12 +16,15 @@ defineProps<{
 
 <style scoped>
 .titles {
-		position: absolute;
-		top: 40%;
-		left: 32%;
-		transform: translate(-50%, -50%);
-		z-index: 20;
-		width: fit-content;
+	position: absolute;
+	top: 40%;
+	left: 32%;
+	transform: translate(-50%, -50%);
+	z-index: 20;
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
 .title {
@@ -49,5 +52,27 @@ defineProps<{
 		position: absolute;
 		top: 18%;
 		left: -20px;
+}
+
+@media (max-width: 600px) {
+	.titles {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90vw;
+		align-items: center;
+		text-align: center;
+	}
+	.title {
+		font-size: 6vh;
+	}
+	.subtitle {
+		font-size: 2vh;
+		margin-left: 0;
+	}
+	.line {
+		display: none;
+	}
 }
 </style>

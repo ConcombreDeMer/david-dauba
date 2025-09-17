@@ -130,7 +130,6 @@ function formatRelativeDate(dateStr: string): string {
 </script>
 
 <style scoped>
-
 .news {
     width: 80%;
     height: fit-content;
@@ -140,7 +139,6 @@ function formatRelativeDate(dateStr: string): string {
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 200px;
 
     h1 {
         margin-bottom: 50px;
@@ -153,7 +151,7 @@ function formatRelativeDate(dateStr: string): string {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 70vh;
+    margin-top: 90vh;
 }
 
 .create-news {
@@ -281,8 +279,7 @@ function formatRelativeDate(dateStr: string): string {
 
 @media (max-width: 900px) {
     .news {
-        width: 98vw;
-        margin-top: 100px;
+        width: 100%;
     }
 
     .news h1 {
@@ -301,16 +298,51 @@ function formatRelativeDate(dateStr: string): string {
         font-size: 2.2rem;
     }
 
+    .content {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 80vh;
+
+    }
+
+    .news-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
     .news-item {
-        max-width: 100vw;
-        width: 90vw;
-        padding: 12px;
-        margin-bottom: 40px;
-        gap: 10px;
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 70px;
+        gap: 20px;
+        opacity: 1;
+        padding: 10px;
+    }
+
+    .news-item .media-block {
+        width: 100%;
     }
 
     .news-item h2 {
         font-size: 2rem;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .description {
+        font-size: 1rem;
+        text-align: left;
+        font-weight: 300;
+        width: 100%;
     }
 
     .youtube-iframe,
@@ -318,6 +350,7 @@ function formatRelativeDate(dateStr: string): string {
         width: 100%;
         min-width: 0;
         aspect-ratio: 16 / 9;
+        border-radius: 10px;
     }
 
     .news-item .created-at {
@@ -326,11 +359,23 @@ function formatRelativeDate(dateStr: string): string {
     }
 
     .delete-news-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 1.5rem;
-        top: 8px;
-        right: 8px;
+        position: relative;
+        font-size: 1.5vh;
+        width: 90%;
+        margin: 12px 0 0 0;
+        padding: 10px 0;
+        top: unset;
+        right: unset;
+        z-index: 10;
+        display: block;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+    .line {
+        display: none;
     }
 }
 </style>

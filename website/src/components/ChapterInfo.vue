@@ -14,13 +14,10 @@
             <router-link :to="`/chapter/${chapter.id}`" class="button">
                 Découvrir
             </router-link>
+
         </div>
-
         <button v-if="isAdmin" class="delete-chapter-btn" @click.stop="deleteChapter(chapter)">Supprimer</button>
-
     </div>
-
-
 </template>
 
 
@@ -170,5 +167,96 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
 .item:hover {
     opacity: 1;
     transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .item {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        min-width: unset;
+        height: auto;
+        min-height: 320px;
+        max-height: unset;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        padding-bottom: 20px;
+        background: linear-gradient(180deg, #262626 0%, #262626 30%, #343434 100%);
+        opacity: 1;
+
+
+        .photo {
+            position: static;
+            width: 100%;
+            height: 180px;
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 0;
+        }
+
+        .info {
+            position: static;
+            left: unset;
+            width: 100%;
+            height: auto;
+            padding: 16px 10px 0 10px;
+            box-sizing: border-box;
+        }
+
+        .texte {
+            position: static;
+            top: unset;
+            left: unset;
+            width: 100%;
+            gap: 20px;
+            padding: 0;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .description {
+            font-size: 1rem;
+            text-align: left;
+            font-weight: 300;
+        }
+
+        .date {
+            position: static;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            left: unset;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .button {
+            position: static;
+            display: block;
+            width: 100%;
+            margin: 26px 0 0 0;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-radius: 12px;
+        }
+
+        .delete-chapter-btn {
+            position: static;
+            display: block;
+            width: 95%;
+            margin: 26px 0 0 0;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-radius: 12px;
+        }
+    }
+
+    .item:hover {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 </style>

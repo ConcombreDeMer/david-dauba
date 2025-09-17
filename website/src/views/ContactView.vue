@@ -163,15 +163,14 @@ button[type="submit"]:hover {
 
 @media (max-width: 900px) {
 
-  .contact-title {
-    padding-top: 100px;
-    font-size: 6vh;
-  }
+
 
   form {
-    width: 90vw;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
+    padding: 20px;
+    margin-top: 75vh;
 
     div {
       width: 100%;
@@ -182,17 +181,18 @@ button[type="submit"]:hover {
   textarea {
     width: 100%;
     border-radius: 0px;
+    font-size: 2vh;
   }
 
   label {
-    font-size: 3vh;
+    font-size: 2vh;
   }
 
   button[type="submit"] {
     width: 100%;
     height: auto;
     padding: 10px;
-    font-size: 3vh;
+    font-size: 2vh;
   }
 
 }

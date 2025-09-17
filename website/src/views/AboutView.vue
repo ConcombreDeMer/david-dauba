@@ -90,9 +90,10 @@ img {
 
     .presentation {
         flex-direction: column-reverse;
-        margin-top: 100px;
+        margin-top: 80vh;
         gap: 50px;
-        width: 90%;
+        width: 80%;
+        padding: 20px;
     }
 
     .left {

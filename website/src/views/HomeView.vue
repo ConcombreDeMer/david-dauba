@@ -485,7 +485,7 @@ onMounted(() => {
   .home-button-mobile {
     display: block;
     position: absolute;
-    bottom: 20px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
   }
