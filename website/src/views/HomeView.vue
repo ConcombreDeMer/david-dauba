@@ -40,16 +40,27 @@ import type { Chapter } from '../type'
 
 const showPhotoModal = ref(false)
 const selectedPhotoIndex = ref(0)
+let touchmoveHandler: ((e: TouchEvent) => void) | null = null
 const openPhotoModal = (idx: number) => {
   selectedPhotoIndex.value = idx
   showPhotoModal.value = true
   document.body.style.overflow = 'hidden'
   document.documentElement.style.overflow = 'hidden'
+  // Empêche le scroll tactile sur iOS
+  touchmoveHandler = (e: TouchEvent) => {
+    e.preventDefault()
+  }
+  document.addEventListener('touchmove', touchmoveHandler, { passive: false })
 }
 const closePhotoModal = () => {
   showPhotoModal.value = false
   document.body.style.overflow = ''
   document.documentElement.style.overflow = ''
+  // Retire l'empêchement du scroll tactile
+  if (touchmoveHandler) {
+    document.removeEventListener('touchmove', touchmoveHandler)
+    touchmoveHandler = null
+  }
 }
 const updatePhotoIndex = (idx: number) => {
   selectedPhotoIndex.value = idx
