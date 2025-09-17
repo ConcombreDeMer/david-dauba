@@ -1,18 +1,22 @@
 <template>
     <transition name="modal-fade">
-        <div v-if="show" class="modal-overlay" @click.self="close">
-            <button class="modal-arrow left" @click.stop="prev" aria-label="Précédente">&#8592;</button>
+        <div v-if="show" class="modal-overlay" @click.self="close"
+            @touchstart="onTouchStart"
+            @touchmove="onTouchMove"
+            @touchend="onTouchEnd">
+            <button class="modal-arrow left desktop-only" @click.stop="prev" aria-label="Précédente">&#8592;</button>
             <div class="modal-content">
                 <img :src="photo?.url" :alt="photo?.name || 'photo agrandie'" class="modal-photo" @load="onImgLoad" />
-                <button class="modal-close" @click="close">✕</button>
+                <button v-if="!isMobile" class="modal-close" @click="close">✕</button>
             </div>
-            <button class="modal-arrow right" @click.stop="next" aria-label="Suivante">&#8594;</button>
+            <button class="modal-arrow right desktop-only" @click.stop="next" aria-label="Suivante">&#8594;</button>
+            <div v-if="isMobile && showSwipeHint" class="swipe-hint">Swipez pour naviguer entre les photos</div>
         </div>
     </transition>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 const props = defineProps<{
     show: boolean,
     photos: any[],
@@ -33,6 +37,52 @@ const next = () => {
     emit('update:selectedIndex', idx)
 }
 const onImgLoad = (e: Event) => { }
+
+// --- Swipe logic for mobile ---
+const touchStartX = ref<number | null>(null)
+const touchEndX = ref<number | null>(null)
+const minSwipeDistance = 50
+const showSwipeHint = ref(true)
+
+const onTouchStart = (e: TouchEvent) => {
+    if (!isMobile.value) return
+    touchEndX.value = null
+    touchStartX.value = e.changedTouches[0].screenX
+}
+const onTouchMove = (e: TouchEvent) => {
+    if (!isMobile.value) return
+    touchEndX.value = e.changedTouches[0].screenX
+}
+const onTouchEnd = () => {
+    if (!isMobile.value || touchStartX.value === null || touchEndX.value === null) return
+    const distance = touchEndX.value - touchStartX.value
+    if (Math.abs(distance) > minSwipeDistance) {
+        if (distance < 0) next()
+        else prev()
+        showSwipeHint.value = false
+    }
+    touchStartX.value = null
+    touchEndX.value = null
+}
+
+// --- Detect mobile ---
+const isMobile = ref(false)
+const checkMobile = () => {
+    isMobile.value = window.innerWidth <= 768
+}
+onMounted(() => {
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => {
+    window.removeEventListener('resize', checkMobile)
+})
+
+// Reset swipe hint when modal is opened
+import { watch } from 'vue'
+watch(() => props.show, (val) => {
+    if (val) showSwipeHint.value = true
+})
 </script>
 
 <style scoped>
@@ -41,7 +91,7 @@ const onImgLoad = (e: Event) => { }
     top: 0;
     left: 0;
     width: 100vw;
-    min-height: 100vh;
+    min-height: 150vh;
     background: rgba(30, 30, 30, 0.55);
     backdrop-filter: blur(7px);
     z-index: 1000;
@@ -123,6 +173,7 @@ const onImgLoad = (e: Event) => { }
     opacity: 0;
 }
 
+/* Hide arrows on mobile, show on desktop */
 .modal-arrow {
     position: fixed;
     top: 50%;
@@ -143,18 +194,37 @@ const onImgLoad = (e: Event) => { }
     transition: background 0.2s;
     opacity: 0.5;
 }
-
 .modal-arrow.left {
     left: 32px;
 }
-
 .modal-arrow.right {
     right: 32px;
 }
-
 .modal-arrow:hover {
     transition: all 0.2s ease-in-out;
     background: #eaeaea;
     opacity: 0.7;
+}
+@media (max-width: 768px) {
+    .modal-arrow.desktop-only {
+        display: none !important;
+    }
+    .swipe-hint {
+        display: block;
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: #ffffff;
+        font-size: 1.05rem;
+        user-select: none;
+        animation: swipe-hint-fade 1s infinite alternate;
+    }
+}
+
+@keyframes swipe-hint-fade {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 </style>
