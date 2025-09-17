@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 const props = defineProps<{
     show: boolean,
     photos: any[],
@@ -70,18 +70,33 @@ const isMobile = ref(false)
 const checkMobile = () => {
     isMobile.value = window.innerWidth <= 768
 }
+
+// Empêche le scroll du body quand la modale est ouverte
+const lockBodyScroll = () => {
+    document.body.style.overflow = 'hidden'
+}
+const unlockBodyScroll = () => {
+    document.body.style.overflow = ''
+}
+
 onMounted(() => {
     checkMobile()
     window.addEventListener('resize', checkMobile)
+    if (props.show) lockBodyScroll()
 })
 onUnmounted(() => {
     window.removeEventListener('resize', checkMobile)
+    unlockBodyScroll()
 })
 
 // Reset swipe hint when modal is opened
-import { watch } from 'vue'
 watch(() => props.show, (val) => {
-    if (val) showSwipeHint.value = true
+    if (val) {
+        showSwipeHint.value = true
+        lockBodyScroll()
+    } else {
+        unlockBodyScroll()
+    }
 })
 </script>
 
