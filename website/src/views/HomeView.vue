@@ -33,28 +33,27 @@
 </template>
 
 <script setup lang="ts">
-// ...existing code...
 import PhotoModal from '../components/PhotoModal.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { supabase } from '../../supabase'
+import type { Chapter } from '../type'
+
 const showPhotoModal = ref(false)
 const selectedPhotoIndex = ref(0)
 const openPhotoModal = (idx: number) => {
   selectedPhotoIndex.value = idx
   showPhotoModal.value = true
   document.body.style.overflow = 'hidden'
+  document.documentElement.style.overflow = 'hidden'
 }
 const closePhotoModal = () => {
   showPhotoModal.value = false
   document.body.style.overflow = ''
+  document.documentElement.style.overflow = ''
 }
 const updatePhotoIndex = (idx: number) => {
   selectedPhotoIndex.value = idx
 }
-import { ref, onMounted, onUnmounted } from 'vue'
-import { supabase } from '../../supabase'
-import type { Chapter } from '../type'
-import { isAdmin } from '../stores/admin'
-import IconClose from '@/components/icons/IconClose.vue'
-import GoToButton from '@/components/GoToButton.vue'
 
 const chapters = ref<Chapter[]>([])
 const recentImages = ref<any[]>([])
