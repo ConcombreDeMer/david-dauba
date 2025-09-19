@@ -2,38 +2,46 @@
 
 
     <div class="admin-chapters">
-        <h1>Chapitres</h1>
         <div class="content">
-            <div class="header-row">
-                <router-link to="/create-chapter" class="create-chapter-btn">Créer un chapitre</router-link>
-            </div>
-            <div v-if="loading" class="loading">
-                <span class="spinner"></span>
-            </div>
-            <template v-else>
-                <div class="chapters-list">
-                    <div class="chapters-header">
-                        <div class="col col-header col-title">Nom</div>
-                        <div class="col col-header col-date">Date</div>
-                        <div class="col col-header col-nbPhotos">Nb de photo</div>
-                        <div class="col col-header col-status">Status</div>
-                        <div class="col col-header col-actions">Actions</div>
+            <transition :name="slideDirection === 'forward' ? 'slide-horizontal' : 'slide-horizontal-reverse'"
+                mode="out-in">
+                <div v-if="!editingChapterId" key="list" class="slide-content">
+                    <h1>Chapitres</h1>
+                    <div class="header-row">
+                        <router-link to="/create-chapter" class="create-chapter-btn">Créer un chapitre</router-link>
                     </div>
-                    <div class="scroll">
-                        <div v-for="chapter in chapters" :key="chapter.id" class="chapter-row">
-                            <div class="col col-title">{{ chapter.title }}</div>
-                            <div class="col col-date">{{ chapter.date }}</div>
-                            <div class="col col-nbPhotos">{{ chapter.nbPhotos }}</div>
-                            <div class="col col-status">{{ chapter.status }}</div>
-                            <div class="col col-actions">
-                                <button class="edit-btn" @click="editChapter(chapter.id)">O</button>
-                                <button class="delete-btn" @click="deleteChapter(chapter.id)">X</button>
+                    <div v-if="loading" class="loading">
+                        <span class="spinner"></span>
+                    </div>
+                    <template v-else>
+                        <div class="chapters-list">
+                            <div class="chapters-header">
+                                <div class="col col-header col-title">Nom</div>
+                                <div class="col col-header col-date">Date</div>
+                                <div class="col col-header col-nbPhotos">Nb de photo</div>
+                                <div class="col col-header col-status">Status</div>
+                                <div class="col col-header col-actions">Actions</div>
                             </div>
+                            <div class="scroll">
+                                <div v-for="chapter in chapters" :key="chapter.id" class="chapter-row">
+                                    <div class="col col-title">{{ chapter.title }}</div>
+                                    <div class="col col-date">{{ chapter.date }}</div>
+                                    <div class="col col-nbPhotos">{{ chapter.nbPhotos }}</div>
+                                    <div class="col col-status">{{ chapter.status }}</div>
+                                    <div class="col col-actions">
+                                        <button class="edit-btn" @click="editChapter(chapter.id)">O</button>
+                                        <button class="delete-btn" @click="deleteChapter(chapter.id)">X</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="chapters.length === 0" class="empty">Aucun chapitre pour le moment.</div>
                         </div>
-                    </div>
-                    <div v-if="chapters.length === 0" class="empty">Aucun chapitre pour le moment.</div>
+                    </template>
                 </div>
-            </template>
+                <div v-else key="edit" class="slide-content edit-content">
+                    <AdminChapter :chapter="selectedChapter" @back="goBackToList" />
+                </div>
+            </transition>
         </div>
     </div>
 
@@ -42,10 +50,12 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted } from 'vue'
-import { supabase } from '../../../supabase'
 
-interface ChapterRow {
+import { ref, computed, onMounted } from 'vue'
+import { supabase } from '../../../supabase'
+import AdminChapter from './AdminChapter.vue'
+
+export interface ChapterRow {
     id: number
     title: string
     date: string
@@ -53,8 +63,16 @@ interface ChapterRow {
     status: string
 }
 
+
 const chapters = ref<ChapterRow[]>([])
 const loading = ref(true)
+
+const editingChapterId = ref<number | null>(null)
+const slideDirection = ref<'forward' | 'back'>('forward')
+
+const selectedChapter = computed(() => {
+    return chapters.value.find(ch => ch.id === editingChapterId.value) || null
+})
 
 const fetchChapters = async () => {
     loading.value = true
@@ -84,10 +102,17 @@ const fetchChapters = async () => {
     loading.value = false
 }
 
+
 const editChapter = (id: number) => {
-    // Rediriger vers la page d'édition ou ouvrir un modal
-    alert('Edit chapitre ' + id)
+    slideDirection.value = 'forward'
+    editingChapterId.value = id
 }
+
+const goBackToList = () => {
+    slideDirection.value = 'back'
+    editingChapterId.value = null
+}
+
 
 const deleteChapter = (id: number) => {
     if (confirm('Voulez-vous vraiment supprimer ce chapitre ?')) {
@@ -116,7 +141,94 @@ onMounted(() => {
     .content {
         display: block;
         position: relative;
-        height: 80%;
+        height: 100%;
+        overflow: hidden;
+
+        .slide-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .edit-content {
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #444;
+        }
+
+        /* Animation slide horizontale */
+        .slide-horizontal-enter-active,
+        .slide-horizontal-leave-active {
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-horizontal-enter-from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .slide-horizontal-enter-to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide-horizontal-leave-from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide-horizontal-leave-to {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        /* Slide reverse (retour) */
+        .slide-horizontal-reverse-enter-active,
+        .slide-horizontal-reverse-leave-active {
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-horizontal-reverse-enter-from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .slide-horizontal-reverse-enter-to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide-horizontal-reverse-leave-from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide-horizontal-reverse-leave-to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
 
         .header-row {
             display: flex;
@@ -150,8 +262,9 @@ onMounted(() => {
 
         .chapters-list {
             display: block;
+            box-sizing: border-box;
             width: 100%;
-            max-height: calc(100% - 65px);
+            max-height: calc(80% - 65px);
             color: #e0e0e0;
             border-radius: 10px;
             overflow: hidden;
@@ -161,7 +274,7 @@ onMounted(() => {
             background-color: rgba(255, 255, 255, 0.1);
             overflow-y: auto;
 
-            
+
             .chapters-header {
                 display: flex;
                 justify-content: space-between;
@@ -171,7 +284,7 @@ onMounted(() => {
                 padding-bottom: 10px;
                 font-weight: 500;
             }
-            
+
             .chapter-row {
                 display: flex;
                 justify-content: space-between;
@@ -181,7 +294,7 @@ onMounted(() => {
                 transition: background 0.2s;
                 font-weight: 300;
             }
-            
+
             .col {
                 display: flex;
                 justify-content: left;
@@ -189,11 +302,11 @@ onMounted(() => {
                 box-sizing: border-box;
                 padding: 5px 20px;
             }
-            
+
             .edit-btn:hover {
                 background: #888;
             }
-            
+
             .delete-btn {
                 background: #ff4d4f;
                 color: #fff;
@@ -204,11 +317,11 @@ onMounted(() => {
                 margin-left: 10px;
                 transition: background 0.2s;
             }
-            
+
             .delete-btn:hover {
                 background: #d9363e;
             }
-            
+
             .empty {
                 margin-top: 30px;
                 color: #bcbcbc;
