@@ -39,7 +39,12 @@
                     </template>
                 </div>
                 <div v-else key="edit" class="slide-content edit-content">
-                    <AdminChapter :chapter="selectedChapter" @back="goBackToList" />
+                    <template v-if="selectedChapter">
+                        <AdminChapter :chapter="selectedChapter" @back="goBackToList" />
+                    </template>
+                    <template v-else>
+                        <div style="color:red; padding:2em;">Erreur : chapitre introuvable (id={{ editingChapterId }})<br>Chapitres chargés : {{ chapters.length }}</div>
+                    </template>
                 </div>
             </transition>
         </div>
@@ -61,6 +66,7 @@ export interface ChapterRow {
     date: string
     nbPhotos: number
     status: string
+    description: string
 }
 
 
@@ -94,7 +100,8 @@ const fetchChapters = async () => {
                 title: chapter.title,
                 date: chapter.date,
                 nbPhotos: count || 0,
-                status: 'Publié' // ou autre logique de status si besoin
+                status: chapter.status || 'Inconnu',
+                description: chapter.description || ''
             }
         })
     )
