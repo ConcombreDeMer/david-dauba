@@ -27,10 +27,12 @@
                                     <div class="col col-title">{{ chapter.title }}</div>
                                     <div class="col col-date">{{ chapter.date }}</div>
                                     <div class="col col-nbPhotos">{{ chapter.nbPhotos }}</div>
-                                    <div class="col col-status">{{ chapter.status }}</div>
+                                    <div class="col col-status">
+                                        <AdminStatusLabel :status="chapter.status" />
+                                    </div>
                                     <div class="col col-actions">
-                                        <button class="edit-btn" @click="editChapter(chapter.id)">O</button>
-                                        <button class="delete-btn" @click="deleteChapter(chapter.id)">X</button>
+                                        <button class="edit-btn" @click="editChapter(chapter.id)"><img src="/admin/pencil.png" alt=""></button>
+                                        <button class="delete-btn" @click="deleteChapter(chapter.id)"><img src="/admin/trash.png" alt=""></button>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +42,7 @@
                 </div>
                 <div v-else key="edit" class="slide-content edit-content">
                     <template v-if="selectedChapter">
-                        <AdminChapter :chapter="selectedChapter" @back="goBackToList" />
+                        <AdminChapter :chapter="selectedChapter" @back="goBackToList" @saved="onChapterSaved" />
                     </template>
                     <template v-else>
                         <div style="color:red; padding:2em;">Erreur : chapitre introuvable (id={{ editingChapterId }})<br>Chapitres chargés : {{ chapters.length }}</div>
@@ -59,6 +61,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { supabase } from '../../../supabase'
 import AdminChapter from './AdminChapter.vue'
+import AdminStatusLabel from './AdminStatusLabel.vue'
 
 export interface ChapterRow {
     id: number
@@ -120,12 +123,41 @@ const goBackToList = () => {
     editingChapterId.value = null
 }
 
+// Rafraîchir la liste après modification d'un chapitre
+const onChapterSaved = async () => {
+    await fetchChapters()
+}
 
-const deleteChapter = (id: number) => {
+const deleteChapter = async (id: number) => {
     if (confirm('Voulez-vous vraiment supprimer ce chapitre ?')) {
-        // À compléter : suppression réelle côté supabase si besoin
-        alert('Suppression du chapitre ' + id)
+        // Suppression des photos associées
+        const { data: photos, error: photosError } = await supabase
+            .from('photos')
+            .select('*')
+            .eq('chapter_id', id)
+        if (photosError) {
+            alert('Erreur récupération photos: ' + photosError.message)
+            await fetchChapters();
+            return
+        }
+        if (photos && photos.length > 0) {
+            for (const photo of photos) {
+                if (photo.path) {
+                    await supabase.storage.from('photos').remove([photo.path])
+                }
+            }
+            await supabase.from('photos').delete().eq('chapter_id', id)
+        }
+        // Suppression du chapitre
+        const { error: chapterError } = await supabase
+            .from('chapters')
+            .delete()
+            .eq('id', id)
+        if (chapterError) {
+            alert('Erreur suppression chapitre: ' + chapterError.message)
+        }
     }
+    await fetchChapters();
 }
 
 onMounted(() => {
@@ -310,6 +342,24 @@ onMounted(() => {
                 padding: 5px 20px;
             }
 
+            .edit-btn {
+                background: #222;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.2s;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 100%;
+                }
+            }
+
             .edit-btn:hover {
                 background: #888;
             }
@@ -319,10 +369,18 @@ onMounted(() => {
                 color: #fff;
                 border: none;
                 border-radius: 5px;
-                padding: 6px 18px;
                 cursor: pointer;
                 margin-left: 10px;
                 transition: background 0.2s;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 100%;
+                }
             }
 
             .delete-btn:hover {

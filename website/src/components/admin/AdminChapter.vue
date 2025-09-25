@@ -1,8 +1,25 @@
 <template>
     <div class="edit-chapter">
         <div class="header">
-            <button class="back-btn" @click="emit('back')">←</button>
-            <h1>{{ editedChapter?.title || 'Chapitre' }}</h1>
+            <div class="header-left">
+                <button class="back-btn" @click="emit('back')">←</button>
+                <div class="title-edit">
+                    <template v-if="editMode.title">
+                        <input v-if="editedChapter" v-model="editedChapter.title" @input="onInput" type="text"
+                            class="title-input" />
+                    </template>
+                    <template v-else>
+                        <h1>{{ editedChapter?.title || 'Chapitre' }}</h1>
+                    </template>
+                    <button class="edit-btn2" v-if="!editMode.title" @click="startEdit('title')">✎</button>
+                </div>
+            </div>
+            <div class="open-chapter" v-if="editedChapter && editedChapter.id">
+                <a :href="`/chapter/${editedChapter.id}`" target="_blank" rel="noopener">
+                    <img src="/admin/open-chapter.png" alt="">
+                </a>
+            </div>
+
         </div>
         <div v-if="editedChapter" class="details">
             <!-- Description -->
@@ -23,10 +40,13 @@
             <div class="case status">
                 <div class="title-case">Status</div>
                 <template v-if="editMode.status">
-                    <input v-model="editedChapter.status" @input="onInput" style="width:100%" />
+                    <select v-model="editedChapter.status" @change="onInput" class="status-select">
+                        <option value="Publique">Publique</option>
+                        <option value="Privé">Privé</option>
+                    </select>
                 </template>
                 <template v-else>
-                    <div class="data">{{ editedChapter.status }}</div>
+                    <AdminStatusLabel :status="editedChapter.status" />
                 </template>
                 <div class="edit">
                     <button class="edit-btn" v-if="!editMode.status" @click="startEdit('status')">✎</button>
@@ -57,11 +77,14 @@
         editedChapter: {{ JSON.stringify(editedChapter, null, 2) }}
     </pre>
         </div>
-        <div v-if="editedChapter">
-            <div v-if="errorMsg" style="color:red; margin:10px 0">{{ errorMsg }}</div>
-            <button @click="cancelEdit" :disabled="!edited || loading" class="cancel-btn">Annuler</button>
-            <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les
-                modifications</button>
+        <div v-if="editedChapter" class="footer">
+            <div v-if="errorMsg" style="color:red;">{{ errorMsg }}</div>
+            <button @click="deleteChapter" :disabled="loading" class="delete-btn">Supprimer</button>
+            <div class="right-buttons">
+                <button @click="cancelEdit" :disabled="!edited || loading" class="cancel-btn">Annuler</button>
+                <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les
+                    modifications</button>
+            </div>
         </div>
 
         <!-- Toast de succès -->
@@ -78,10 +101,12 @@
 import { ref, watch, onMounted } from 'vue'
 import { supabase } from '../../../supabase'
 import type { ChapterRow } from './AdminChapters.vue'
+
 import AdminChapterPhotos from './AdminChapterPhotos.vue'
+import AdminStatusLabel from './AdminStatusLabel.vue'
 
 const props = defineProps<{ chapter: ChapterRow | null }>()
-const emit = defineEmits(['back'])
+const emit = defineEmits(['back', 'saved'])
 
 // Champs éditables
 const editMode = ref<{ [key: string]: boolean }>({})
@@ -256,13 +281,101 @@ const saveEdit = async () => {
     if (clearNewPhotos) clearNewPhotos()
     successMsg.value = 'Modifications enregistrées.'
     showToast.value = true
+    // Émettre un événement 'saved' pour prévenir le parent
+    emit('saved')
     setTimeout(() => { showToast.value = false }, 5000)
 }
 
 
+
+// Suppression du chapitre
+const deleteChapter = async () => {
+    if (!props.chapter || !editedChapter.value) return
+    if (!confirm('Voulez-vous vraiment supprimer ce chapitre ? Cette action est irréversible.')) return
+    loading.value = true
+    errorMsg.value = ''
+    // Suppression des photos associées
+    const { data: photos, error: photosError } = await supabase
+        .from('photos')
+        .select('*')
+        .eq('chapter_id', props.chapter.id)
+    if (photosError) {
+        errorMsg.value = `Erreur récupération photos: ${photosError.message}`
+        loading.value = false
+        return
+    }
+    if (photos && photos.length > 0) {
+        for (const photo of photos) {
+            if (photo.path) {
+                await supabase.storage.from('photos').remove([photo.path])
+            }
+        }
+        await supabase.from('photos').delete().eq('chapter_id', props.chapter.id)
+    }
+    // Suppression du chapitre
+    const { error: chapterError } = await supabase
+        .from('chapters')
+        .delete()
+        .eq('id', props.chapter.id)
+    loading.value = false
+    if (chapterError) {
+        errorMsg.value = `Erreur suppression chapitre: ${chapterError.message}`
+        return
+    }
+    // Émettre un événement pour prévenir le parent (retour à la liste)
+    emit('saved')
+    emit('back')
+}
 </script>
 
 <style scoped>
+.edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-btn,
+.edit-btn2 {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.edit-btn:hover,
+.edit-btn2:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Style pour l'input du titre */
+.title-input {
+    font-size: 2.5rem;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-weight: 600;
+    outline: none;
+    margin: 0;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+.title-input:focus {
+    border: solid 1.5px #fff;
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px #00000033;
+}
+
 textarea {
     background: rgba(255, 255, 255, 0.1);
     border: solid 1px rgba(255, 255, 255, 0.2);
@@ -285,14 +398,30 @@ textarea {
 
     .header {
         display: flex;
-        justify-content: left;
+        justify-content: space-between;
         align-items: center;
         gap: 20px;
         margin: 0;
         padding: 0;
         margin-bottom: 20px;
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 80%;
+
+            .title-edit {
+                width: 100%;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+
         h1 {
+            font-size: 2.5rem;
             margin: 0;
             padding: 0;
         }
@@ -316,6 +445,17 @@ textarea {
 
         .back-btn:hover {
             transition: all 0.2s ease-in-out;
+            opacity: 1;
+        }
+
+        .open-chapter img {
+            width: 32px;
+            height: 32px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .open-chapter img:hover {
             opacity: 1;
         }
     }
@@ -346,24 +486,6 @@ textarea {
                 font-weight: 600;
                 margin-bottom: 10px;
                 height: 30px;
-            }
-
-            .edit-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background: rgba(255, 255, 255, 0.2);
-                border: none;
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 1rem;
-                color: #fff;
-                transition: background 0.2s;
-            }
-
-            .edit-btn:hover {
-                background: rgba(255, 255, 255, 0.4);
             }
         }
 
@@ -467,32 +589,90 @@ textarea {
 
     }
 
-    .cancel-btn,
-    .save-btn {
-        background: rgb(255, 255, 255, 0.2);
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 1rem;
-        color: #fff;
-        transition: background 0.2s;
-        margin-right: 10px;
-        margin-top: 20px;
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .right-buttons {
+            display: flex;
+            gap: 10px;
+
+            .cancel-btn,
+            .save-btn {
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: background 0.2s;
+                margin-top: 20px;
+                border: solid 1px rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            }
+
+            .save-btn {
+                background: rgba(255, 255, 255, 0.874);
+                color: black;
+            }
+
+            .cancel-btn {
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+            }
+
+            .cancel-btn:disabled,
+            .save-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                background: rgb(255, 255, 255, 0.1);
+                color: #ccc;
+            }
+
+            .cancel-btn:hover:not(:disabled) {
+                background-color: rgb(255, 255, 255, 0.3);
+                color: #fff;
+            }
+
+            .save-btn:hover:not(:disabled) {
+                background-color: rgb(255, 255, 255, 1);
+                color: black;
+            }
+        }
+
+
+        .delete-btn {
+            background: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.2s ease-in-out;
+            opacity: 0.7;
+            border: solid 1px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .delete-btn:hover {
+            opacity: 1;
+        }
+
+        .delete-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #ffb3b3;
+        }
+
+        .delete-btn:hover:not(:disabled) {
+            background: #d9363e;
+        }
     }
 
-    .cancel-btn:disabled,
-    .save-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        background: rgb(255, 255, 255, 0.1);
-        color: #ccc;
-    }
-
-    .cancel-btn:hover:not(:disabled),
-    .save-btn:hover:not(:disabled) {
-        background: rgb(255, 255, 255, 0.4);
-    }
 
     .error-msg {
         color: red;
@@ -553,5 +733,31 @@ textarea {
 .toast-slide-leave-to {
     transform: translateX(120%);
     opacity: 0;
+}
+
+.status-select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    appearance: none;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.status-select:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.status-select:focus {
+    box-shadow: 0 0 0 2px #00000033;
 }
 </style>
