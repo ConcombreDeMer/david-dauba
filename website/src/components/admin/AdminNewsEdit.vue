@@ -2,7 +2,15 @@
     <div class="edit-news">
         <div class="header">
             <button class="back-btn" @click="emit('back')">←</button>
-            <h1>{{ editedNews?.name || 'Actualité' }}</h1>
+            <div class="title-edit">
+                <template v-if="editMode.name">
+                    <input v-if="editedNews" v-model="editedNews.name" @input="onInput" type="text" class="title-input" />
+                </template>
+                <template v-else>
+                    <h1>{{ editedNews?.name || 'Actualité' }}</h1>
+                </template>
+                <button class="edit-btn2" v-if="!editMode.name" @click="startEdit('name')">✎</button>
+            </div>
         </div>
         <div v-if="editedNews" class="details">
             <!-- Description -->
@@ -22,7 +30,7 @@
             <div class="case date">
                 <div class="title-case">Date</div>
                 <template v-if="editMode.date">
-                    <input v-model="editedNews.date" @input="onInput" type="date" style="width:100%" />
+                    <input v-model="editedNews.date" @input="onInput" type="date" class="date-input" />
                 </template>
                 <template v-else>
                     <div class="data">{{ editedNews.date }}</div>
@@ -33,13 +41,20 @@
             </div>
             <!-- Photo (media_path) -->
             <div class="case photo">
-                <div class="title-case">Photo (media_path)</div>
+                <div class="title-case">Photo</div>
                 <template v-if="editMode.media_path">
                     <input v-model="editedNews.media_path" @input="onInput" style="width:100%"
                         placeholder="Chemin de la photo" />
                 </template>
                 <template v-else>
-                    <div class="data">{{ editedNews.media_path }}</div>
+                    <div class="data">
+                        <template v-if="editedNews.media_path && editedNews.media_path.trim() !== ''">
+                            {{ editedNews.media_path }}
+                        </template>
+                        <template v-else>
+                            Aucune photo ajoutée
+                        </template>
+                    </div>
                 </template>
                 <div class="edit">
                     <button class="edit-btn" v-if="!editMode.media_path" @click="startEdit('media_path')">✎</button>
@@ -47,27 +62,29 @@
             </div>
             <!-- Vidéo (media_link) -->
             <div class="case video">
-                <div class="title-case">Vidéo (media_link)</div>
+                <div class="title-case">Vidéo</div>
                 <template v-if="editMode.media_link">
                     <input v-model="editedNews.media_link" @input="onInput" style="width:100%"
                         placeholder="Lien vidéo" />
                 </template>
                 <template v-else>
                     <div class="data">
-                        <template
-                            v-if="editedNews.media_link && (editedNews.media_link.endsWith('.mp4') || editedNews.media_link.endsWith('.webm'))">
-                            <video :src="editedNews.media_link" controls
-                                style="max-width:100%; max-height:250px; border-radius:8px; background:#000;" />
-                        </template>
-                        <template
-                            v-else-if="editedNews.media_link && (editedNews.media_link.includes('youtube.com') || editedNews.media_link.includes('youtu.be'))">
-                            <iframe :src="getYoutubeEmbedUrl(editedNews.media_link)" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                                style="width:100%; min-height:220px; max-height:300px; border-radius:8px; background:#000;"></iframe>
+                        <template v-if="editedNews.media_link && editedNews.media_link.trim() !== ''">
+                            <template v-if="editedNews.media_link.endsWith('.mp4') || editedNews.media_link.endsWith('.webm')">
+                                <video :src="editedNews.media_link" controls
+                                    style="max-width:100%; max-height:250px; border-radius:8px; background:#000;" />
+                            </template>
+                            <template v-else-if="editedNews.media_link.includes('youtube.com') || editedNews.media_link.includes('youtu.be')">
+                                <iframe class="frame-video" :src="getYoutubeEmbedUrl(editedNews.media_link)" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
+                            </template>
+                            <template v-else>
+                                {{ editedNews.media_link }}
+                            </template>
                         </template>
                         <template v-else>
-                            {{ editedNews.media_link }}
+                            Aucune vidéo liée
                         </template>
                     </div>
                 </template>
@@ -79,12 +96,13 @@
         <div v-else>
             <p>Chargement de l'actualité...</p>
         </div>
-        <div v-if="editedNews">
-            <div v-if="errorMsg" style="color:red; margin:10px 0">{{ errorMsg }}</div>
-            <button @click="cancelEdit" :disabled="!edited || loading" class="cancel-btn">Annuler</button>
-            <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les
-                modifications</button>
+        <div v-if="editedNews" class="footer">
+            <div v-if="errorMsg" style="color:red;">{{ errorMsg }}</div>
             <button @click="deleteNews" :disabled="loading" class="delete-btn">Supprimer</button>
+            <div class="right-buttons">
+                <button @click="cancelEdit" :disabled="!edited || loading" class="cancel-btn">Annuler</button>
+                <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les modifications</button>
+            </div>
         </div>
         <transition name="toast-slide">
             <div v-if="showToast" class="toast-success">
@@ -158,6 +176,7 @@ const cancelEdit = () => {
 const onInput = () => {
     if (!props.news || !editedNews.value) return
     edited.value =
+        props.news.name !== editedNews.value.name ||
         props.news.description !== editedNews.value.description ||
         props.news.date !== editedNews.value.date ||
         props.news.media_path !== editedNews.value.media_path ||
@@ -170,6 +189,7 @@ const saveEdit = async () => {
     successMsg.value = ''
     showToast.value = false
     const updatePayload: any = {
+        name: editedNews.value.name,
         description: editedNews.value.description,
         date: editedNews.value.date,
         media_path: editedNews.value.media_path,
@@ -210,6 +230,54 @@ const deleteNews = async () => {
 </script>
 
 <style scoped>
+
+/* Style pour l'input du titre (identique AdminChapter.vue) */
+.title-edit {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-input {
+    font-size: 2.5rem;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-weight: 600;
+    outline: none;
+    margin: 0;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+.title-input:focus {
+    border: solid 1.5px #fff;
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px #00000033;
+}
+
+.edit-btn2 {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.edit-btn2:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
 h1 {
     font-size: 2.5rem;
     margin: 0;
@@ -234,6 +302,7 @@ textarea {
     width: 100%;
     height: 100%;
     color: #fff;
+    box-sizing: border-box;
 }
 
 .header {
@@ -272,6 +341,8 @@ textarea {
     gap: 20px;
     flex: 1 1 0%;
     font-size: 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .case {
@@ -283,11 +354,35 @@ textarea {
     font-weight: 300;
     position: relative;
     box-sizing: border-box;
+
+    .data {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        width: 100%;
+        height: calc(100% - 40px);
+        max-width: 100%;
+        box-sizing: border-box;
+
+
+        .frame-video {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            border-radius: 8px;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+    }
 }
 
 .description {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 .date {
@@ -309,7 +404,7 @@ textarea {
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 10px;
-    box-sizing: border-box;
+    height: 30px;
 }
 
 .edit-btn {
@@ -338,34 +433,90 @@ textarea {
     max-width: 100%;
 }
 
+
+/* Footer et boutons comme AdminChapter.vue */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 .cancel-btn,
-.save-btn,
-.delete-btn {
-    background: rgb(255, 255, 255, 0.2);
+.save-btn {
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 1rem;
-    color: #fff;
     transition: background 0.2s;
-    margin-right: 10px;
     margin-top: 20px;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.save-btn {
+    background: rgba(255, 255, 255, 0.874);
+    color: black;
+}
+
+.cancel-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .cancel-btn:disabled,
-.save-btn:disabled,
-.delete-btn:disabled {
+.save-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     background: rgb(255, 255, 255, 0.1);
     color: #ccc;
 }
 
-.cancel-btn:hover:not(:disabled),
-.save-btn:hover:not(:disabled),
+.cancel-btn:hover:not(:disabled) {
+    background-color: rgb(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.save-btn:hover:not(:disabled) {
+    background-color: rgb(255, 255, 255, 1);
+    color: black;
+}
+
+.delete-btn {
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: all 0.2s ease-in-out;
+    opacity: 0.7;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.delete-btn:hover {
+    opacity: 1;
+}
+
+.delete-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ffb3b3;
+}
+
 .delete-btn:hover:not(:disabled) {
-    background: rgb(255, 255, 255, 0.4);
+    background: #d9363e;
 }
 
 .toast-success {
@@ -408,5 +559,33 @@ textarea {
 .toast-slide-leave-to {
     transform: translateX(120%);
     opacity: 0;
+}
+
+input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    appearance: none;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+    opacity: 0.8;
+    box-sizing: border-box;
+}
+
+input:hover {
+    opacity: 1;
+    cursor: text;
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px #00000033;
+    color: #fff;
 }
 </style>

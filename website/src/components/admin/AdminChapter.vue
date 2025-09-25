@@ -56,7 +56,7 @@
             <div class="case date">
                 <div class="title-case">Date</div>
                 <template v-if="editMode.date">
-                    <input v-model="editedChapter.date" @input="onInput" type="date" style="width:100%" />
+                    <input v-model="editedChapter.date" @input="onInput" type="date" class="date-input" />
                 </template>
                 <template v-else>
                     <div class="data">{{ editedChapter.date }}</div>
@@ -759,5 +759,34 @@ textarea {
 
 .status-select:focus {
     box-shadow: 0 0 0 2px #00000033;
+}
+
+/* Style pour l'input de date */
+.date-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.13);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    appearance: none;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+    opacity: 0.8;
+    box-sizing: border-box;
+}
+
+.date-input:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.date-input:focus {
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px #00000033;
+    color: #fff;
 }
 </style>

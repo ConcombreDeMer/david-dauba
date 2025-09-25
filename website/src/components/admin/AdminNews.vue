@@ -34,8 +34,8 @@
                                         <span v-else>—</span>
                                     </div>
                                     <div class="col col-actions">
-                                        <button class="edit-btn" @click="editNews(news.id)">O</button>
-                                        <button class="delete-btn" @click="deleteNews(news.id)">X</button>
+                                        <button class="edit-btn" @click="editNews(news.id)"><img src="/admin/pencil.png" alt="Edit"></button>
+                                        <button class="delete-btn" @click="deleteNews(news.id)"><img src="/admin/trash.png" alt="Delete"></button>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +132,6 @@ const deleteNews = async (id: number) => {
 
 const onNewsUpdated = async () => {
     await fetchNews()
-    goBackToList()
 }
 const onNewsDeleted = async () => {
     await fetchNews()
@@ -301,6 +300,23 @@ onMounted(() => {
                 box-sizing: border-box;
                 padding: 5px 20px;
             }
+            .edit-btn {
+                background: #222;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.2s;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 0;
+            }
+            .edit-btn img {
+                width: 100%;
+            }
             .edit-btn:hover {
                 background: #888;
             }
@@ -309,10 +325,17 @@ onMounted(() => {
                 color: #fff;
                 border: none;
                 border-radius: 5px;
-                padding: 6px 18px;
                 cursor: pointer;
                 margin-left: 10px;
                 transition: background 0.2s;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .delete-btn img {
+                width: 100%;
             }
             .delete-btn:hover {
                 background: #d9363e;
