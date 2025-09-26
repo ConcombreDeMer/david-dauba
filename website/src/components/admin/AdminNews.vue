@@ -26,8 +26,12 @@
                                     <div class="col col-name">{{ news.name }}</div>
                                     <div class="col col-date">{{ news.date }}</div>
                                     <div class="col col-photo">
-                                        <span v-if="news.media_path">🖼️</span>
-                                        <span v-else>—</span>
+                                        <template v-if="news.media_url">
+                                            <img :src="news.media_url" alt="Photo" style="max-width:60px; max-height:40px; border-radius:4px; object-fit:cover; background:#222;" />
+                                        </template>
+                                        <template v-else>
+                                            <span>—</span>
+                                        </template>
                                     </div>
                                     <div class="col col-video">
                                         <span v-if="news.media_link">🔗</span>
@@ -75,6 +79,7 @@ export interface NewsRow {
     date: string
     media_path?: string | null
     media_link?: string | null
+    media_url?: string | null
 }
 
 const newsList = ref<NewsRow[]>([])
@@ -94,15 +99,25 @@ const fetchNews = async () => {
         loading.value = false
         return
     }
-    // Pour chaque actualité, on mappe les bons champs
-    const newsWithMedia: NewsRow[] = (data || []).map((news: any) => ({
-        id: news.id,
-        name: news.name,
-        date: news.date,
-        media_path: news.media_path || null,
-        media_link: news.media_link || null,
-        description: news.description || ''
-    }))
+    // Pour chaque actualité, on mappe les bons champs et on récupère l'URL publique de l'image si media_path existe
+    const newsWithMedia: NewsRow[] = await Promise.all(
+        (data || []).map(async (news: any) => {
+            let media_url = null
+            if (news.media_path) {
+                const { data: publicUrlData } = supabase.storage.from('news-media').getPublicUrl(news.media_path)
+                media_url = publicUrlData?.publicUrl || null
+            }
+            return {
+                id: news.id,
+                name: news.name,
+                date: news.date,
+                media_path: news.media_path || null,
+                media_link: news.media_link || null,
+                media_url,
+                description: news.description || ''
+            }
+        })
+    )
     newsList.value = newsWithMedia
     loading.value = false
 }

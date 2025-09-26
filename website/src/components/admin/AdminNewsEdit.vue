@@ -4,7 +4,8 @@
             <button class="back-btn" @click="emit('back')">←</button>
             <div class="title-edit">
                 <template v-if="editMode.name">
-                    <input v-if="editedNews" v-model="editedNews.name" @input="onInput" type="text" class="title-input" />
+                    <input v-if="editedNews" v-model="editedNews.name" @input="onInput" type="text"
+                        class="title-input" />
                 </template>
                 <template v-else>
                     <h1>{{ editedNews?.name || 'Actualité' }}</h1>
@@ -43,13 +44,23 @@
             <div class="case photo">
                 <div class="title-case">Photo</div>
                 <template v-if="editMode.media_path">
-                    <input v-model="editedNews.media_path" @input="onInput" style="width:100%"
-                        placeholder="Chemin de la photo" />
+                    <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start; position: relative;">
+                        <input type="file" accept="image/*" @change="onPhotoFileChange" />
+                        <div v-if="photoPreview" style="margin-top: 8px; position: relative; display: inline-block;">
+                            <img :src="photoPreview" alt="Aperçu" class="media-photo" style="max-width: 200px; max-height: 200px; border-radius: 8px;" />
+                            <button @click="removeSelectedPhoto" type="button" style="margin-left: 10px;">Supprimer</button>
+                        </div>
+                        <div v-else-if="editedNews.media_url" style="position: relative; display: inline-block;">
+                            <img :src="editedNews.media_url" alt="Photo actuelle" class="media-photo" style="max-width: 200px; max-height: 200px; border-radius: 8px;" />
+                            <button v-if="editedNews.media_path" @click="removeExistingPhoto" type="button" class="remove-photo-x" title="Supprimer la photo">×</button>
+                        </div>
+                        <div v-else>Aucune photo ajoutée</div>
+                    </div>
                 </template>
                 <template v-else>
                     <div class="data">
-                        <template v-if="editedNews.media_path && editedNews.media_path.trim() !== ''">
-                            {{ editedNews.media_path }}
+                        <template v-if="editedNews.media_url">
+                            <img :src="editedNews.media_url" alt="Photo" class="media-photo"/>
                         </template>
                         <template v-else>
                             Aucune photo ajoutée
@@ -70,12 +81,15 @@
                 <template v-else>
                     <div class="data">
                         <template v-if="editedNews.media_link && editedNews.media_link.trim() !== ''">
-                            <template v-if="editedNews.media_link.endsWith('.mp4') || editedNews.media_link.endsWith('.webm')">
+                            <template
+                                v-if="editedNews.media_link.endsWith('.mp4') || editedNews.media_link.endsWith('.webm')">
                                 <video :src="editedNews.media_link" controls
                                     style="max-width:100%; max-height:250px; border-radius:8px; background:#000;" />
                             </template>
-                            <template v-else-if="editedNews.media_link.includes('youtube.com') || editedNews.media_link.includes('youtu.be')">
-                                <iframe class="frame-video" :src="getYoutubeEmbedUrl(editedNews.media_link)" frameborder="0"
+                            <template
+                                v-else-if="editedNews.media_link.includes('youtube.com') || editedNews.media_link.includes('youtu.be')">
+                                <iframe class="frame-video" :src="getYoutubeEmbedUrl(editedNews.media_link)"
+                                    frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen></iframe>
                             </template>
@@ -101,7 +115,8 @@
             <button @click="deleteNews" :disabled="loading" class="delete-btn">Supprimer</button>
             <div class="right-buttons">
                 <button @click="cancelEdit" :disabled="!edited || loading" class="cancel-btn">Annuler</button>
-                <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les modifications</button>
+                <button @click="saveEdit" :disabled="!edited || loading" class="save-btn">Enregistrer les
+                    modifications</button>
             </div>
         </div>
         <transition name="toast-slide">
@@ -115,6 +130,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { supabase } from '../../../supabase'
+import imageCompression from 'browser-image-compression'
 import type { NewsRow as BaseNewsRow } from './AdminNews.vue'
 
 // Utilitaire pour transformer un lien YouTube en URL d'embed
@@ -148,6 +164,11 @@ const errorMsg = ref('')
 const successMsg = ref('')
 const showToast = ref(false)
 
+// Pour gestion upload photo
+const photoFile = ref<File|null>(null)
+const photoPreview = ref<string|null>(null)
+let previousMediaPath: string|null = null
+
 if (props.news) {
     editedNews.value = { ...props.news }
 }
@@ -157,11 +178,19 @@ watch(() => props.news, (newNews) => {
         editMode.value = {}
         edited.value = false
         errorMsg.value = ''
+        photoFile.value = null
+        if (photoPreview.value) {
+            URL.revokeObjectURL(photoPreview.value)
+            photoPreview.value = null
+        }
     }
 })
 
 const startEdit = (field: keyof NewsRow) => {
     editMode.value[field] = true
+    if (field === 'media_path') {
+        previousMediaPath = editedNews.value?.media_path || null
+    }
 }
 const cancelEdit = () => {
     if (props.news) {
@@ -171,6 +200,11 @@ const cancelEdit = () => {
         errorMsg.value = ''
         successMsg.value = ''
         showToast.value = false
+        photoFile.value = null
+        if (photoPreview.value) {
+            URL.revokeObjectURL(photoPreview.value)
+            photoPreview.value = null
+        }
     }
 }
 const onInput = () => {
@@ -180,7 +214,34 @@ const onInput = () => {
         props.news.description !== editedNews.value.description ||
         props.news.date !== editedNews.value.date ||
         props.news.media_path !== editedNews.value.media_path ||
+        !!photoFile.value ||
         props.news.media_link !== editedNews.value.media_link
+}
+
+const onPhotoFileChange = (e: Event) => {
+    const target = e.target as HTMLInputElement
+    if (!target || !target.files || target.files.length === 0) return
+    const file = target.files[0]
+    photoFile.value = file
+    if (photoPreview.value) URL.revokeObjectURL(photoPreview.value)
+    photoPreview.value = URL.createObjectURL(file)
+    onInput()
+}
+
+const removeSelectedPhoto = () => {
+    if (photoPreview.value) URL.revokeObjectURL(photoPreview.value)
+    photoFile.value = null
+    photoPreview.value = null
+    onInput()
+}
+
+// Supprimer la photo existante (sans remplacement)
+const removeExistingPhoto = () => {
+    if (editedNews.value) {
+        editedNews.value.media_path = null
+        editedNews.value.media_url = null
+        onInput()
+    }
 }
 const saveEdit = async () => {
     if (!props.news || !editedNews.value) return
@@ -188,11 +249,57 @@ const saveEdit = async () => {
     errorMsg.value = ''
     successMsg.value = ''
     showToast.value = false
+    let newMediaPath = editedNews.value.media_path
+    let newMediaUrl = editedNews.value.media_url
+    // Gestion upload photo si modifiée
+    if (editMode.value.media_path && photoFile.value) {
+        // Compression
+        let fileToUpload = photoFile.value
+        try {
+            fileToUpload = await imageCompression(fileToUpload, {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true
+            })
+        } catch (err) {
+            loading.value = false
+            errorMsg.value = "Erreur lors de la compression de l'image."
+            return
+        }
+        // Générer un nom unique
+        const ext = photoFile.value.name.split('.').pop() || 'jpg'
+        const filePath = `${Date.now()}_${Math.random().toString(36).slice(2,12)}.${ext}`
+        // Upload
+        const { error: uploadError } = await supabase.storage.from('news-media').upload(filePath, fileToUpload)
+        if (uploadError) {
+            loading.value = false
+            errorMsg.value = "Erreur lors de l'upload de la photo : " + uploadError.message
+            return
+        }
+        // Supprimer l'ancienne image si existante
+        if (previousMediaPath && previousMediaPath !== filePath) {
+            await supabase.storage.from('news-media').remove([previousMediaPath])
+        }
+        // Récupérer l'URL publique
+        const { data: publicUrlData } = supabase.storage.from('news-media').getPublicUrl(filePath)
+        newMediaPath = filePath
+        newMediaUrl = publicUrlData?.publicUrl || null
+        editedNews.value.media_path = newMediaPath
+        editedNews.value.media_url = newMediaUrl
+    }
+    // Si suppression de la photo (aucune sélection et ancienne existante)
+    if (editMode.value.media_path && !photoFile.value && previousMediaPath && !editedNews.value.media_path) {
+        await supabase.storage.from('news-media').remove([previousMediaPath])
+        newMediaPath = null
+        newMediaUrl = null
+        editedNews.value.media_path = null
+        editedNews.value.media_url = null
+    }
     const updatePayload: any = {
         name: editedNews.value.name,
         description: editedNews.value.description,
         date: editedNews.value.date,
-        media_path: editedNews.value.media_path,
+        media_path: newMediaPath,
         media_link: editedNews.value.media_link
     }
     const { error } = await supabase
@@ -204,8 +311,17 @@ const saveEdit = async () => {
         errorMsg.value = `Erreur lors de la sauvegarde : ${error.message}`
         return
     }
+    // Met à jour l'URL publique si nouvelle image
+    if (editMode.value.media_path && photoFile.value) {
+        editedNews.value.media_url = newMediaUrl
+    }
     editMode.value = {}
     edited.value = false
+    photoFile.value = null
+    if (photoPreview.value) {
+        URL.revokeObjectURL(photoPreview.value)
+        photoPreview.value = null
+    }
     successMsg.value = 'Modifications enregistrées.'
     showToast.value = true
     emit('updated')
@@ -230,7 +346,6 @@ const deleteNews = async () => {
 </script>
 
 <style scoped>
-
 /* Style pour l'input du titre (identique AdminChapter.vue) */
 .title-edit {
     width: 100%;
@@ -393,6 +508,14 @@ textarea {
 .photo {
     grid-column: 1 / 2;
     grid-row: 3 / -1;
+
+    .media-photo {
+        max-width: 100%;
+        max-height: 250px;
+        border-radius: 8px;
+        object-fit: contain;
+        background: #222;
+    }
 }
 
 .video {
@@ -441,7 +564,6 @@ textarea {
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-top: 20px;
 }
 
 .right-buttons {
@@ -589,3 +711,25 @@ input:focus {
     color: #fff;
 }
 </style>
+
+.remove-photo-x {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+}
+.remove-photo-x:hover {
+    background: #e74c3c;
+}
