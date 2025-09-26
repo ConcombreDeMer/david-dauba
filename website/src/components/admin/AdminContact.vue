@@ -1,7 +1,13 @@
 <template>
 
     <div>
-        <h1>Admin Contact</h1>
+        <h1>Contact</h1>
+    </div>
+
+    <div>
+        <div>
+            <p>En cours de développement</p>
+        </div>
     </div>
 
 
@@ -11,6 +17,4 @@
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

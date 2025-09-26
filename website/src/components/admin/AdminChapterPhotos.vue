@@ -4,12 +4,12 @@
     <div class="edit">
       <button class="edit-btn" v-if="!editMode" @click="$emit('start-edit')">✎</button>
     </div>
-    <div v-if="editMode" style="position:absolute;top:10px;right:10px;display:flex;gap:8px;z-index:11;">
+    <div class="edit-photos-btn" v-if="editMode">
       <button class="close-photos-btn" @click="$emit('close-edit')" title="Réduire">
-        <span style="font-size:1.5em;line-height:1;">→</span>
+        <span>←</span>
       </button>
       <label class="add-photo-btn" title="Ajouter des photos">
-        <span style="font-size:1.5em;color:#2ecc40;">＋</span>
+        <span>＋</span>
         <input type="file" multiple accept="image/*" @change="onAddPhotos" style="display:none;" />
       </label>
     </div>
@@ -19,18 +19,17 @@
       </template>
       <template v-else-if="photos.length">
         <div v-for="photo in photos" :key="photo.id"
-          :class="['photo-thumb-admin', { 'photo-thumb-admin-large': editMode }]"
-          style="position:relative;">
+          :class="['photo-thumb-admin', { 'photo-thumb-admin-large': editMode }]" style="position:relative;">
           <img :src="photo.url" :alt="photo.name || 'photo'" />
           <!-- Croix de suppression visible seulement en mode édition -->
-          <button v-if="editMode" class="delete-photo-btn" @click="toggleDeletePhoto(photo.id)" :title="photoToDelete.has(photo.id) ? 'Annuler la suppression' : 'Supprimer la photo'">
+          <button v-if="editMode" class="delete-photo-btn" @click="toggleDeletePhoto(photo.id)"
+            :title="photoToDelete.has(photo.id) ? 'Annuler la suppression' : 'Supprimer la photo'">
             <span :style="photoToDelete.has(photo.id) ? 'color:#2ecc40' : ''">✕</span>
           </button>
         </div>
         <!-- Photos ajoutées localement (non encore uploadées) -->
-        <div v-for="(file, idx) in newPhotos" :key="'new-'+idx"
-          :class="['photo-thumb-admin', { 'photo-thumb-admin-large': editMode }]"
-          style="position:relative;">
+        <div v-for="(file, idx) in newPhotos" :key="'new-' + idx"
+          :class="['photo-thumb-admin', { 'photo-thumb-admin-large': editMode }]" style="position:relative;">
           <img :src="file.preview" alt="nouvelle photo" />
           <span class="new-photo-plus">＋</span>
         </div>
@@ -126,40 +125,42 @@ const toggleDeletePhoto = (photoId: number) => {
 </script>
 
 <style scoped>
-.add-photo-btn {
-  background: rgba(46,204,64,0.15);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+.edit-photos-btn {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1.2em;
-  margin-left: 4px;
-  transition: background 0.2s;
-}
-.add-photo-btn:hover {
-  background: #2ecc40;
-  color: #fff;
-}
-.new-photo-plus {
+  gap: 8px;
   position: absolute;
-  top: 4px;
-  left: 4px;
-  color: #2ecc40;
-  font-size: 1.3em;
-  font-weight: bold;
-  background: rgba(255,255,255,0.7);
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: flex;
+  top: 10px;
+  right: 10px;
+  z-index: 11;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  padding: 10px;
+  box-sizing: border-box;
+
+  .close-photos-btn, .add-photo-btn {
+    background: rgb(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 10px;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    opacity: 0.8;
+  }
+
+  .close-photos-btn:hover, .add-photo-btn:hover {
+    background: rgb(255, 255, 255, 0.5);
+    opacity: 1;
+  }
 }
+
 .case.photos {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -170,6 +171,7 @@ const toggleDeletePhoto = (photoId: number) => {
   position: relative;
   box-sizing: border-box;
 }
+
 .photos-edit {
   grid-column: 1 / 3 !important;
   grid-row: 1 / 5 !important;
@@ -178,12 +180,14 @@ const toggleDeletePhoto = (photoId: number) => {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   transition: all 0.4s cubic-bezier(.4, 2, .6, 1);
 }
+
 .title-case {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 10px;
   height: 30px;
 }
+
 .edit-btn {
   position: absolute;
   top: 10px;
@@ -197,43 +201,28 @@ const toggleDeletePhoto = (photoId: number) => {
   color: #fff;
   transition: background 0.2s;
 }
+
 .edit-btn:hover {
   background: rgba(255, 255, 255, 0.4);
 }
-.close-photos-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgb(255, 255, 255, 0.3);
-  color: #fff;
-  border-radius: 10px;
-  border: solid 1px rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 10px 4px 10px;
-  z-index: 10;
-  transition: background 0.2s;
-}
-.close-photos-btn:hover {
-  background: rgb(255, 255, 255, 0.5);
-  color: #222;
-}
+
 .photo-list-admin {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 40px;
   margin-bottom: 8px;
   align-items: center;
   max-height: 220px;
   padding-right: 4px;
   transition: max-height 0.4s cubic-bezier(.4, 2, .6, 1);
 }
+
 .photo-list-admin-large {
   max-height: 70vh;
   gap: 24px;
 }
+
 .photo-thumb-admin {
   width: 70px;
   height: 70px;
@@ -246,16 +235,19 @@ const toggleDeletePhoto = (photoId: number) => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
   transition: all 0.3s cubic-bezier(.4, 2, .6, 1);
 }
+
 .photo-thumb-admin-large {
   width: 120px;
   height: 120px;
 }
-  .photo-thumb-admin img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+
+.photo-thumb-admin img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .delete-photo-btn {
   position: absolute;
   top: 4px;
@@ -274,9 +266,11 @@ const toggleDeletePhoto = (photoId: number) => {
   z-index: 2;
   transition: background 0.2s;
 }
+
 .delete-photo-btn:hover {
   background: #ff4d4f;
 }
+
 .data {
   overflow: hidden;
   text-overflow: ellipsis;
