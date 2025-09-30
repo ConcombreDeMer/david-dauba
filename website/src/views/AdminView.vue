@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { computed, ref, nextTick, onMounted } from 'vue';
+import { computed } from 'vue';
 
 const route = useRoute();
 
@@ -46,7 +46,7 @@ const buttons = [
 ];
 
 const BUTTON_HEIGHT = 70; // hauteur du bouton + margin-bottom (15+10+30)
-const BUTTON_MARGIN = 30;
+const BUTTON_MARGIN = 10;
 
 const activeIndex = computed(() => buttons.findIndex(b => b.to === route.path));
 
@@ -78,7 +78,7 @@ function isActive(to: string) {
   aspect-ratio: 16/9;
   margin-top: 120px;
   left: 50%;
-  transform: translate( -50%);
+  transform: translate(-50%);
   background-image: url('/admin/panel-background.png');
   background-size: cover;
   border-radius: 50px;
@@ -113,11 +113,12 @@ function isActive(to: string) {
     justify-content: left;
     width: 100%;
     height: 70px;
-    padding: 15px;
+    margin-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     padding-left: 10%;
     padding-right: 10%;
     box-sizing: border-box;
-    margin-bottom: 30px;
     border-radius: 10px;
     text-align: center;
     text-decoration: none;
@@ -128,6 +129,7 @@ function isActive(to: string) {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
   }
 
   .sidebar-icon-stack {
@@ -136,6 +138,7 @@ function isActive(to: string) {
     width: 28px;
     height: 28px;
     margin-right: 20px;
+    box-sizing: border-box;
   }
 
   .sidebar-icon {
@@ -190,16 +193,19 @@ function isActive(to: string) {
     }
   }
 
-  .bottom {
+  .top{
+    height: 70%;
+  }
 
-    width: 100%;
+  .bottom {
+    height: fit-content;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     padding: 0 10px;
-    margin-bottom: 10px;
 
 
     .line {
@@ -225,7 +231,9 @@ function isActive(to: string) {
       position: relative;
       overflow: hidden;
       transition: all 0.2s ease-in-out;
-      border : solid 1px rgba(255, 255, 255, 0.2);
+      border: solid 1px rgba(255, 255, 255, 0.2);
+      box-sizing: border-box;
+
     }
 
     .sidebar-bottom-button:hover {
@@ -248,7 +256,7 @@ function isActive(to: string) {
 .content {
   margin-left: calc(20% + 2%);
   width: calc(80% - 2%);
-  padding : 2%;
+  padding: 2%;
   box-sizing: border-box;
 }
 </style>
