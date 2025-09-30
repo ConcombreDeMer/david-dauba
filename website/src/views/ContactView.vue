@@ -95,7 +95,9 @@ form {
   gap: 50px;
   margin-top: 75vh;
   margin-bottom: 100px;
-  background-color: rgb(43, 43, 43);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background-color: rgba(255, 255, 255, 0.1);
   width: fit-content;
   padding: 50px;
   margin-left: auto;
@@ -145,7 +147,9 @@ button[type="submit"] {
   padding: 10px 32px;
   border: none;
   border-radius: 4px;
-  background: #4E4E4E;
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
   font-size: 2rem;
   font-family: inherit;

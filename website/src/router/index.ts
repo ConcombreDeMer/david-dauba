@@ -27,7 +27,29 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      component: () => import('../views/AdminView.vue')
+      component: () => import('../views/AdminView.vue'),
+      children: [
+        {
+          path: '',
+          name: 'admin-dashboard',
+          component: () => import('../components/admin/AdminDashboard.vue')
+        },
+        {
+          path: 'chapters',
+          name: 'admin-chapters',
+          component: () => import('../components/admin/AdminChapters.vue')
+        },
+        {
+          path: 'news',
+          name: 'admin-news',
+          component: () => import('../components/admin/AdminNews.vue')
+        },
+        {
+          path: 'contact',
+          name: 'admin-contact',
+          component: () => import('../components/admin/AdminContact.vue')
+        }
+      ]
     },
     {
       path: '/password',

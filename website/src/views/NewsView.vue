@@ -25,8 +25,8 @@
                             title="Supprimer">Supprimer</button>
                         <h2 class="title">{{ item.name }}</h2>
                         <p class="description">{{ item.description }}</p>
-                        <div v-if="item.media_url" class="media-block">
-                            <img :src="item.media_url" alt="media" class="image-iframe" />
+                        <div v-if="item.media_path" class="media-block">
+                            <img :src="getPublicImageUrl(item.media_path, item.id)" alt="media" class="image-iframe" />
                         </div>
                         <div v-if="item.media_link" class="media-block">
                             <iframe v-if="isYoutube(item.media_link)" :src="youtubeEmbedUrl(item.media_link)"
@@ -49,7 +49,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { supabase } from '../../supabase'
 import { isAdmin } from '@/stores/admin'
 import PageTitles from '@/components/PageTitles.vue'
 
@@ -63,8 +62,17 @@ interface NewsItem {
     media_link: string | null
 }
 
+
+import { supabase } from '../../supabase'
 const news = ref<NewsItem[]>([])
 const loading = ref(true)
+
+function getPublicImageUrl(mediaPath: string | null, id: number) {
+    if (!mediaPath) return ''
+    const { data } = supabase.storage.from('news-media').getPublicUrl(mediaPath)
+    // Ajoute un paramètre pour le cache busting
+    return (data?.publicUrl || '') + '?t=' + id
+}
 
 onMounted(async () => {
     loading.value = true
@@ -188,8 +196,9 @@ function formatRelativeDate(dateStr: string): string {
 
 .news-item {
     position: relative;
-    background: #676767;
-    background: linear-gradient(90deg, #343434 0%, #262626 80%, #262626 100%);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     max-width: 1200px;
     width: 90vw;

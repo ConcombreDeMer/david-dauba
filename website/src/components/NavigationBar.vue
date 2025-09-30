@@ -2,11 +2,10 @@
 
     <div class="header">
         <div class="navbar">
-            <RouterLink to="/" class="btn">Accueil</RouterLink>
-            <RouterLink to="/chapters" class="btn">Chapitres</RouterLink>
-            <RouterLink to="/news" class="btn">Actualités</RouterLink>
-            <RouterLink to="/about" class="btn">À propos</RouterLink>
-            <RouterLink to="/contact" class="btn">Contact</RouterLink>
+            <div class="navbar-slider" :style="sliderStyle"></div>
+            <RouterLink v-for="(btn, i) in navButtons" :key="btn.to" :to="btn.to" class="btn" :class="{ active: isActive(btn.to, i) }">
+                {{ btn.label }}
+            </RouterLink>
         </div>
 
         <div class="mobile-navbar">
@@ -36,20 +35,56 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
 
 const dropdownOpen = ref(false);
 
-// Ferme le menu si on clique en dehors
+const navButtons = [
+    { to: '/', label: 'Accueil' },
+    { to: '/chapters', label: 'Chapitres' },
+    { to: '/news', label: 'Actualités' },
+    { to: '/about', label: 'À propos' },
+    { to: '/contact', label: 'Contact' },
+];
+
+const route = useRoute();
+const NAV_BTN_WIDTH = 120; // px, à ajuster si besoin
+const NAV_BTN_MARGIN = 0; // px, à ajuster si besoin
+
+
+// On mémorise le dernier index valide pour garder le slider en place si la route est inconnue
+const lastValidIndex = ref(0);
+const activeIndex = computed(() => {
+    const idx = navButtons.findIndex(b => b.to === route.path);
+    if (idx !== -1) {
+        lastValidIndex.value = idx;
+        return idx;
+    }
+    return lastValidIndex.value;
+});
+const sliderStyle = computed(() => {
+    return {
+        transform: `translateX(${activeIndex.value * NAV_BTN_WIDTH}px)`
+    };
+});
+
+function isActive(to: string, idx?: number) {
+    // Si la route est inconnue, on garde le bouton actif sur lastValidIndex
+    const currentIdx = navButtons.findIndex(b => b.to === route.path);
+    if (currentIdx === -1 && typeof idx === 'number') {
+        return idx === lastValidIndex.value;
+    }
+    return route.path === to;
+}
+
+// Dropdown mobile (inchangé)
 function handleClickOutside(event: MouseEvent) {
     const dropdown = document.querySelector('.dropdown');
     if (dropdownOpen.value && dropdown && !dropdown.contains(event.target as Node)) {
         dropdownOpen.value = false;
     }
 }
-
-// Ajoute/retire l'écouteur selon l'état du menu
-import { watch, onMounted, onBeforeUnmount } from 'vue';
 watch(dropdownOpen, (open) => {
     if (open) {
         document.addEventListener('mousedown', handleClickOutside);
@@ -76,6 +111,7 @@ function closeDropdown() {
 </script>
 
 <style scoped>
+
 .header {
     position: fixed;
     top: 0;
@@ -219,19 +255,68 @@ function closeDropdown() {
     background: #333;
 }
 
+
 .navbar {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    width: 30%;
-    padding: 10px;
+    width: fit-content;
     margin-left: auto;
     margin-right: auto;
     background: transparent;
     backdrop-filter: blur(10px);
-    border-radius: 10px;
+    border-radius: 50px;
     opacity: 0.9;
     z-index: 999999;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
+    position: relative;
+    min-width: 500px;
+}
+
+.navbar-slider {
+    position: absolute;
+    left: 0;
+    width: 120px;
+    height: 100%;
+    background: linear-gradient(135deg, #FFFFFF 0%, #afafaf 100%);
+    border-radius: 50px;
+    z-index: 0;
+    transition: transform 0.35s cubic-bezier(.4, 1.3, .6, 1);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+    pointer-events: none;
+    border: solid 1px rgba(255, 255, 255, 0.4);
+    opacity: 0.7;
+}
+
+.navbar .btn {
+    position: relative;
+    z-index: 1;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 300;
+    border-radius: 50px;
+    transition: color 0.3s, font-weight 0.3s;
+    padding: 10px;
+}
+
+.navbar .btn.active {
+    color: #4C4C4C;
+    font-weight: 500;
+}
+
+@media (max-width: 900px) {
+    .navbar {
+        display: none;
+    }
+    .navbar-slider {
+        display: none;
+    }
 }
 
 

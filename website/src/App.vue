@@ -129,10 +129,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto';
-  background-color: #262626;
-  /* background-image: url('/mesh-gradient.svg');
+  /* background-color: #262626; */
+  background-image: url('/mesh-gradient.svg');
   background-size: cover;
-  background-attachment: fixed; */
+  background-attachment: fixed;
   color: #f0f0f0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
