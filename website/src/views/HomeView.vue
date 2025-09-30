@@ -285,21 +285,26 @@ onMounted(() => {
   margin: 0 auto;
 }
 
+
 .recent-work-img {
   width: 100%;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
-  transition: transform 0.2s;
+  transition: transform 0.2s, opacity 0.3s;
   display: block;
   margin-bottom: 50px;
   break-inside: avoid;
+  opacity: 0.5;
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .recent-work-img:hover {
   transition: all 0.3s ease-in-out;
   transform: scale(1.03);
   cursor: pointer;
+  opacity: 1;
 }
 
 .recent-works-empty {
@@ -418,6 +423,7 @@ onMounted(() => {
   z-index: 10;
   width: fit-content;
   font-size: 16vh;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.45), 0 1px 0 #fff;
 }
 
 .sous-title {

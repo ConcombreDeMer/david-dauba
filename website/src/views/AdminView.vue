@@ -70,13 +70,13 @@ function isActive(to: string) {
 }
 
 .admin-panel {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   width: 80%;
   max-width: 2000px;
   aspect-ratio: 16/9;
-  margin-top: 100px;
+  margin-top: 120px;
   left: 50%;
   transform: translate( -50%);
   background-image: url('/admin/panel-background.png');
@@ -88,7 +88,7 @@ function isActive(to: string) {
 }
 
 .sidebar {
-  position: relative;
+  position: fixed;
   top: 50%;
   left: 2%;
   transform: translateY(-50%);
@@ -246,6 +246,7 @@ function isActive(to: string) {
 }
 
 .content {
+  margin-left: calc(20% + 2%);
   width: calc(80% - 2%);
   padding : 2%;
   box-sizing: border-box;

@@ -67,7 +67,7 @@ import { supabase } from '../../supabase'
 const news = ref<NewsItem[]>([])
 const loading = ref(true)
 
-function getPublicImageUrl(mediaPath: string|null, id: number) {
+function getPublicImageUrl(mediaPath: string | null, id: number) {
     if (!mediaPath) return ''
     const { data } = supabase.storage.from('news-media').getPublicUrl(mediaPath)
     // Ajoute un paramètre pour le cache busting
@@ -196,8 +196,9 @@ function formatRelativeDate(dateStr: string): string {
 
 .news-item {
     position: relative;
-    background: #676767;
-    background: linear-gradient(90deg, #343434 0%, #262626 80%, #262626 100%);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     max-width: 1200px;
     width: 90vw;

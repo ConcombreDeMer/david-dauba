@@ -52,7 +52,6 @@ import PageTitles from '@/components/PageTitles.vue'
     margin-right: auto;
     margin-top: 90vh;
     gap: 100px;
-    background-color: rgb(43, 43, 43);
     border-radius: 10px;
 
     .presentation-title {
@@ -84,6 +83,11 @@ img {
     flex-direction: column;
     justify-content: center;
     align-items: start;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 @media (max-width: 900px) {

@@ -59,8 +59,11 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     height: 30vh;
     max-width: 1600px;
     max-height: 800px;
-    background: #676767;
-    background: linear-gradient(90deg, #262626 0%, #262626 30%, #343434 100%);
+    /* background: #676767;
+    background: linear-gradient(90deg, #262626 0%, #262626 30%, #343434 100%); */
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     position: relative;
     transition: all 0.3s ease-in-out;
@@ -91,7 +94,7 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
         width: 40%;
         height: 100%;
         object-fit: cover;
-        border-radius: 15px;
+        border-radius: 20px;
         transition: all 0.3s ease-in-out;
         z-index: 90;
     }
