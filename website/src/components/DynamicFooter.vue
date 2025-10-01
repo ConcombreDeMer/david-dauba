@@ -1,7 +1,7 @@
 <template>
 
-
-    <div v-if="isHome" class="footer">
+    <div v-if="isAdmin"></div>
+    <div v-else-if="isHome" class="footer">
         <img class="footer-image" src="/footer.png" alt="">
     </div>
     <div v-else class="alternative-footer">
@@ -21,6 +21,7 @@ import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 const route = useRoute();
 const isHome = computed(() => route.path === '/');
+const isAdmin = computed(() => route.path.startsWith('/admin'));
 </script>
 
 <style scoped>

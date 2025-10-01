@@ -39,19 +39,27 @@ function goToAdmin() {
 
 
 <style>
-
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.fade-enter-from, .fade-leave-to {
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
-.fade-enter-to, .fade-leave-from {
+
+.fade-enter-to,
+.fade-leave-from {
   opacity: 1;
 }
 
+.admin {
+  margin-right: 100px;
+  margin-top: 20px;
+}
+
 .logout-btn {
-  margin-top: 50px;
   width: 50px;
   height: 50px;
   border-radius: 5px;
@@ -59,6 +67,9 @@ function goToAdmin() {
   background: #c00;
   color: #fff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout-btn:hover {
@@ -67,7 +78,6 @@ function goToAdmin() {
 }
 
 .admin-btn {
-  margin-top: 50px;
   width: 50px;
   height: 50px;
   border-radius: 5px;
@@ -75,6 +85,9 @@ function goToAdmin() {
   background: #5D5D5D;
   color: #fff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .admin-btn:hover {
@@ -100,7 +113,7 @@ function goToAdmin() {
   right: 20px;
   z-index: 2000;
   display: flex;
-  gap : 10px;
+  gap: 10px;
 }
 
 @font-face {
@@ -161,7 +174,7 @@ a {
   text-decoration: none;
 }
 
-p{
+p {
   margin: 0;
   padding: 0;
   font-size: 2.5vh;

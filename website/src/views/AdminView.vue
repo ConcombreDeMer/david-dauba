@@ -73,15 +73,16 @@ function isActive(to: string) {
   position: fixed;
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
+  height: 80%;
   max-width: 2000px;
-  aspect-ratio: 16/9;
+  max-height: 1500px;
   margin-top: 120px;
   left: 50%;
   transform: translate(-50%);
   background-image: url('/admin/panel-background.png');
   background-size: cover;
-  border-radius: 50px;
+  border-radius: 10px;
   border: solid 1px rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   overflow: hidden;
@@ -96,7 +97,7 @@ function isActive(to: string) {
   height: calc(100% - 7%);
   background-image: url('/admin/sidebar-background2.png');
   background-size: cover;
-  border-radius: 30px;
+  border-radius: 10px;
   border: solid 1px rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   display: flex;

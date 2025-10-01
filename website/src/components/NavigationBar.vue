@@ -117,7 +117,7 @@ function closeDropdown() {
     top: 0;
     left: auto;
     width: 100%;
-    z-index: 9999;
+    z-index: 9;
     padding: 0;
     margin-top: 40px;
 }
