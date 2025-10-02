@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import PageTitles from '@/components/PageTitles.vue'
+import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
 const name = ref('')
 const email = ref('')

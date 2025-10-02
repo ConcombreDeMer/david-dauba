@@ -6,6 +6,8 @@
 
 
         <div class="content">
+            <ArrowDownPage class="arrow"/>
+
 
             <div class="news-list">
                 <template v-if="loading">
@@ -43,6 +45,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import PageTitles from '@/components/PageTitles.vue'
+import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
 interface NewsItem {
     id: number
@@ -130,6 +133,12 @@ function formatRelativeDate(dateStr: string): string {
 </script>
 
 <style scoped>
+
+.arrow {
+    position: relative;
+    top: -50px;
+}
+
 .news {
     width: 80%;
     height: fit-content;

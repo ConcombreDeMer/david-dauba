@@ -4,7 +4,6 @@
 
         <PageTitles title="À propos" subtitle="Derrière l'objectif" />
 
-
         <div class="left image-bg">
             <img class="home2" src="/home2.png" alt="" />
         </div>

@@ -15,7 +15,7 @@
     <RouterLink class="home-button-mobile" to="/about">Découvrir</RouterLink>
   </div>
 
-
+<ArrowDownPage />
   <div class="recent-works">
     <PhotoModal :show="showPhotoModal" :photos="recentImages" :selectedIndex="selectedPhotoIndex"
       @close="closePhotoModal" @update:selectedIndex="updatePhotoIndex" />
@@ -37,6 +37,7 @@ import PhotoModal from '../components/PhotoModal.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '../type'
+import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
 const showPhotoModal = ref(false)
 const selectedPhotoIndex = ref(0)

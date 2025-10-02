@@ -7,6 +7,9 @@
 
         <div class="content">
 
+            <!-- fleche dynamique -->
+            <ArrowDownPage />
+
             <ul class="chapters-list">
                 <li v-for="chapter in chapters" :key="chapter.id">
 
@@ -28,6 +31,8 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '@/type'
 import ChapterInfo from '@/components/ChapterInfo.vue'
+
+import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
 import PageTitles from '@/components/PageTitles.vue'
 
@@ -193,6 +198,10 @@ onMounted(() => {
 .delete-chapter-btn:hover {
     color: #ff4d4f;
 }
+
+
+/* Flèche animée vers le bas */
+
 
 
 @media (max-width: 900px) {
