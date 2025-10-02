@@ -277,31 +277,30 @@ onMounted(() => {
 }
 
 .recent-works-grid {
-  column-count: 3;
-  column-width: 300px;
-  column-gap: 50px;
-  width: 100%;
-  max-width: 1220px;
-  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
 }
 
 
 .recent-work-img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
-  transition: transform 0.2s, opacity 0.3s;
-  display: block;
-  margin-bottom: 50px;
-  break-inside: avoid;
-  opacity: 0.5;
+  width: 20%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+  opacity: 0.6;
   border: solid 1px rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .recent-work-img:hover {
-  transition: all 0.3s ease-in-out;
   transform: scale(1.03);
   cursor: pointer;
   opacity: 1;
@@ -422,8 +421,8 @@ onMounted(() => {
   color: #dcdcdc;
   z-index: 10;
   width: fit-content;
-  font-size: 16vh;
-  text-shadow: 0 4px 24px rgba(0,0,0,0.45), 0 1px 0 #fff;
+  font-size: 14vh;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 1px 0 #fff;
 }
 
 .sous-title {
@@ -522,6 +521,23 @@ onMounted(() => {
   .insta-link {
     display: none;
   }
+
+  .recent-work-img {
+    opacity: 1;
+  }
+
+  .recent-works-grid {
+    column-gap: 10px;
+    width: 90vw;
+    margin-bottom: 200px;
+
+
+    .recent-work-img {
+      width: 30%;
+      border-radius: 5px;
+    }
+  }
+
 
 
 

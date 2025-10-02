@@ -7,10 +7,6 @@
 
         <div class="content">
 
-            <RouterLink v-if="isAdmin" to="/create-chapter" class="create-chapters">
-                <p>Créer une chapitre</p>
-                <p class="plus">+</p>
-            </RouterLink>
             <ul class="chapters-list">
                 <li v-for="chapter in chapters" :key="chapter.id">
 
@@ -30,7 +26,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
-import { isAdmin } from '../stores/admin'
 import type { Chapter } from '@/type'
 import ChapterInfo from '@/components/ChapterInfo.vue'
 

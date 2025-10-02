@@ -20,7 +20,7 @@ defineProps<{
 	top: 40%;
 	left: 32%;
 	transform: translate(-50%, -50%);
-	z-index: 20;
+	z-index: 8;
 	width: fit-content;
 	display: flex;
 	flex-direction: column;

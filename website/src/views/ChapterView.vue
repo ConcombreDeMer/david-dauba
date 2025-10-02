@@ -12,7 +12,6 @@
 
 
     <p class="chapter-description">{{ chapter.description }}</p>
-    <UploadPhotos v-if="isAdmin" :chapterId="chapter.id" :isValidationVisible="true" />
   </div>
 
 
@@ -22,7 +21,6 @@
         <div v-for="photo in photos" :key="photo.id" class="photo-wrapper">
           <img :src="photo.url" :alt="photo.name || 'photo'" class="chapter-photo" @click="openPhotoModal(photo)"
             style="cursor:pointer;" />
-          <button v-if="isAdmin" class="delete-cross" @click="deletePhoto(photo)">✕</button>
         </div>
       </div>
     </div>
@@ -31,13 +29,8 @@
     </div>
   </div>
 
-  <PhotoModal
-    :show="showPhotoModal"
-    :photos="photos"
-    :selectedIndex="selectedPhotoIndex"
-    @close="closePhotoModal"
-    @update:selectedIndex="updatePhotoIndex"
-  />
+  <PhotoModal :show="showPhotoModal" :photos="photos" :selectedIndex="selectedPhotoIndex" @close="closePhotoModal"
+    @update:selectedIndex="updatePhotoIndex" />
 
 
 </template>
@@ -266,12 +259,15 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   margin: 24px 0 16px 0;
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 12px;
+  overflow: hidden;
+
 }
 
 .random-landscape-photo {
   max-width: 80vw;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
   object-fit: cover;
   aspect-ratio: 16/9;
 }
@@ -289,21 +285,24 @@ onMounted(async () => {
 }
 
 .photo-wrapper {
+  width: fit-content;
   position: relative;
-  display: inline-block;
+  width: 20%;
 }
 
 .chapter-photo {
-  width: 350px;
-  height: 350px;
+  width: 100%;
+  aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s;
+  transition: all 0.2s ease-in-out;
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .chapter-photo:hover {
-  transform: scale(1.04);
+  transform: scale(1.03);
+  cursor: pointer;
 }
 
 .delete-cross {
@@ -357,10 +356,25 @@ onMounted(async () => {
 
   .random-landscape-photo {
     max-width: 90vw;
-    aspect-ratio: unset; /* Désactive l'aspect ratio pour les petits écrans */
+    aspect-ratio: unset;
+    /* Désactive l'aspect ratio pour les petits écrans */
+  }
+
+  .photo-list {
+    column-gap: 10px;
+    width: 90vw;
+    margin-bottom: 200px;
+
+    .photo-wrapper {
+      width: 30%;
+      border-radius: 5px;
+
+
+      .chapter-photo {
+        border-radius: 5px;
+      }
+    }
   }
 
 }
-
-
 </style>

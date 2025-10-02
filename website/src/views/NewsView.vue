@@ -7,11 +7,6 @@
 
         <div class="content">
 
-            <RouterLink v-if="isAdmin" to="/create-news" class="create-news">
-                <p>Créer une actualité</p>
-                <p class="plus">+</p>
-            </RouterLink>
-
             <div class="news-list">
                 <template v-if="loading">
                     <p class="no-news">Chargement des actualités...</p>
@@ -21,8 +16,6 @@
                 </template>
                 <div v-else>
                     <div v-for="item in news" :key="item.id" class="news-item">
-                        <button v-if="isAdmin" class="delete-news-btn" @click="deleteNews(item.id)"
-                            title="Supprimer">Supprimer</button>
                         <h2 class="title">{{ item.name }}</h2>
                         <p class="description">{{ item.description }}</p>
                         <div v-if="item.media_path" class="media-block">
@@ -49,7 +42,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { isAdmin } from '@/stores/admin'
 import PageTitles from '@/components/PageTitles.vue'
 
 interface NewsItem {

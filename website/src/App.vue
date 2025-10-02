@@ -144,7 +144,8 @@ body {
   font-family: 'Roboto';
   /* background-color: #262626; */
   background-image: url('/Background.png');
-  background-size: cover;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   background-attachment: fixed;
   color: #f0f0f0;
   -webkit-font-smoothing: antialiased;

@@ -1,7 +1,7 @@
 <template>
     <div :class="['item', { deployed: isDeployed }]">
 
-        <img :src="chapter.firstPhotoUrl" alt="photo du chapitre" class="photo" @click="deployChapter(chapter)" />
+        <img :src="chapter.firstPhotoUrl" alt="photo du chapitre" class="photo" />
 
         <div class="info">
             <div class="texte">
@@ -16,7 +16,6 @@
             </router-link>
 
         </div>
-        <button v-if="isAdmin" class="delete-chapter-btn" @click.stop="deleteChapter(chapter)">Supprimer</button>
     </div>
 </template>
 
@@ -24,7 +23,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { ChapterWithPhoto } from '@/views/ChaptersView.vue';
-import { isAdmin } from '@/stores/admin';
 
 const isDeployed = ref(false);
 
@@ -34,13 +32,6 @@ const props = defineProps<{
     isDeployed: boolean
 }>();
 
-const deployChapter = (chapter: ChapterWithPhoto) => {
-    isDeployed.value = !isDeployed.value;
-    if (isDeployed.value) {
-        chapter.firstPhotoUrl = chapter.firstPhotoUrl || '/default-chapter-photo.png';
-        console.log('Déploiement du chapitre:', chapter.title);
-    }
-};
 
 // Pour émettre l'événement
 // @ts-ignore
