@@ -165,7 +165,7 @@ function isActive(to: string) {
     width: 100%;
     height: 70px;
     background: linear-gradient(135deg, #FFFFFF 0%, #afafaf 100%);
-    border-radius: 20px;
+    border-radius: 10px;
     z-index: 0;
     transition: transform 0.35s cubic-bezier(.4, 1.3, .6, 1);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);

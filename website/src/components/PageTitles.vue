@@ -54,7 +54,7 @@ defineProps<{
 		left: -20px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
 	.titles {
 		position: absolute;
 		top: 50%;

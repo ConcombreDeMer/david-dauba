@@ -29,6 +29,8 @@
                 <br><br>
                 David
             </p>
+            <RouterLink class="chapters-button" to="/chapters">Voir mes chapitres</RouterLink>
+
         </div>
 
     </div>
@@ -53,6 +55,9 @@ import PageTitles from '@/components/PageTitles.vue'
     margin-top: 90vh;
     gap: 100px;
     border-radius: 10px;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
 
     .presentation-title {
         margin-bottom: 50px;
@@ -78,16 +83,43 @@ img {
 }
 
 .right {
+    position: relative;
     width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    border: solid 1px rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     box-sizing: border-box;
+
+    h1 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .chapters-button{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #D9D9D9;
+        border-radius: 20px;
+        padding: 12px 40px;
+        color: #212121;
+        text-decoration: none;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-weight: 300;
+    }
+
+    .chapters-button:hover{
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
 }
 
 @media (max-width: 900px) {
@@ -117,6 +149,12 @@ img {
     .presentation-text {
         font-size: 2.5vh;
     }
+
+    .chapters-button {
+        display: none;
+    }
+
+
 
 
 }
