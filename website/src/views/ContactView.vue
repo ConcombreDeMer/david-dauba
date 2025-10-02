@@ -146,18 +146,18 @@ button[type="submit"] {
   margin-top: 16px;
   padding: 10px 32px;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   border: solid 1px rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 2rem;
+  background-color: #ffffff;
+  color: #0e0e0e;
+  font-size: 1.5rem;
   font-family: inherit;
   font-weight: lighter;
   cursor: pointer;
   transition: background 0.2s;
-  width: 50vw;
-  height: 70px;
+  width: 50%;
+  height: 50px;
 }
 
 button[type="submit"]:hover {
