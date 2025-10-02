@@ -130,7 +130,7 @@ function closeDropdown() {
     width: auto;
     padding: 10px;
     background: transparent;
-    z-index: 10001;
+    z-index: 5;
 }
 
 /* Dropdown styles for mobile-navbar */

@@ -10,10 +10,12 @@
                 </div>
                 <p class="description">{{ chapter.description }}</p>
             </div>
-            <div class="date">{{ chapter.date }}</div>
-            <router-link :to="`/chapter/${chapter.id}`" class="button">
-                Découvrir
-            </router-link>
+            <div class="bottom-info">
+                <div class="date">{{ chapter.date }}</div>
+                <router-link :to="`/chapter/${chapter.id}`" class="button">
+                    Découvrir
+                </router-link>
+            </div>
 
         </div>
     </div>
@@ -60,25 +62,8 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     opacity: 0.8;
+    box-sizing: border-box;
 
-    .delete-chapter-btn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: #ff4d4f;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 18px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 100;
-        transition: background 0.2s;
-    }
-
-    .delete-chapter-btn:hover {
-        background: #d9363e;
-    }
 
     .photo {
         position: absolute;
@@ -87,26 +72,33 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
         object-fit: cover;
         border-radius: 20px;
         transition: all 0.3s ease-in-out;
-        z-index: 90;
+        z-index: 4;
     }
 
     .info {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
         left: 40%;
         width: 60%;
         height: 100%;
         transition: all 0.3s ease-in-out;
         z-index: 2;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .texte {
         position: relative;
-        top: 20px;
-        left: 40px;
         display: flex;
         flex-direction: column;
         gap: 20px;
-        width: 90%;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .title {
@@ -120,15 +112,31 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     .description {
         position: relative;
         width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+        white-space: normal;
         font-size: 1.5vh;
         color: #c2c2c2;
         font-weight: 100;
+        box-sizing: border-box;
+    }
+
+    .bottom-info {
+        position: relative;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .button {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
         background-color: #D9D9D9;
         border-radius: 20px;
         padding: 12px 40px;
@@ -147,9 +155,6 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     }
 
     .date {
-        position: absolute;
-        bottom: 20px;
-        left: 40px;
         color: #8a8a8a;
         font-style: italic;
         font-size: 2vh;
@@ -175,7 +180,7 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
         flex-direction: column;
         display: flex;
         align-items: center;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
         background: linear-gradient(180deg, #262626 0%, #262626 30%, #343434 100%);
         opacity: 1;
 
@@ -186,6 +191,8 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
             height: 180px;
             border-radius: 15px 15px 0 0;
             margin-bottom: 0;
+            border-top-left-radius: 20px;
+            
         }
 
         .info {
@@ -218,6 +225,13 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
             font-weight: 300;
         }
 
+        .bottom-info {
+            position: static;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px 0 0 0;
+        }
+
         .date {
             position: static;
             margin-top: 20px;
@@ -241,10 +255,9 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
             position: static;
             display: block;
             width: 95%;
-            margin: 26px 0 0 0;
             padding: 12px 0;
             font-size: 1.1rem;
-            border-radius: 12px;
+            border-radius: 20px;
         }
     }
 
