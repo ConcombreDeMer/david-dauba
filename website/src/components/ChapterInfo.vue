@@ -120,7 +120,7 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
         white-space: normal;
         font-size: 1.5vh;
         color: #c2c2c2;
-        font-weight: 100;
+        font-weight: 300;
         box-sizing: border-box;
     }
 

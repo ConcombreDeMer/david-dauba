@@ -28,7 +28,6 @@
                 <br><br>
                 David
             </p>
-            <RouterLink class="chapters-button" to="/chapters">Voir mes chapitres</RouterLink>
 
         </div>
 

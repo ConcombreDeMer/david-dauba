@@ -158,11 +158,12 @@ button[type="submit"] {
   cursor: pointer;
   transition: background 0.2s;
   width: 50%;
-  height: 50px;
+  height: 70px;
+  font-weight: 300;
 }
 
 button[type="submit"]:hover {
-  background: rgb(101, 101, 101);
+  background: #e0e0e0;
   transition: all 0.3s ease;
 }
 
