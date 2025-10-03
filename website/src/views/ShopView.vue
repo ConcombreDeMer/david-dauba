@@ -75,8 +75,9 @@
 </template>
 
 
+
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import PageTitles from '@/components/PageTitles.vue';
 import ArrowDownPage from '@/components/ArrowDownPage.vue';
 
@@ -88,35 +89,54 @@ const buyQuantite = ref(1);
 const buyMessage = ref('');
 const buyStatus = ref('');
 
+const setBodyModalState = (active: boolean) => {
+    if (active) {
+        document.body.classList.add('modal-open');
+    } else {
+        document.body.classList.remove('modal-open');
+    }
+};
+
+watch(showForm, (val) => {
+    setBodyModalState(val);
+});
+
+onMounted(() => {
+    setBodyModalState(showForm.value);
+});
+onUnmounted(() => {
+    setBodyModalState(false);
+});
+
 const sendBuyRequest = async () => {
-    if (!buyNom.value || !buyPrenom.value || !buyEmail.value || !buyQuantite.value) {
-        buyStatus.value = 'Veuillez remplir tous les champs obligatoires.';
-        return;
-    }
-    try {
-        const response = await fetch('http://localhost:3001/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: buyNom.value,
-                prenom: buyPrenom.value,
-                email: buyEmail.value,
-                quantite: buyQuantite.value,
-                message: buyMessage.value,
-                type: 'achat'
-            })
-        });
-        if (!response.ok) throw new Error("Erreur lors de l'envoi de la demande.");
-        buyStatus.value = 'Demande envoyée avec succès !';
-        buyNom.value = '';
-        buyPrenom.value = '';
-        buyEmail.value = '';
-        buyQuantite.value = 1;
-        buyMessage.value = '';
-        setTimeout(() => { showForm.value = false; buyStatus.value = ''; }, 2000);
-    } catch (error) {
-        buyStatus.value = error instanceof Error ? error.message : 'Une erreur est survenue.';
-    }
+        if (!buyNom.value || !buyPrenom.value || !buyEmail.value || !buyQuantite.value) {
+                buyStatus.value = 'Veuillez remplir tous les champs obligatoires.';
+                return;
+        }
+        try {
+                const response = await fetch('http://localhost:3001/api/send-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                                name: buyNom.value,
+                                prenom: buyPrenom.value,
+                                email: buyEmail.value,
+                                quantite: buyQuantite.value,
+                                message: buyMessage.value,
+                                type: 'achat'
+                        })
+                });
+                if (!response.ok) throw new Error("Erreur lors de l'envoi de la demande.");
+                buyStatus.value = 'Demande envoyée avec succès !';
+                buyNom.value = '';
+                buyPrenom.value = '';
+                buyEmail.value = '';
+                buyQuantite.value = 1;
+                buyMessage.value = '';
+                setTimeout(() => { showForm.value = false; buyStatus.value = ''; }, 2000);
+        } catch (error) {
+                buyStatus.value = error instanceof Error ? error.message : 'Une erreur est survenue.';
+        }
 };
 
 </script>
@@ -385,5 +405,14 @@ const sendBuyRequest = async () => {
     color: #0e0e0e;
     font-size: 1rem;
     margin-top: 8px;
+}
+/* Empêche le scroll et la sélection du contenu derrière la modal */
+.modal-open {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-overflow-scrolling: none;
 }
 </style>
