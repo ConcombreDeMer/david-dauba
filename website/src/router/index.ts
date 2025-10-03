@@ -81,6 +81,12 @@ const router = createRouter({
       name: 'create-news',
       component: () => import('../views/CreateNewsView.vue')
     }
+    ,
+    {
+      path: '/shop',
+      name: 'shop',
+      component: () => import('../views/ShopView.vue')
+    }
   ],
 })
 

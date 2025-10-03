@@ -22,6 +22,7 @@
                         <RouterLink to="/" class="btn" @click="closeDropdown">Accueil</RouterLink>
                         <RouterLink to="/chapters" class="btn" @click="closeDropdown">Chapitres</RouterLink>
                         <RouterLink to="/news" class="btn" @click="closeDropdown">Actualités</RouterLink>
+                        <RouterLink to="/shop" class="btn" @click="closeDropdown">Boutique</RouterLink>
                         <RouterLink to="/about" class="btn" @click="closeDropdown">À propos</RouterLink>
                         <RouterLink to="/contact" class="btn" @click="closeDropdown">Contact</RouterLink>
                     </div>
@@ -44,6 +45,7 @@ const navButtons = [
     { to: '/', label: 'Accueil' },
     { to: '/chapters', label: 'Chapitres' },
     { to: '/news', label: 'Actualités' },
+    { to: '/shop', label: 'Boutique' },
     { to: '/about', label: 'À propos' },
     { to: '/contact', label: 'Contact' },
 ];
