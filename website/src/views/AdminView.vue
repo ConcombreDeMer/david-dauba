@@ -41,6 +41,7 @@ const route = useRoute();
 const buttons = [
   { to: '/admin', label: 'Dashboard', icon: '/admin/sidebar/dashboard/black.png' },
   { to: '/admin/chapters', label: 'Chapitres', icon: '/admin/sidebar/chapters/black.png' },
+  { to: '/admin/products', label: 'Produits', icon: '/admin/sidebar/site/black.png' },
   { to: '/admin/news', label: 'Actualités', icon: '/admin/sidebar/news/black.png' },
   { to: '/admin/contact', label: 'Contacts', icon: '/admin/sidebar/contact/black.png' },
 ];

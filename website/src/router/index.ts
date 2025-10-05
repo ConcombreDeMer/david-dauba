@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AdminProducts from '../components/admin/AdminProducts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,11 @@ const router = createRouter({
       component: { template: '<div><h1>Modifier un chapitre (à implémenter)</h1></div>' }
     },
     {
+      path: '/create-product',
+      name: 'create-product',
+      component: () => import('../components/CreateProduct.vue')
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
@@ -48,6 +54,11 @@ const router = createRouter({
           path: 'contact',
           name: 'admin-contact',
           component: () => import('../components/admin/AdminContact.vue')
+        },
+        {
+          path: 'products',
+          name: 'admin-products',
+          component: AdminProducts
         }
       ]
     },

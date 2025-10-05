@@ -179,8 +179,8 @@ const sendBuyRequest = async () => {
     border: none;
     border-radius: 50px;
     padding: 10px 30px;
-    font-size: 1.5rem;
-    font-weight: 300;
+    font-size: 1.3rem;
+    font-weight: 500;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     opacity: 0.8;
@@ -200,8 +200,8 @@ const sendBuyRequest = async () => {
     border: none;
     border-radius: 50px;
     padding: 10px 30px;
-    font-size: 1.5rem;
-    font-weight: 300;
+    font-size: 1.3rem;
+    font-weight: 500;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     opacity: 0.8;
