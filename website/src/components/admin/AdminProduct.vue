@@ -20,29 +20,34 @@
             <div class="case little-description">
                 <div class="title-case">Petite description</div>
                 <template v-if="editMode.little_description">
-                    <textarea v-model="editedProduct.little_description" @input="onInput" rows="2" style="width:100%" class="edit-area"></textarea>
+                    <textarea v-model="editedProduct.little_description" @input="onInput" rows="2" style="width:100%"
+                        class="edit-area"></textarea>
                 </template>
                 <template v-else>
                     <div class="data">{{ editedProduct.little_description }}</div>
                 </template>
-                <button class="edit-btn" v-if="!editMode.little_description" @click="startEdit('little_description')">✎</button>
+                <button class="edit-btn" v-if="!editMode.little_description"
+                    @click="startEdit('little_description')">✎</button>
             </div>
             <!-- Grande description -->
             <div class="case big-description">
                 <div class="title-case">Grande description</div>
                 <template v-if="editMode.big_description">
-                    <textarea v-model="editedProduct.big_description" @input="onInput" rows="4" style="width:100%" class="edit-area"></textarea>
+                    <textarea v-model="editedProduct.big_description" @input="onInput" rows="4" style="width:100%"
+                        class="edit-area"></textarea>
                 </template>
                 <template v-else>
                     <div class="data">{{ editedProduct.big_description }}</div>
                 </template>
-                <button class="edit-btn" v-if="!editMode.big_description" @click="startEdit('big_description')">✎</button>
+                <button class="edit-btn" v-if="!editMode.big_description"
+                    @click="startEdit('big_description')">✎</button>
             </div>
             <!-- Prix -->
             <div class="case price">
                 <div class="title-case">Prix</div>
                 <template v-if="editMode.price">
-                    <input type="number" min="0" step="0.01" v-model.number="editedProduct.price" @input="onInput" class="price-input" />
+                    <input type="number" min="0" step="0.01" v-model.number="editedProduct.price" @input="onInput"
+                        class="price-input" />
                 </template>
                 <template v-else>
                     <div class="data">{{ editedProduct.price }} €</div>
@@ -72,7 +77,7 @@
             <pre style="color:red; background:#222; padding:1em; margin-top:1em;">
         props.product: {{ JSON.stringify(props.product, null, 2) }}
         editedProduct: {{ JSON.stringify(editedProduct, null, 2) }}
-      </pre>
+    </pre>
         </div>
         <div v-if="editedProduct" class="footer">
             <div v-if="errorMsg" style="color:red;">{{ errorMsg }}</div>
@@ -257,10 +262,6 @@ const deleteProduct = async () => {
 <style scoped>
 /* Reprend la structure et les animations de AdminChapter.vue, adapté pour les produits */
 
-.edit-area {
-    height: 100%;
-    box-sizing: border-box;
-}
 
 
 .edit-product {
@@ -346,9 +347,9 @@ textarea {
     padding: 10px;
     font-size: 1rem;
     font-family: inherit;
-    height: 80px;
     box-sizing: border-box;
     width: 100%;
+    height: calc(100% - 30px);
 }
 
 .price-input {
@@ -407,7 +408,7 @@ textarea {
 
 .title-case {
     font-weight: 600;
-    margin-bottom: 8px;
+    height: 30px;
 }
 
 .photo-preview {
@@ -561,5 +562,7 @@ textarea {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    height: calc(100% - 40px);
+
 }
 </style>
