@@ -6,28 +6,24 @@
 
             <ArrowDownPage />
 
-            <div class="product-card">
-                <img src="/book.jpg" alt="Mon livre" class="product-image" />
 
+            <!-- Liste dynamique des produits -->
+            <div v-for="product in products" :key="product.id" class="product-card">
+                <img :src="product.photo_url || '/book.jpg'" :alt="product.title" class="product-image" />
                 <div class="product-info">
-
-                    <h2 class="product-title">Mon livre</h2>
-                    <p class="product-description">Découvrez "Mon livre" – un ouvrage unique à découvrir dans notre
-                        boutique.</p>
-
+                    <h2 class="product-title">{{ product.title }}</h2>
+                    <p class="product-description">{{ product.little_description }}</p>
                     <div class="product-bottom">
-                        <span class="product-price">19,90&nbsp;€</span>
-                        <button class="buy-button" @click="showForm = true">Acheter</button>
+                        <span class="product-price">{{ product.price}}&nbsp;€</span>
+                        <button class="buy-button" @click="openBuyForm(product)">Acheter</button>
                     </div>
-
-
                 </div>
-
             </div>
 
         </div>
 
     </div>
+
 
 
     <transition name="modal-fade">
@@ -77,10 +73,20 @@
 
 
 <script setup lang="ts">
+
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import PageTitles from '@/components/PageTitles.vue';
 import ArrowDownPage from '@/components/ArrowDownPage.vue';
+import { supabase } from '../../supabase'
 
+const products = ref<Array<{
+    id: number
+    title: string
+    little_description: string
+    big_description: string
+    photo_url: string
+    price: number
+}>>([])
 const showForm = ref(false);
 const buyNom = ref('');
 const buyPrenom = ref('');
@@ -88,6 +94,7 @@ const buyEmail = ref('');
 const buyQuantite = ref(1);
 const buyMessage = ref('');
 const buyStatus = ref('');
+const selectedProduct = ref<any>(null)
 
 const setBodyModalState = (active: boolean) => {
     if (active) {
@@ -101,35 +108,51 @@ watch(showForm, (val) => {
     setBodyModalState(val);
 });
 
+const fetchProducts = async () => {
+    const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false })
+    if (error) {
+        console.error('Erreur lors de la récupération des produits:', error)
+        return
+    }
+    products.value = data || []
+}
+
 onMounted(() => {
     setBodyModalState(showForm.value);
+    fetchProducts()
 });
 onUnmounted(() => {
     setBodyModalState(false);
 });
+const openBuyForm = (product: any) => {
+    selectedProduct.value = product
+    showForm.value = true
+}
 
 const sendBuyRequest = async () => {
-        if (!buyNom.value || !buyPrenom.value || !buyEmail.value || !buyQuantite.value) {
-                buyStatus.value = 'Veuillez remplir tous les champs obligatoires.';
-                return;
-        }
-        try {
-                const response = await fetch('http://localhost:3001/api/send-email', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                                name: buyNom.value,
-                                prenom: buyPrenom.value,
-                                email: buyEmail.value,
-                                quantite: buyQuantite.value,
-                                message: buyMessage.value,
-                                type: 'achat'
-                        })
-                });
-                if (!response.ok) throw new Error("Erreur lors de l'envoi de la demande.");
-                buyStatus.value = 'Demande envoyée avec succès !';
-                buyNom.value = '';
-                buyPrenom.value = '';
+    if (!buyNom.value || !buyPrenom.value || !buyEmail.value || !buyQuantite.value) {
+        buyStatus.value = 'Veuillez remplir tous les champs obligatoires.';
+        return;
+    }
+    try {
+        const response = await fetch('http://localhost:3001/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: buyNom.value,
+                prenom: buyPrenom.value,
+                email: buyEmail.value,
+                quantite: buyQuantite.value,
+                message: buyMessage.value,
+                type: 'achat',
+                productId: selectedProduct.value ? selectedProduct.value.id : null,
+                productTitle: selectedProduct.value ? selectedProduct.value.title : null
+            })
+        });
+        if (!response.ok) throw new Error("Erreur lors de l'envoi de la demande.");
+        buyStatus.value = 'Demande envoyée avec succès !';
+        buyNom.value = '';
+        buyPrenom.value = '';
                 buyEmail.value = '';
                 buyQuantite.value = 1;
                 buyMessage.value = '';
