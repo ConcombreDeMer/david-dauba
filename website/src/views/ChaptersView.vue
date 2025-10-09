@@ -47,7 +47,11 @@ export type ChapterWithPhoto = {
 const chapters = ref<ChapterWithPhoto[]>([])
 
 const fetchChapters = async () => {
-    const { data, error } = await supabase.from('chapters').select('*').order('date', { ascending: false })
+    const { data, error } = await supabase
+        .from('chapters')
+        .select('*')
+        .eq('status', 'Publique')
+        .order('date', { ascending: false })
     if (error) {
         console.error('Erreur lors de la récupération des chapitres:', error)
         return
