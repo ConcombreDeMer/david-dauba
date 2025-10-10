@@ -149,7 +149,7 @@ const sendBuyRequest = async () => {
 /* ...existing code... */
 
 .product-page {
-    width: 100%;
+    width: 85%;
     margin-top: 200px;
     position: relative;
     margin-left: auto;
