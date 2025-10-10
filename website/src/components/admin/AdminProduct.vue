@@ -270,6 +270,7 @@ const deleteProduct = async () => {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .header {
@@ -375,6 +376,7 @@ textarea {
     flex: 1 1 0%;
     height: 100%;
     font-size: 1rem;
+
 }
 
 .case {
@@ -386,6 +388,7 @@ textarea {
     font-weight: 300;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .edit-btn {
