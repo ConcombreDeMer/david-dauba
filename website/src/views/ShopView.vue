@@ -7,66 +7,11 @@
             <ArrowDownPage />
 
 
-            <!-- Liste dynamique des produits -->
-            <div v-for="product in products" :key="product.id" class="product-card">
-                <img :src="product.photo_url || '/book.jpg'" :alt="product.title" class="product-image" />
-                <div class="product-info">
-                    <h2 class="product-title">{{ product.title }}</h2>
-                    <p class="product-description">{{ product.little_description }}</p>
-                    <div class="product-bottom">
-                        <span class="product-price">{{ product.price}}&nbsp;€</span>
-                        <button class="buy-button" @click="openBuyForm(product)">Acheter</button>
-                    </div>
-                </div>
-            </div>
+            <ProductCard v-for="product in products" :key="product.id" :product="product" />
 
         </div>
 
     </div>
-
-
-
-    <transition name="modal-fade">
-        <div v-if="showForm" class="buy-form-modal">
-            <transition name="modal-scale">
-                <form v-if="showForm" class="buy-form" @submit.prevent="sendBuyRequest">
-                    <h2>Formulaire d'achat</h2>
-                    <p class="buy-explanation">
-                        Les livres sont disponibles uniquement à la commande directe.<br><br>
-                        Pour garantir une expérience personnalisée et un suivi de chaque demande, l'achat ne se fait pas
-                        en ligne mais en contactant directement le photographe via ce formulaire.<br><br>
-                        Merci de remplir vos informations, vous serez recontacté rapidement pour finaliser votre
-                        commande !
-                    </p>
-                    <div>
-                        <label for="buy-nom">Nom :</label>
-                        <input id="buy-nom" v-model="buyNom" required />
-                    </div>
-                    <div>
-                        <label for="buy-prenom">Prénom :</label>
-                        <input id="buy-prenom" v-model="buyPrenom" required />
-                    </div>
-                    <div>
-                        <label for="buy-email">Email :</label>
-                        <input id="buy-email" v-model="buyEmail" type="email" required />
-                    </div>
-                    <div>
-                        <label for="buy-quantite">Quantité :</label>
-                        <input id="buy-quantite" v-model="buyQuantite" type="number" min="1" required />
-                    </div>
-                    <div>
-                        <label for="buy-message">Message (optionnel) :</label>
-                        <textarea id="buy-message" v-model="buyMessage" rows="2"></textarea>
-                    </div>
-                    <div class="buy-form-actions">
-                        <button type="submit" class="buy-button2">Envoyer la demande</button>
-                        <button type="button" class="buy-button2" @click="showForm = false">Annuler</button>
-                    </div>
-                    <div v-if="buyStatus" class="buy-status">{{ buyStatus }}</div>
-                </form>
-            </transition>
-        </div>
-    </transition>
 
 </template>
 
@@ -74,7 +19,8 @@
 
 <script setup lang="ts">
 
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import ProductCard from '@/components/ProductCard.vue';
 import PageTitles from '@/components/PageTitles.vue';
 import ArrowDownPage from '@/components/ArrowDownPage.vue';
 import { supabase } from '../../supabase'
@@ -87,26 +33,7 @@ const products = ref<Array<{
     photo_url: string
     price: number
 }>>([])
-const showForm = ref(false);
-const buyNom = ref('');
-const buyPrenom = ref('');
-const buyEmail = ref('');
-const buyQuantite = ref(1);
-const buyMessage = ref('');
-const buyStatus = ref('');
-const selectedProduct = ref<any>(null)
 
-const setBodyModalState = (active: boolean) => {
-    if (active) {
-        document.body.classList.add('modal-open');
-    } else {
-        document.body.classList.remove('modal-open');
-    }
-};
-
-watch(showForm, (val) => {
-    setBodyModalState(val);
-});
 
 const fetchProducts = async () => {
     const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false })
@@ -118,49 +45,10 @@ const fetchProducts = async () => {
 }
 
 onMounted(() => {
-    setBodyModalState(showForm.value);
     fetchProducts()
 });
-onUnmounted(() => {
-    setBodyModalState(false);
-});
-const openBuyForm = (product: any) => {
-    selectedProduct.value = product
-    showForm.value = true
-}
 
-const sendBuyRequest = async () => {
-    if (!buyNom.value || !buyPrenom.value || !buyEmail.value || !buyQuantite.value) {
-        buyStatus.value = 'Veuillez remplir tous les champs obligatoires.';
-        return;
-    }
-    try {
-        const response = await fetch('http://localhost:3001/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: buyNom.value,
-                prenom: buyPrenom.value,
-                email: buyEmail.value,
-                quantite: buyQuantite.value,
-                message: buyMessage.value,
-                type: 'achat',
-                productId: selectedProduct.value ? selectedProduct.value.id : null,
-                productTitle: selectedProduct.value ? selectedProduct.value.title : null
-            })
-        });
-        if (!response.ok) throw new Error("Erreur lors de l'envoi de la demande.");
-        buyStatus.value = 'Demande envoyée avec succès !';
-        buyNom.value = '';
-        buyPrenom.value = '';
-                buyEmail.value = '';
-                buyQuantite.value = 1;
-                buyMessage.value = '';
-                setTimeout(() => { showForm.value = false; buyStatus.value = ''; }, 2000);
-        } catch (error) {
-                buyStatus.value = error instanceof Error ? error.message : 'Une erreur est survenue.';
-        }
-};
+
 
 </script>
 
@@ -190,8 +78,8 @@ const sendBuyRequest = async () => {
 }
 
 .product-price {
-    font-size: 1.3rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 300;
     color: #ffffff;
     margin-right: 1.5rem;
 }
@@ -241,30 +129,40 @@ const sendBuyRequest = async () => {
     display: flex;
     flex-direction: column;
     align-items: start;
-    border: solid 1px rgba(255, 255, 255, 0.2);
+    gap: 20px;
+    border: solid 1px rgba(180, 180, 180, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 5px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     max-width: 500px;
     min-width: 300px;
-    width: 40%;
+    width: 30%;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.9;
+}
+
+.product-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    opacity: 1;
 }
 
 .product-image {
     width: 100%;
     height: auto;
-    border-radius: 12px;
-    margin-bottom: 1rem;
+    border-radius: 5px;
 }
 
 .product-info {
-    padding: 12px;
     color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 10px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -279,8 +177,11 @@ const sendBuyRequest = async () => {
 
 .product-description {
     font-size: 1rem;
-    color: #ffffff;
+    color: #b6b6b6;
     text-align: left;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
 
 }
 
