@@ -36,6 +36,10 @@ const message = ref('')
 const status = ref('')
 const messageTextarea = ref<HTMLTextAreaElement | null>(null)
 
+// Base URL for API. When deploying to Vercel, prefer a relative path (no VITE_API_URL needed).
+// For local development, set VITE_API_URL=http://localhost:3001 (or your backend origin).
+const API_BASE = import.meta.env.VITE_API_URL ?? ''
+
 const autoResize = () => {
   const el = messageTextarea.value
   if (el) {
@@ -55,7 +59,10 @@ const sendMessage = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:3001/api/send-email', {
+    // Prefer same-origin relative endpoint in production to avoid CORS/adblock issues.
+    const endpoint = API_BASE ? `${API_BASE.replace(/\/$/, '')}/api/send-email` : '/api/send-email'
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
