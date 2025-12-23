@@ -234,24 +234,29 @@ function isActive(to: string) {
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.3s ease-in-out;
       border: solid 1px rgba(255, 255, 255, 0.2);
       box-sizing: border-box;
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .sidebar-bottom-button:hover {
       color: white;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
-      z-index: 1;
+      border: solid 1px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .logout:hover {
-      background: rgba(214, 101, 101, 0.783);
+      background: rgba(214, 101, 101, 0.4);
+      border: solid 1px rgba(214, 101, 101, 0.6);
     }
 
     .site:hover {
-      background: rgba(11, 11, 11, 0.783);
+      background: rgba(180, 180, 180, 0.2);
+      border: solid 1px rgba(255, 255, 255, 0.3);
     }
   }
 
