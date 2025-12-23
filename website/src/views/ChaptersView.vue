@@ -10,13 +10,19 @@
             <!-- fleche dynamique -->
             <ArrowDownPage />
 
-            <ul class="chapters-list">
+            <template v-if="loading">
+                <LoadingSpinner />
+                <p class="loading-text">Chargement des chapitres...</p>
+            </template>
+            <template v-else-if="chapters.length === 0">
+                <div class="no-chapters">Aucun chapitre pour le moment.</div>
+            </template>
+            <ul v-else class="chapters-list">
                 <li v-for="chapter in chapters" :key="chapter.id">
 
                     <ChapterInfo :chapter="chapter" :is-deployed="true" @delete-chapter="deleteChapter" />
                 </li>
             </ul>
-            <div v-if="chapters.length === 0">Aucun chapitre pour le moment.</div>
 
         </div>
 
@@ -31,6 +37,7 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '@/type'
 import ChapterInfo from '@/components/ChapterInfo.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
@@ -45,8 +52,10 @@ export type ChapterWithPhoto = {
 }
 
 const chapters = ref<ChapterWithPhoto[]>([])
+const loading = ref(true)
 
 const fetchChapters = async () => {
+    loading.value = true
     const { data, error } = await supabase
         .from('chapters')
         .select('*')
@@ -72,6 +81,7 @@ const fetchChapters = async () => {
         })
     )
     chapters.value = chaptersWithPhotos
+    loading.value = false
 }
 
 const deleteChapter = async (id: number) => {
@@ -201,6 +211,20 @@ onMounted(() => {
 
 .delete-chapter-btn:hover {
     color: #ff4d4f;
+}
+
+.loading-text {
+    text-align: center;
+    color: #bcbcbc;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+.no-chapters {
+    text-align: center;
+    color: #bcbcbc;
+    font-size: 1.2rem;
+    margin-top: 50px;
 }
 
 

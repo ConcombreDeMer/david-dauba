@@ -19,7 +19,11 @@
   <div class="recent-works">
     <PhotoModal :show="showPhotoModal" :photos="recentImages" :selectedIndex="selectedPhotoIndex"
       @close="closePhotoModal" @update:selectedIndex="updatePhotoIndex" />
-    <template v-if="recentImages.length">
+    <template v-if="loading">
+      <LoadingSpinner />
+      <p class="loading-text">Chargement des images récentes...</p>
+    </template>
+    <template v-else-if="recentImages.length">
       <div class="recent-works-grid">
         <img v-for="(img, i) in recentImages" :key="img.id" :src="img.url" :alt="img.name || 'photo'"
           class="recent-work-img" @click="openPhotoModal(i)" style="cursor:pointer;" />
@@ -34,6 +38,7 @@
 
 <script setup lang="ts">
 import PhotoModal from '../components/PhotoModal.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { supabase } from '../../supabase'
 import type { Chapter } from '../type'
@@ -69,6 +74,7 @@ const updatePhotoIndex = (idx: number) => {
 
 const chapters = ref<Chapter[]>([])
 const recentImages = ref<any[]>([])
+const loading = ref(true)
 
 const fetchChapters = async () => {
   const { data, error } = await supabase.from('chapters').select('*')
@@ -80,6 +86,7 @@ const fetchChapters = async () => {
 }
 
 const fetchRecentImages = async () => {
+  loading.value = true
   // 1. Récupérer le dernier chapitre publié (par date décroissante)
   const { data: lastChapter, error: chapterError } = await supabase
     .from('chapters')
@@ -90,6 +97,7 @@ const fetchRecentImages = async () => {
   if (chapterError || !lastChapter) {
     console.error('Erreur lors de la récupération du dernier chapitre:', chapterError)
     recentImages.value = []
+    loading.value = false
     return
   }
   // 2. Récupérer toutes les images de ce chapitre
@@ -100,11 +108,13 @@ const fetchRecentImages = async () => {
   if (imagesError || !images) {
     console.error('Erreur lors de la récupération des images:', imagesError)
     recentImages.value = []
+    loading.value = false
     return
   }
   // 3. Mélanger et prendre 20 images max
   const shuffled = images.sort(() => Math.random() - 0.5)
   recentImages.value = shuffled.slice(0, 20)
+  loading.value = false
 }
 
 const deleteChapter = async (id: number) => {
@@ -312,6 +322,13 @@ onMounted(() => {
   color: #bcbcbc;
   font-size: 1.2rem;
   margin: 40px 0;
+}
+
+.loading-text {
+  text-align: center;
+  color: #bcbcbc;
+  font-size: 1.2rem;
+  margin-top: 20px;
 }
 
 .home-button,

@@ -1,5 +1,12 @@
 <template>
 
+  <template v-if="loading">
+    <div class="loading-container">
+      <LoadingSpinner />
+      <p class="loading-text">Chargement du chapitre...</p>
+    </div>
+  </template>
+  <template v-else>
   <div class="chapter-header">
     <h1 class="chapter-title">{{ chapter.title }}</h1>
     <p class="chapter-date">{{ chapter.date }}</p>
@@ -31,12 +38,13 @@
 
   <PhotoModal :show="showPhotoModal" :photos="photos" :selectedIndex="selectedPhotoIndex" @close="closePhotoModal"
     @update:selectedIndex="updatePhotoIndex" />
-
+  </template>
 
 </template>
 
 <script setup lang="ts">
 import PhotoModal from '../components/PhotoModal.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 const showPhotoModal = ref(false)
 const selectedPhotoIndex = ref(0)
 const openPhotoModal = (photo: any) => {
@@ -62,6 +70,7 @@ import UploadPhotos from '../components/UploadPhotos.vue'
 
 const route = useRoute()
 const isAdmin = ref(false)
+const loading = ref(true)
 const chapter = ref<Chapter>({ id: 0, title: '', description: '', date: '' })
 const photos = ref<any[]>([])
 const randomLandscapePhoto = ref<any | null>(null)
@@ -95,8 +104,12 @@ const deletePhoto = async (photo: any) => {
 }
 
 onMounted(async () => {
+  loading.value = true
   const chapterId = Number(route.params.id)
-  if (!chapterId) return
+  if (!chapterId) {
+    loading.value = false
+    return
+  }
   const { data, error } = await supabase
     .from('chapters')
     .select('*')
@@ -104,6 +117,7 @@ onMounted(async () => {
     .single()
   if (error) {
     console.error('Erreur lors du fetch du chapitre:', error)
+    loading.value = false
     return
   }
   chapter.value = data as Chapter
@@ -113,6 +127,7 @@ onMounted(async () => {
     .from('photos')
     .select('*')
     .eq('chapter_id', chapterId)
+    .order('position', { ascending: true })
   if (photosError) {
     console.error('Erreur lors du fetch des photos:', photosError)
     return
@@ -152,12 +167,32 @@ onMounted(async () => {
   }
 
   isAdmin.value = localStorage.getItem('isAdmin') === 'true'
+  loading.value = false
 })
 
 
 </script>
 
 <style scoped>
+.loading-container {
+  width: 80vw;
+  margin: 0 auto;
+  padding: 150px 20px 100px;
+  text-align: center;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loading-text {
+  color: #bcbcbc;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
 .chapter-description {
   text-align: center;
   width: 50vw;

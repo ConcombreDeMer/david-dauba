@@ -12,7 +12,7 @@
     </div>
     <div>
       <label for="big_description">Grande description :</label>
-      <textarea id="big_description" v-model="bigDescription" required rows="1" ref="bigDescriptionTextarea" @input="autoResize" style="overflow:hidden;resize:none;"></textarea>
+      <textarea id="big_description" v-model="bigDescription" required rows="3" ref="bigDescriptionTextarea" @input="autoResize" style="overflow:hidden;resize:none;"></textarea>
     </div>
     <div>
       <label for="photo">Image :</label>
@@ -23,7 +23,7 @@
       <input id="price" v-model.number="price" type="number" min="0" step="0.01" required />
     </div>
     <button class="create-product-button" type="submit">Créer le produit</button>
-    <div v-if="message" class="create-product-message">{{ message }}</div>
+    <div v-if="message" :class="message.includes('Erreur') ? 'create-product-message message-error' : 'create-product-message message-success'">{{ message }}</div>
   </form>
 </template>
 
@@ -110,7 +110,8 @@ const createProduct = async () => {
 <style scoped>
 .create-product-title {
   text-align: center;
-  padding-top: 100px;
+  padding-top: 150px;
+  margin-bottom: 50px;
 }
 
 form {
@@ -131,57 +132,107 @@ form div {
 
 input,
 textarea {
-  width: 95%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #646464;
+  background: rgba(255, 255, 255, 0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   outline: none;
-  color: inherit;
+  color: #fff;
   font-size: 1.5rem;
   font-family: inherit;
   font-weight: 300;
-  padding: 8px 0 4px 0;
+  border-radius: 10px;
+  padding: 10px 16px;
   margin-top: 4px;
-  transition: border-color 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+
+input[type="file"] {
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="file"]::file-selector-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-weight: 300;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 input:focus,
 textarea:focus {
-  border-bottom: 1px solid #ffffff;
+  border: solid 1.5px #fff;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 2px #00000033;
 }
 
 label {
   font-weight: normal;
-  margin-bottom: 2px;
-  font-size: 2rem;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  display: block;
 }
 
 .create-product-button {
   margin-top: 16px;
-  padding: 10px 32px;
   border: none;
-  border-radius: 4px;
-  background: #4E4E4E;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-family: inherit;
-  font-weight: lighter;
+  font-weight: 300;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
   width: 50vw;
-  height: 70px;
+  height: 60px;
 }
 
 .create-product-button:hover {
-  background: #0056b3;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .create-product-message {
   margin-top: 16px;
-  font-size: 1.5rem;
-  color: #4E4E4E;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 1rem;
   text-align: center;
+  width: 50vw;
+  box-sizing: border-box;
+}
+
+.message-error {
+  background: rgba(220, 38, 38, 0.15);
+  border: solid 1px rgba(220, 38, 38, 0.3);
+  color: #ff9b9b;
+}
+
+.message-success {
+  background: rgba(34, 197, 94, 0.15);
+  border: solid 1px rgba(34, 197, 94, 0.3);
+  color: #86efac;
 }
 </style>

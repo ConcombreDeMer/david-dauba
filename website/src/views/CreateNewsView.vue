@@ -15,7 +15,7 @@
                     required
                     ref="descriptionTextarea"
                     @input="autoResize"
-                    rows="1"
+                    rows="3"
                     style="overflow:hidden;resize:none;"
                 ></textarea>
             </div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <button class="create-chapter-button" type="submit">Créer l'actualité</button>
-            <div v-if="message" style="margin-top:10px;">{{ message }}</div>
+            <div v-if="message" :class="message.includes('Erreur') ? 'message-container message-error' : 'message-container message-success'">{{ message }}</div>
         </form>
     </div>
 </template>
@@ -153,57 +153,60 @@ const createNews = async () => {
 </script>
 
 <style scoped>
-/* Ajout du style d'upload de UploadPhotos.vue */
 .upload-label {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 70px;
-    border-radius: 8px;
-    background: #4E4E4E;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     cursor: pointer;
     margin-bottom: 10px;
+    transition: all 0.2s;
 }
 .upload-label:hover {
-    background-color: #525252;
-    transition: all 0.2s ease-in-out;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 .upload-plus {
-    font-size: 5rem;
-    color: #888;
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.6);
     user-select: none;
     font-weight: lighter;
 }
 .preview-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
 }
 .preview-item img {
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: solid 1px rgba(255, 255, 255, 0.2);
 }
 .remove-photo-btn {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    background: rgba(0,0,0,0.6);
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     font-size: 1.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 .remove-photo-btn:hover {
-    background: #e74c3c;
+    background: rgba(220, 38, 38, 0.8);
 }
 
 .create-news {
@@ -215,7 +218,7 @@ const createNews = async () => {
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 200px;
+    margin-top: 150px;
 }
 
 .create-news h1 {
@@ -241,50 +244,84 @@ const createNews = async () => {
 
 input,
 textarea {
-    width: 95%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #646464;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     outline: none;
-    color: inherit;
+    color: #fff;
     font-size: 1.5rem;
     font-family: inherit;
     font-weight: 300;
-    padding: 8px 0 4px 0;
+    border-radius: 10px;
+    padding: 10px 16px;
     margin-top: 4px;
-    transition: border-color 0.2s;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 input:focus,
 textarea:focus {
-    border-bottom: 1px solid #ffffff;
+    border: solid 1.5px #fff;
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px #00000033;
 }
 
 label {
     font-weight: normal;
-    margin-bottom: 2px;
-    font-size: 2rem;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    display: block;
 }
 
 .create-chapter-button {
     margin-top: 16px;
-    padding: 10px 32px;
     border: none;
-    border-radius: 4px;
-    background: #4E4E4E;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     color: #fff;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-family: inherit;
-    font-weight: lighter;
+    font-weight: 300;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
     width: 50vw;
-    height: 70px;
+    height: 60px;
 }
 
 .create-chapter-button:hover {
-    background: #0056b3;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.message-container {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: center;
+    width: 50vw;
+    box-sizing: border-box;
+}
+
+.message-error {
+    background: rgba(220, 38, 38, 0.15);
+    border: solid 1px rgba(220, 38, 38, 0.3);
+    color: #ff9b9b;
+}
+
+.message-success {
+    background: rgba(34, 197, 94, 0.15);
+    border: solid 1px rgba(34, 197, 94, 0.3);
+    color: #86efac;
 }
 </style>
