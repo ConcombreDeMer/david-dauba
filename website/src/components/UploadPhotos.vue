@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineExpose } from 'vue'
+import { ref } from 'vue'
 import { supabase } from '../../supabase'
 import imageCompression from 'browser-image-compression'
 
@@ -60,12 +60,22 @@ function randomString(length = 10) {
 
 const uploadFiles = async () => {
   if (!selectedFiles.value.length) return
+  
+  // Récupérer le nombre de photos existantes pour ce chapitre
+  const { count } = await supabase
+    .from('photos')
+    .select('id', { count: 'exact', head: true })
+    .eq('chapter_id', props.chapterId)
+  
+  let photoCount = count || 0
+  
   const options = {
     maxSizeMB: 1,
     maxWidthOrHeight: 1920,
     useWebWorker: true
   }
   for (const file of selectedFiles.value) {
+    photoCount += 1
     try {
       const compressedFile = await imageCompression(file, options)
       const ext = file.name.split('.').pop() || 'jpg';
@@ -89,7 +99,8 @@ const uploadFiles = async () => {
         {
           chapter_id: props.chapterId,
           url: url,
-          path: filePath
+          path: filePath,
+          position: photoCount
         }
       ])
       if (insertError) {
@@ -118,44 +129,48 @@ defineExpose({ triggerUpload })
 <style scoped>
 
 .upload-btn {
-  background-color: #4CAF50;
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  color: #fff;
   padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
+  font-family: inherit;
+  font-weight: 300;
+  transition: all 0.2s;
 }
 
 .upload-btn:hover {
-  background-color: #45a049;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-
-/* ...existing code... */
 .remove-photo-btn {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  background: rgba(0,0,0,0.6);
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   font-size: 1.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
+
 .remove-photo-btn:hover {
-  background: #e74c3c;
+  background: rgba(220, 38, 38, 0.8);
 }
 </style>
 
@@ -164,47 +179,49 @@ defineExpose({ triggerUpload })
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: #3a3a3a;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-top: 10px;
   width: 50vw;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 50px;
 }
+
 .upload-label {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 70px;
-  border-radius: 8px;
-  background: #4E4E4E;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   cursor: pointer;
+  transition: all 0.2s;
 }
+
 .upload-label:hover {
-  border-color: #007bff;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .upload-plus {
-  font-size: 5rem;
-  color: #888;
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.6);
   user-select: none;
   font-weight: lighter;
-}
-
-.upload-label:hover {
-  background-color: #525252;
-  transition: all 0.2s ease-in-out;
 }
 
 .preview-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
 }
+
 .preview-item img {
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border: solid 1px rgba(255, 255, 255, 0.2);
 }
 </style>

@@ -1,14 +1,26 @@
 import { ref } from 'vue'
 
 // Store simple pour l'état admin
-export const isAdmin = ref(localStorage.getItem('isAdmin') === 'true')
+// Accéder à localStorage seulement si disponible (navigateur)
+const getInitialAdmin = () => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    return localStorage.getItem('isAdmin') === 'true'
+  }
+  return false
+}
+
+export const isAdmin = ref(getInitialAdmin())
 
 export function setAdmin(value: boolean) {
   isAdmin.value = value
-  localStorage.setItem('isAdmin', value ? 'true' : 'false')
+  if (typeof window !== 'undefined' && window.localStorage) {
+    localStorage.setItem('isAdmin', value ? 'true' : 'false')
+  }
 }
 
 export function logoutAdmin() {
   isAdmin.value = false
-  localStorage.removeItem('isAdmin')
+  if (typeof window !== 'undefined' && window.localStorage) {
+    localStorage.removeItem('isAdmin')
+  }
 }

@@ -11,7 +11,8 @@
 
             <div class="news-list">
                 <template v-if="loading">
-                    <p class="no-news">Chargement des actualités...</p>
+                    <LoadingSpinner />
+                    <p class="loading-text">Chargement des actualités...</p>
                 </template>
                 <template v-else-if="news.length === 0">
                     <p class="no-news">Aucune actualité pour le moment.</p>
@@ -45,6 +46,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import PageTitles from '@/components/PageTitles.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ArrowDownPage from '@/components/ArrowDownPage.vue'
 
 interface NewsItem {
@@ -192,6 +194,13 @@ function formatRelativeDate(dateStr: string): string {
 
 .no-news {
     text-align: center;
+}
+
+.loading-text {
+    text-align: center;
+    color: #bcbcbc;
+    font-size: 1.2rem;
+    margin-top: 20px;
 }
 
 

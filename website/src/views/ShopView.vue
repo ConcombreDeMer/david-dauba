@@ -6,8 +6,16 @@
 
             <ArrowDownPage />
 
-
-            <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            <template v-if="loading">
+                <LoadingSpinner />
+                <p class="loading-text">Chargement des produits...</p>
+            </template>
+            <template v-else-if="products.length === 0">
+                <p class="no-products">Aucun produit pour le moment.</p>
+            </template>
+            <template v-else>
+                <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            </template>
 
         </div>
 
@@ -21,6 +29,7 @@
 
 import { ref, onMounted, onUnmounted } from 'vue';
 import ProductCard from '@/components/ProductCard.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import PageTitles from '@/components/PageTitles.vue';
 import ArrowDownPage from '@/components/ArrowDownPage.vue';
 import { supabase } from '../../supabase'
@@ -33,15 +42,19 @@ const products = ref<Array<{
     photo_url: string
     price: number
 }>>([])
+const loading = ref(true)
 
 
 const fetchProducts = async () => {
+    loading.value = true
     const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false })
     if (error) {
         console.error('Erreur lors de la récupération des produits:', error)
+        loading.value = false
         return
     }
     products.value = data || []
+    loading.value = false
 }
 
 onMounted(() => {
@@ -66,6 +79,14 @@ onMounted(() => {
         margin-right: auto;
         gap: 50px;
     }
+}
+
+.loading-text,
+.no-products {
+    text-align: center;
+    color: #bcbcbc;
+    font-size: 1.2rem;
+    margin: 50px 0;
 }
 
 .product-bottom {

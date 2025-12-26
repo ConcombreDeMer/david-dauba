@@ -1,11 +1,24 @@
 <template>
 
     <div class="header">
-        <div class="navbar">
-            <div class="navbar-slider" :style="sliderStyle"></div>
-            <RouterLink v-for="(btn, i) in navButtons" :key="btn.to" :to="btn.to" class="btn" :class="{ active: isActive(btn.to, i) }">
-                {{ btn.label }}
-            </RouterLink>
+        <div class="navbar-container">
+            <div class="navbar">
+                <div class="navbar-slider" :style="sliderStyle"></div>
+                <RouterLink v-for="(btn, i) in navButtons" :key="btn.to" :to="btn.to" class="btn" :class="{ active: isActive(btn.to, i) }">
+                    {{ btn.label }}
+                </RouterLink>
+            </div>
+
+            <div class="admin-buttons" v-if="isAdminUser">
+                <button @click="goToAdmin" class="admin-btn" title="Admin">
+                    <img class="admin-icon" src="/admin.png" alt="Admin">
+                </button>
+                <button @click="logout" class="logout-btn" title="Logout">
+                    <img class="logout-icon" src="/logout.png" alt="Logout">
+                </button>
+            </div>
+
+            <AdminButton v-else class="admin-button-component" />
         </div>
 
         <div class="mobile-navbar">
@@ -37,9 +50,13 @@
 <script setup lang="ts">
 
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { isAdmin, logoutAdmin } from '../stores/admin';
+import AdminButton from './AdminButton.vue';
 
 const dropdownOpen = ref(false);
+const router = useRouter();
+const isAdminUser = isAdmin;
 
 const navButtons = [
     { to: '/', label: 'Accueil' },
@@ -110,6 +127,15 @@ function toggleDropdown() {
 function closeDropdown() {
     dropdownOpen.value = false;
 }
+
+function logout() {
+    logoutAdmin();
+    router.push('/');
+}
+
+function goToAdmin() {
+    router.push('/admin');
+}
 </script>
 
 <style scoped>
@@ -122,6 +148,14 @@ function closeDropdown() {
     z-index: 9;
     padding: 0;
     margin-top: 40px;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
 .mobile-navbar {
@@ -263,8 +297,6 @@ function closeDropdown() {
     justify-content: space-between;
     align-items: center;
     width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
     background: transparent;
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -312,11 +344,72 @@ function closeDropdown() {
     font-weight: 500;
 }
 
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 8px 12px;
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.9;
+}
+
+.admin-btn,
+.logout-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: transparent;
+    padding: 0;
+}
+
+.admin-btn {
+    background: rgba(93, 93, 93, 0.6);
+}
+
+.admin-btn:hover {
+    background: rgba(125, 125, 125, 0.8);
+}
+
+.logout-btn {
+    background: rgba(192, 0, 0, 0.6);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 0, 0, 0.8);
+}
+
+.admin-icon,
+.logout-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.admin-button-component {
+    background: transparent;
+}
+
 @media (max-width: 900px) {
     .navbar {
         display: none;
     }
     .navbar-slider {
+        display: none;
+    }
+    .admin-buttons {
+        display: none;
+    }
+    .admin-button-component {
         display: none;
     }
 }

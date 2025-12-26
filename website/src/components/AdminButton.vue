@@ -20,6 +20,7 @@
     z-index: 2000;
     width: 50px;
     height: 50px;
+    background: rgb(0, 195, 255);
 }
 
 </style>

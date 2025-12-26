@@ -121,6 +121,7 @@ const photosLoading = ref(false)
 const photosChanged = ref(false)
 let photosToDelete: number[] = []
 let photosToAdd: File[] = []
+let positionChanges: { [photoId: number]: number } = {}
 
 
 
@@ -169,10 +170,11 @@ const onInput = () => {
 }
 
 // Callback pour les changements de photos
-const onPhotosChange = ({ hasPhotoChange, toDelete, toAdd, clearNewPhotos: clearFn }: { hasPhotoChange: boolean, toDelete: number[], toAdd: File[], clearNewPhotos?: () => void }) => {
+const onPhotosChange = ({ hasPhotoChange, toDelete, toAdd, positionChanges: posChanges, clearNewPhotos: clearFn }: { hasPhotoChange: boolean, toDelete: number[], toAdd: File[], positionChanges?: { [key: number]: number }, clearNewPhotos?: () => void }) => {
     photosChanged.value = hasPhotoChange
     photosToDelete = toDelete
     photosToAdd = toAdd
+    positionChanges = posChanges || {}
     clearNewPhotos = clearFn || null
     onInput()
 }
@@ -262,7 +264,22 @@ const saveEdit = async () => {
         }
     }
 
-    // 3. Update du chapitre (texte, etc)
+    // 3. Mise à jour des positions
+    if (Object.keys(positionChanges).length > 0) {
+        for (const [photoId, newPosition] of Object.entries(positionChanges)) {
+            const { error: updateError } = await supabase
+                .from('photos')
+                .update({ position: newPosition })
+                .eq('id', parseInt(photoId))
+            if (updateError) {
+                errorMsg.value = `Erreur mise à jour position: ${updateError.message}`
+                loading.value = false
+                return
+            }
+        }
+    }
+
+    // 4. Update du chapitre (texte, etc)
     const { error, status, statusText } = await supabase
         .from('chapters')
         .update(updatePayload)
@@ -278,6 +295,7 @@ const saveEdit = async () => {
     photosChanged.value = false
     photosToDelete = []
     photosToAdd = []
+    positionChanges = {}
     if (clearNewPhotos) clearNewPhotos()
     successMsg.value = 'Modifications enregistrées.'
     showToast.value = true

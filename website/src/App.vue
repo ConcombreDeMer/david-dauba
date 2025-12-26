@@ -5,13 +5,6 @@
   <Transition mode="out-in" name="fade">
     <RouterView />
   </Transition>
-  <div class="admin">
-    <AdminButton v-if="!isAdmin" />
-    <button v-if="isAdmin" @click="logout" class="logout-btn"><img class="logout-icon" src="/logout.png"
-        alt=""></button>
-    <button v-if="isAdmin" @click="goToAdmin" class="admin-btn"><img class="admin-icon" src="/admin.png"
-        alt=""></button>
-  </div>
 
   <DynamicFooter />
 
@@ -20,87 +13,13 @@
 <script setup lang="ts">
 
 import { RouterView } from 'vue-router'
-import AdminButton from './components/AdminButton.vue'
-import { isAdmin, logoutAdmin } from './stores/admin'
 import NavigationBar from './components/NavigationBar.vue'
-
-function logout() {
-  logoutAdmin()
-  router.push('/')
-}
-
-import { useRouter } from 'vue-router'
 import DynamicFooter from './components/DynamicFooter.vue'
-const router = useRouter()
-function goToAdmin() {
-  router.push('/admin')
-}
+
 </script>
 
 
 <style>
-
-.admin {
-  margin-right: 100px;
-  margin-top: 20px;
-}
-
-.logout-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 5px;
-  border: none;
-  background: #c00;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logout-btn:hover {
-  background: #f00;
-  transition: all 0.3s ease;
-}
-
-.admin-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 5px;
-  border: none;
-  background: #5D5D5D;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-btn:hover {
-  background: #7D7D7D;
-  transition: all 0.3s ease;
-}
-
-.logout-icon {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-}
-
-.admin-icon {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-}
-
-.admin {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  display: flex;
-  gap: 10px;
-}
 
 @font-face {
   font-family: 'Roboto';

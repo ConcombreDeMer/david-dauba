@@ -34,12 +34,8 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
+      redirect: '/admin/chapters',
       children: [
-        {
-          path: '',
-          name: 'admin-dashboard',
-          component: () => import('../components/admin/AdminDashboard.vue')
-        },
         {
           path: 'chapters',
           name: 'admin-chapters',
@@ -49,11 +45,6 @@ const router = createRouter({
           path: 'news',
           name: 'admin-news',
           component: () => import('../components/admin/AdminNews.vue')
-        },
-        {
-          path: 'contact',
-          name: 'admin-contact',
-          component: () => import('../components/admin/AdminContact.vue')
         },
         {
           path: 'products',
@@ -105,6 +96,15 @@ const router = createRouter({
         component: () => import('../components/ProductPage.vue')
       }
   ],
+})
+
+// Scroll vers le haut au changement de route
+router.afterEach(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
 })
 
 export default router

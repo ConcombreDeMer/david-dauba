@@ -39,17 +39,19 @@ import { computed } from 'vue';
 const route = useRoute();
 
 const buttons = [
-  { to: '/admin', label: 'Dashboard', icon: '/admin/sidebar/dashboard/black.png' },
   { to: '/admin/chapters', label: 'Chapitres', icon: '/admin/sidebar/chapters/black.png' },
   { to: '/admin/products', label: 'Boutique', icon: '/admin/sidebar/products/black.png' },
   { to: '/admin/news', label: 'Actualités', icon: '/admin/sidebar/news/black.png' },
-  { to: '/admin/contact', label: 'Contacts', icon: '/admin/sidebar/contact/black.png' },
 ];
 
 const BUTTON_HEIGHT = 70; // hauteur du bouton + margin-bottom (15+10+30)
 const BUTTON_MARGIN = 10;
 
-const activeIndex = computed(() => buttons.findIndex(b => b.to === route.path));
+const activeIndex = computed(() => {
+  const index = buttons.findIndex(b => b.to === route.path);
+  // Si aucun bouton ne match et qu'on est sur /admin, utiliser le premier bouton
+  return index >= 0 ? index : 0;
+});
 
 const sliderStyle = computed(() => {
   return {
@@ -74,18 +76,18 @@ function isActive(to: string) {
   position: fixed;
   display: flex;
   justify-content: space-between;
-  width: 90%;
+  width: 100%;
   height: 80%;
   max-width: 2000px;
   max-height: 1500px;
   margin-top: 120px;
   left: 50%;
   transform: translate(-50%);
-  background-image: url('/admin/panel-background.png');
-  background-size: cover;
-  border-radius: 10px;
-  border: solid 1px rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* background-image: url('/admin/panel-background.png'); */
+  /* background-size: cover; */
+  /* border-radius: 10px;
+  border: solid 1px rgba(255, 255, 255, 0.2); */
+  /* box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); */
   overflow: hidden;
 }
 
@@ -232,24 +234,29 @@ function isActive(to: string) {
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.3s ease-in-out;
       border: solid 1px rgba(255, 255, 255, 0.2);
       box-sizing: border-box;
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .sidebar-bottom-button:hover {
       color: white;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
-      z-index: 1;
+      border: solid 1px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .logout:hover {
-      background: rgba(214, 101, 101, 0.783);
+      background: rgba(214, 101, 101, 0.4);
+      border: solid 1px rgba(214, 101, 101, 0.6);
     }
 
     .site:hover {
-      background: rgba(11, 11, 11, 0.783);
+      background: rgba(180, 180, 180, 0.2);
+      border: solid 1px rgba(255, 255, 255, 0.3);
     }
   }
 
