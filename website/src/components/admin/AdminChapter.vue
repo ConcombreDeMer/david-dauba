@@ -93,6 +93,16 @@
                 {{ successMsg }}
             </div>
         </transition>
+
+        <!-- Indicateur de chargement lors de la sauvegarde -->
+        <transition name="fade">
+            <div v-if="loading" class="loading-overlay">
+                <div class="loading-content">
+                    <LoadingSpinner />
+                    <p>Enregistrement en cours...</p>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -104,6 +114,7 @@ import type { ChapterRow } from './AdminChapters.vue'
 
 import AdminChapterPhotos from './AdminChapterPhotos.vue'
 import AdminStatusLabel from './AdminStatusLabel.vue'
+import LoadingSpinner from '../LoadingSpinner.vue'
 
 const props = defineProps<{ chapter: ChapterRow | null }>()
 const emit = defineEmits(['back', 'saved'])
@@ -230,11 +241,50 @@ const saveEdit = async () => {
                 return
             }
         }
+        
+        // Réajuster les positions après suppression
+        const { data: remainingPhotos, error: fetchError } = await supabase
+            .from('photos')
+            .select('id, position')
+            .eq('chapter_id', props.chapter.id)
+            .order('position', { ascending: true })
+        
+        if (fetchError) {
+            errorMsg.value = `Erreur récupération photos restantes: ${fetchError.message}`
+            loading.value = false
+            return
+        }
+        
+        if (remainingPhotos && remainingPhotos.length > 0) {
+            for (let i = 0; i < remainingPhotos.length; i++) {
+                const newPosition = i + 1
+                if (remainingPhotos[i].position !== newPosition) {
+                    const { error: updateError } = await supabase
+                        .from('photos')
+                        .update({ position: newPosition })
+                        .eq('id', remainingPhotos[i].id)
+                    if (updateError) {
+                        errorMsg.value = `Erreur réajustement positions: ${updateError.message}`
+                        loading.value = false
+                        return
+                    }
+                }
+            }
+        }
     }
 
     // 2. Upload des nouvelles photos
     if (photosToAdd.length > 0) {
+        // Récupérer le nombre de photos existantes pour déterminer les positions
+        const { count } = await supabase
+            .from('photos')
+            .select('id', { count: 'exact', head: true })
+            .eq('chapter_id', props.chapter.id)
+        
+        let photoPosition = count || 0
+        
         for (const file of photosToAdd) {
+            photoPosition += 1
             // Génère un nom unique
             const fileExt = file.name.split('.').pop()
             const fileName = `chapter_${props.chapter.id}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`
@@ -255,6 +305,7 @@ const saveEdit = async () => {
                     chapter_id: props.chapter.id,
                     url: publicUrlData?.publicUrl || '',
                     path: filePath,
+                    position: photoPosition
                 })
             if (insertError) {
                 errorMsg.value = `Erreur insertion table: ${insertError.message}`
@@ -806,5 +857,52 @@ textarea {
     background: rgba(255, 255, 255, 0.18);
     box-shadow: 0 0 0 2px #00000033;
     color: #fff;
+}
+
+/* Overlay de chargement */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(2px);
+}
+
+.loading-content {
+    background: rgba(255, 255, 255, 0.15);
+    border: solid 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 15px;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: #fff;
+    font-size: 1.1rem;
+    backdrop-filter: blur(4px);
+}
+
+.loading-content p {
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Animation de fade pour le loading overlay */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
