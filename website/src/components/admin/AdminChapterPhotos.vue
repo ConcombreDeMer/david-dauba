@@ -66,6 +66,8 @@ const photoToDelete: Ref<Set<number>> = ref(new Set())
 const newPhotos: Ref<{ file: File, preview: string }[]> = ref([])
 // Objet pour tracker les changements de position
 const positionChanges: Ref<{ [photoId: number]: number }> = ref({})
+// Snapshot des positions avant modification (pour calculer l'ancienne position)
+const photoPositionSnapshots: Ref<{ [photoId: number]: number }> = ref({})
 
 // Trier les photos par position
 const sortedPhotos = computed(() => {
@@ -109,6 +111,11 @@ const fetchPhotos = async (chapterId: number) => {
   photos.value = data || []
   photosLoading.value = false
   photoToDelete.value.clear()
+  // Mettre à jour les snapshots des positions
+  photoPositionSnapshots.value = {}
+  for (const photo of photos.value) {
+    photoPositionSnapshots.value[photo.id] = photo.position
+  }
 }
 
 // Monter une photo
@@ -136,11 +143,36 @@ const movePhotoDown = (idx: number) => {
 // Tracker un changement de position
 const trackPositionChange = (photo: any) => {
   positionChanges.value[photo.id] = photo.position
+  photoPositionSnapshots.value[photo.id] = photo.position
   notifyChange()
 }
 
 // Mettre à jour la position d'une photo (pour l'input)
 const updatePhotoPosition = (photo: any) => {
+  const oldPosition = photoPositionSnapshots.value[photo.id]
+  const newPosition = photo.position
+
+  if (oldPosition === newPosition) return
+
+  // Si la nouvelle position est plus élevée que l'ancienne, décaler les photos vers le bas
+  if (newPosition > oldPosition) {
+    for (const p of photos.value) {
+      if (p.id !== photo.id && p.position > oldPosition && p.position <= newPosition) {
+        p.position -= 1
+        trackPositionChange(p)
+      }
+    }
+  }
+  // Si la nouvelle position est plus basse que l'ancienne, décaler les photos vers le haut
+  else if (newPosition < oldPosition) {
+    for (const p of photos.value) {
+      if (p.id !== photo.id && p.position < oldPosition && p.position >= newPosition) {
+        p.position += 1
+        trackPositionChange(p)
+      }
+    }
+  }
+
   trackPositionChange(photo)
 }
 
