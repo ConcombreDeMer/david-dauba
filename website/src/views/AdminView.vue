@@ -2,7 +2,7 @@
   <div class="admin-view">
     <div class="admin-panel">
       <div class="sidebar">
-        <div class="top" style="position:relative;">
+        <div class="top">
           <div class="sidebar-slider" :style="sliderStyle"></div>
           <RouterLink v-for="btn in buttons" :key="btn.to" :to="btn.to" class="sidebar-top-button"
             :class="{ active: isActive(btn.to) }">
@@ -78,7 +78,6 @@ function isActive(to: string) {
   justify-content: space-between;
   width: 100%;
   height: 80%;
-  max-width: 2000px;
   max-height: 1500px;
   margin-top: 120px;
   left: 50%;
@@ -96,7 +95,7 @@ function isActive(to: string) {
   top: 50%;
   left: 2%;
   transform: translateY(-50%);
-  width: 20%;
+  width: 15%;
   height: calc(100% - 7%);
   background-image: url('/admin/sidebar-background2.png');
   background-size: cover;
@@ -114,26 +113,22 @@ function isActive(to: string) {
   .sidebar-top-button {
     display: flex;
     align-items: center;
-    justify-content: left;
+    justify-content: flex-start;
     width: 100%;
     height: 70px;
     margin-bottom: 10px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding: 15px 10%;
     box-sizing: border-box;
     border-radius: 10px;
-    text-align: center;
     text-decoration: none;
     color: #D3D3D3;
     font-size: 2vh;
     font-weight: 500;
     cursor: pointer;
     position: relative;
+    z-index: 1;
     overflow: hidden;
-    transition: all 0.3s ease-in-out;
-    box-sizing: border-box;
+    transition: color 0.3s ease-in-out;
   }
 
   .sidebar-icon-stack {
@@ -152,13 +147,12 @@ function isActive(to: string) {
     width: 28px;
     height: 28px;
     opacity: 0;
-    transition: opacity 0.3s cubic-bezier(.4, 1.3, .6, 1);
+    transition: opacity 0.3s cubic-bezier(0.4, 1.3, 0.6, 1);
     pointer-events: none;
-    /* Optionally, add filter/blur for extra smoothness */
   }
 
   .sidebar-icon.visible {
-    opacity: 0.7;
+    opacity: 1;
     pointer-events: auto;
   }
 
@@ -170,8 +164,7 @@ function isActive(to: string) {
     background: linear-gradient(135deg, #FFFFFF 0%, #afafaf 100%);
     border-radius: 10px;
     z-index: 0;
-    transition: transform 0.35s cubic-bezier(.4, 1.3, .6, 1);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+    transition: transform 0.35s cubic-bezier(0.4, 1.3, 0.6, 1);
     top: 0;
     pointer-events: none;
     border: solid 1px rgba(255, 255, 255, 0.4);
@@ -180,25 +173,25 @@ function isActive(to: string) {
 
   .sidebar-top-button.active {
     color: #4C4C4C;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
-    z-index: 1;
-    animation: sidebarActiveAnim 0.4s;
+    z-index: 2;
+    animation: sidebarActiveAnim 0.4s forwards;
   }
 
   @keyframes sidebarActiveAnim {
     0% {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
+      color: #D3D3D3;
     }
 
     100% {
-      background: white;
-      color: #222;
+      color: #4C4C4C;
     }
   }
 
-  .top{
-    height: 70%;
+  .top {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .bottom {
@@ -236,7 +229,6 @@ function isActive(to: string) {
       overflow: hidden;
       transition: all 0.3s ease-in-out;
       border: solid 1px rgba(255, 255, 255, 0.2);
-      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -263,8 +255,8 @@ function isActive(to: string) {
 }
 
 .content {
-  margin-left: calc(20% + 2%);
-  width: calc(80% - 2%);
+  margin-left: calc(15% + 2%);
+  width: calc(85% - 2%);
   padding: 2%;
   box-sizing: border-box;
 }

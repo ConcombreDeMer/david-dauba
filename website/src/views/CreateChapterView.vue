@@ -13,28 +13,19 @@
         </div>
         <div>
             <label for="description">Description :</label>
-            <textarea
-                id="description"
-                v-model="description"
-                required
-                ref="descriptionTextarea"
-                @input="autoResize"
-                rows="3"
-                style="overflow:hidden;resize:none;"
-            ></textarea>
+            <textarea id="description" v-model="description" required ref="descriptionTextarea" @input="autoResize"
+                rows="3" style="overflow:hidden;resize:none;"></textarea>
         </div>
 
         <div>
             <label>Photos :</label>
-            <UploadPhotos
-                ref="uploadPhotosRef"
-                :chapterId="chapterId ?? undefined"
-                :isValidationVisible="false"
-            />
+            <UploadPhotos ref="uploadPhotosRef" :chapterId="chapterId ?? undefined" :isValidationVisible="false" />
         </div>
 
         <button class="create-chapter-button" type="submit">Créer le chapitre</button>
-        <div v-if="message" :class="message.includes('Erreur') ? 'message-container message-error' : 'message-container message-success'">{{ message }}</div>
+        <div v-if="message"
+            :class="message.includes('Erreur') ? 'message-container message-error' : 'message-container message-success'">
+            {{ message }}</div>
     </form>
 
 
@@ -92,6 +83,8 @@ const createChapter = async () => {
 </script>
 
 <style scoped>
+
+
 .create-chapter-title {
     text-align: center;
     padding-top: 150px;
@@ -121,7 +114,6 @@ textarea {
     margin-right: auto;
     background: rgba(255, 255, 255, 0.1);
     border: solid 1px rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     outline: none;
     color: #fff;
     font-size: 1.5rem;
@@ -143,7 +135,6 @@ input:focus,
 textarea:focus {
     border: solid 1.5px #fff;
     background: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 0 0 2px #00000033;
 }
 
 label {

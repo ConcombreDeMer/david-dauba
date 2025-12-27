@@ -1,5 +1,5 @@
 <template>
-    <div :class="['item', { deployed: isDeployed }]">
+    <div :class="['item', { deployed: isDeployed }]" @click="goToChapter">
 
         <img :src="chapter.firstPhotoUrl" alt="photo du chapitre" class="photo" />
 
@@ -12,9 +12,9 @@
             </div>
             <div class="bottom-info">
                 <div class="date">{{ chapter.date }}</div>
-                <router-link :to="`/chapter/${chapter.id}`" class="button">
+                <div class="button">
                     Découvrir
-                </router-link>
+                </div>
             </div>
 
         </div>
@@ -24,8 +24,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import type { ChapterWithPhoto } from '@/views/ChaptersView.vue';
 
+const router = useRouter();
 const isDeployed = ref(false);
 
 
@@ -43,6 +45,9 @@ const deleteChapter = (chapter: ChapterWithPhoto) => {
     emit('delete-chapter', chapter.id);
 };
 
+const goToChapter = () => {
+    router.push(`/chapter/${props.chapter.id}`);
+};
 
 </script>
 

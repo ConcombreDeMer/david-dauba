@@ -162,7 +162,6 @@ const createNews = async () => {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.1);
     border: solid 1px rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     cursor: pointer;
     margin-bottom: 10px;
     transition: all 0.2s;
@@ -249,7 +248,6 @@ textarea {
     margin-right: auto;
     background: rgba(255, 255, 255, 0.1);
     border: solid 1px rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     outline: none;
     color: #fff;
     font-size: 1.5rem;
@@ -271,7 +269,6 @@ input:focus,
 textarea:focus {
     border: solid 1.5px #fff;
     background: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 0 0 2px #00000033;
 }
 
 label {
